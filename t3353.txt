@@ -1419,7 +1419,7 @@ def seguimiento():
 
     photo = PhotoImage(file="add_file.png")
     photoimagex = photo.subsample(21, 21)
-    Button(seguimiento_win, text='', image=photoimagex, command=open_archivo, width=23).grid(row=21, column=2, sticky=W)
+    Button(seguimiento_win, text='', image=photoimagex, width=23).grid(row=21, column=2, sticky=W)
 
     label_filee = Label(seguimiento_win, text="Seleccione archivos asociados (Máximo 3)", font=("times", 10), anchor=CENTER)
     label_filee.grid(row=21, column=2)
@@ -1761,9 +1761,9 @@ def verifica_login():
 #global rutas_files
 #rutas_files=[]
 def quitar_path():
-    label_file.configure(text="Seleccione archivos asociados (Máximo 3)")
-    label_file.grid(row=21, column=2)
-    buton_gar3.destroy()
+    label_file.configure(text="Seleccione archivos asociados (Máximo 10)")
+    label_file.grid(row=0, column=1)
+    buton_gar3.grid_forget()
     if(label_file1.cget('text')==""):
         buton_file.destroy()
     else:
@@ -1771,109 +1771,240 @@ def quitar_path():
     #rutas_files.pop(0)
     #rutas_files.insert(0, 0)
 
+
 def quitar_path1():
     label_file1.configure(text="")
-    label_file1.grid(row=22, column=2)
-    buton_gar2.destroy()
+    label_file1.grid(row=1, column=1)
+    buton_gar2.grid_forget()
     if(label_file2.cget('text')==""):
         buton_file2.destroy()
     else:
         pass
 
+
 def quitar_path2():
     label_file2.configure(text="")
-    label_file2.grid(row=23, column=2)
-    buton_gar.destroy()
+    label_file2.grid(row=2, column=1)
+    buton_gar.grid_forget()
 
+
+def quitar_path3():
+    label_file3.configure(text="")
+    label_file3.grid(row=3, column=1)
+    buton_garb.grid_forget()
+
+
+def quitar_path4():
+    label_file4.configure(text="")
+    label_file4.grid(row=4, column=1)
+    buton_garba.grid_forget()
+
+
+def quitar_path5():
+    label_file5.configure(text="")
+    label_file5.grid(row=5, column=1)
+    buton_garbag.grid_forget()
+
+
+def quitar_path6():
+    label_file6.configure(text="")
+    label_file6.grid(row=6, column=1)
+    buton_garbage.grid_forget()
+
+
+def quitar_path7():
+    label_file7.configure(text="")
+    label_file7.grid(row=7, column=1)
+    buton_garbage_.grid_forget()
+
+
+def quitar_path8():
+    label_file8.configure(text="")
+    label_file8.grid(row=8, column=1)
+    buton_garbage_c.grid_forget()
+
+
+def quitar_path9():
+    label_file9.configure(text="")
+    label_file9.grid(row=9, column=1)
+    buton_garbage_co.grid_forget()
+
+
+def abrir_archivo10():
+    global photoimage15, buton_garbage_co, archivo_abierto10, photoimage40
+    archivo_abierto10 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file9.configure(text="File 10: " + archivo_abierto10)
+    label_file9.grid(row=9, column=1)
+    photo = PhotoImage(file="garbage_collector1.png")
+    photoimage15 = photo.subsample(18, 18)
+    buton_garbage_co = Button(frame4, text='', image=photoimage15, command=quitar_path9, width=25)
+    buton_garbage_co.grid(row=9, column=2, sticky=E)
+
+
+def abrir_archivo9():
+    global photoimage14, buton_garbage_c, archivo_abierto9, photoimage40, buton_file9
+    archivo_abierto9 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file8.configure(text="File 9: " + archivo_abierto9)
+    label_file8.grid(row=8, column=1)
+    photo = PhotoImage(file="garbage_collector9.png")
+    photoimage14 = photo.subsample(18, 18)
+    buton_garbage_c = Button(frame4, text='', image=photoimage14, command=quitar_path8, width=25)
+    buton_garbage_c.grid(row=8, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file9.png")
+    photoimage40 = photo.subsample(21, 21)
+    buton_file9 = Button(frame4, text='', image=photoimage40, command=abrir_archivo10, width=23)
+    buton_file9.grid(row=9, column=0, sticky=W)
+
+def abrir_archivo8():
+    global photoimage13, buton_garbage_, archivo_abierto8, buton_file8, photoimage39
+    archivo_abierto8 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file7.configure(text="File 8: " + archivo_abierto8)
+    label_file7.grid(row=7, column=1)
+    photo = PhotoImage(file="garbage_collector8.png")
+    photoimage13 = photo.subsample(18, 18)
+    buton_garbage_ = Button(frame4, text='', image=photoimage13, command=quitar_path7, width=25)
+    buton_garbage_.grid(row=7, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file8.png")
+    photoimage39 = photo.subsample(21, 21)
+    buton_file8 = Button(frame4, text='', image=photoimage39, command=abrir_archivo9, width=23)
+    buton_file8.grid(row=8, column=0, sticky=W)
+
+def abrir_archivo7():
+    global photoimage12, buton_garbage, archivo_abierto7, buton_file7, photoimage38
+    archivo_abierto7 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file6.configure(text="File 7: " + archivo_abierto7)
+    label_file6.grid(row=6, column=1)
+    photo2 = PhotoImage(file="garbage_collector7.png")
+    photoimage12 = photo2.subsample(18, 18)
+    buton_garbage = Button(frame4, text='', image=photoimage12, command=quitar_path6, width=25)
+    buton_garbage.grid(row=6, column=2, sticky=E)
+
+    photo3 = PhotoImage(file="add_file7.png")
+    photoimage38 = photo3.subsample(21, 21)
+    buton_file7 = Button(frame4, text='', image=photoimage38, command=abrir_archivo8, width=23)
+    buton_file7.grid(row=7, column=0, sticky=W)
+
+def abrir_archivo6():
+    global photoimage11, buton_garbag, archivo_abierto6, buton_file6, photoimage37
+    archivo_abierto6 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file5.configure(text="File 6: " + archivo_abierto6)
+    label_file5.grid(row=5, column=1)
+    photo = PhotoImage(file="garbage_collector6.png")
+    photoimage11 = photo.subsample(18, 18)
+    buton_garbag = Button(frame4, text='', image=photoimage11, command=quitar_path5, width=25)
+    buton_garbag.grid(row=5, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file6.png")
+    photoimage37 = photo.subsample(21, 21)
+    buton_file6 = Button(frame4, text='', image=photoimage37, command=abrir_archivo7, width=23)
+    buton_file6.grid(row=6, column=0, sticky=W)
+
+def abrir_archivo5():
+    global photoimage10, buton_garba, archivo_abierto5, photoimage36, buton_file5
+    archivo_abierto5 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file4.configure(text="File 5: " + archivo_abierto5)
+    label_file4.grid(row=4, column=1)
+    photo = PhotoImage(file="garbage_collector5.png")
+    photoimage10 = photo.subsample(18, 18)
+    buton_garba=Button(frame4, text='', image=photoimage10, command=quitar_path4, width=25)
+    buton_garba.grid(row=4, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file5.png")
+    photoimage36 = photo.subsample(21, 21)
+    buton_file5 = Button(frame4, text='', image=photoimage36, command=abrir_archivo6, width=23)
+    buton_file5.grid(row=5, column=0, sticky=W)
+
+def abrir_archivo4():
+    global photoimage9, buton_garb, archivo_abierto4, buton_file4, photoimage35
+    archivo_abierto4 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
+                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
+    label_file3.configure(text="File 4: " + archivo_abierto4)
+    label_file3.grid(row=3, column=1)
+    photo = PhotoImage(file="garbage_collector4.png")
+    photoimage9 = photo.subsample(18, 18)
+    buton_garb=Button(frame4, text='', image=photoimage9, command=quitar_path3, width=25)
+    buton_garb.grid(row=3, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file4.png")
+    photoimage35 = photo.subsample(21, 21)
+    buton_file4 = Button(frame4, text='', image=photoimage35, command=abrir_archivo5, width=23)
+    buton_file4.grid(row=4, column=0, sticky=W)
 
 def abrir_archivo3():
-    global photoimage8, buton_gar, archivo_abierto3
+    global photoimage8, buton_gar, archivo_abierto3, photoimage34, buton_file3
     archivo_abierto3 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file2.configure(text="File 3: " + archivo_abierto3)
-    label_file2.grid(row=23, column=2)
+    label_file2.grid(row=2, column=1)
     photo = PhotoImage(file="garbage_collector3.png")
     photoimage8 = photo.subsample(18, 18)
-    try:
-        buton_gar=Button(root, text='', image=photoimage8, command=quitar_path2, width=25)
-        buton_gar.grid(row=23, column=2, sticky=E)
-    except Exception as e:
-        buton_gar = Button(seguimiento_win, text='', image=photoimage8, command=quitar_path2, width=25)
-        buton_gar.grid(row=23, column=2, sticky=E)
+    #try:
+    buton_gar=Button(frame4, text='', image=photoimage8, command=quitar_path2, width=25)
+    buton_gar.grid(row=2, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file3.png")
+    photoimage34 = photo.subsample(21, 21)
+    buton_file3 = Button(frame4, text='', image=photoimage34, command=abrir_archivo4, width=23)
+    buton_file3.grid(row=3, column=0, sticky=W)
+    #except Exception as e:
+    #    buton_gar = Button(seguimiento_win, text='', image=photoimage8, command=quitar_path2, width=25)
+    #    buton_gar.grid(row=23, column=2, sticky=E)
 
 def abrir_archivo2():
     global photoimage7, photoimage33, buton_gar2, archivo_abierto2, buton_file2
     archivo_abierto2 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file1.configure(text="File 2: " + archivo_abierto2)
-    label_file1.grid(row=22, column=2)
+    label_file1.grid(row=1, column=1)
     photo = PhotoImage(file="garbage_collector2.png")
     photoimage7 = photo.subsample(18, 18)
-    buton_gar2=Button(root, text='', image=photoimage7, command=quitar_path1, width=25)
-    buton_gar2.grid(row=22, column=2, sticky=E)
+    buton_gar2=Button(frame4, text='', image=photoimage7, command=quitar_path1, width=25)
+    buton_gar2.grid(row=1, column=2, sticky=E)
+
     photo = PhotoImage(file="add_file2.png")
     photoimage33 = photo.subsample(21, 21)
-    buton_file2=Button(root, text='', image=photoimage33, command=abrir_archivo3, width=23)
-    buton_file2.grid(row=23, column=2, sticky=W)
+    buton_file2=Button(frame4, text='', image=photoimage33, command=abrir_archivo3, width=23)
+    buton_file2.grid(row=2, column=0, sticky=W)
 
-def open_archivo2():
-    global photoimage7, photoimage33, buton_gar2, archivo_abierto2, buton_file2
-    archivo_abierto2 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
-                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
-    label_file11.configure(text="File 2: " + archivo_abierto2)
-    label_file11.grid(row=22, column=2)
-    photo = PhotoImage(file="garbage_collector2.png")
-    photoimage7 = photo.subsample(18, 18)
-
-    buton_gar2 = Button(seguimiento_win, text='', image=photoimage7, command=quitar_path1, width=25)
-    buton_gar2.grid(row=22, column=2, sticky=E)
-    photo = PhotoImage(file="add_file2.png")
-    photoimage33 = photo.subsample(21, 21)
-    buton_file2 = Button(seguimiento_win, text='', image=photoimage33, command=abrir_archivo3, width=23)
-    buton_file2.grid(row=23, column=2, sticky=W)
 
 def abrir_archivo():
     global datos1, datos2, datos3, photoimage2, photoimage3, photoimage4, buton_gar3, archivo_abierto, buton_file
     archivo_abierto = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file.configure(text="File 1: " + archivo_abierto)
-    label_file.grid(row=21, column=2)
-    photo = PhotoImage(file="garbage_collector.png")
-    photoimage2 = photo.subsample(18, 18)
-    #try:
-    buton_gar3=Button(root, text='', image=photoimage2, command=quitar_path, width=25)
-    buton_gar3.grid(row=21, column=2, sticky=E)
-    photo = PhotoImage(file="add_file3.png")
-    photoimage3 = photo.subsample(21, 21)
-    buton_file=Button(root, text='', image=photoimage3, command=abrir_archivo2, width=23)
-    buton_file.grid(row=22, column=2, sticky=W)
+    label_file.grid(row=0, column=1)
 
-def open_archivo():
-    global datos1, datos2, datos3, photoimage2, photoimage3, photoimage4, buton_gar3, archivo_abierto, buton_file
-    archivo_abierto = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
-                                                 filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
-    label_filee.configure(text="File 1: " + archivo_abierto)
-    label_filee.grid(row=21, column=2)
     photo = PhotoImage(file="garbage_collector.png")
     photoimage2 = photo.subsample(18, 18)
-    buton_gar3 = Button(seguimiento_win, text='', image=photoimage2, command=quitar_path, width=25)
-    buton_gar3.grid(row=21, column=2, sticky=E)
-    photo = PhotoImage(file="add_file3.png")
+    buton_gar3=Button(frame4, text='', image=photoimage2, command=quitar_path, width=25)
+    buton_gar3.grid(row=0, column=2, sticky=E)
+
+    photo = PhotoImage(file="add_file1.png")
     photoimage3 = photo.subsample(21, 21)
-    buton_file = Button(seguimiento_win, text='', image=photoimage3, command=open_archivo2, width=23)
-    buton_file.grid(row=22, column=2, sticky=W)
+    buton_file=Button(frame4, text='', image=photoimage3, command=abrir_archivo2, width=23)
+    buton_file.grid(row=1, column=0, sticky=W)
+
+
+def onFrameConfigure(canvas):
+    canvas.configure(scrollregion=canvas.bbox("all"))
 
 def exito_login():
     style=ttk.Style()
     style.configure("GW.TLabel", foreground="green", background="white")
-    style2 = ttk.Style()
-    style2.configure("BG.TLabel", foreground="black", background="green")
 
     ventana_decision.state(newstate='withdraw')
     global root, now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
-        photoimagex, frame3
+        photoimagex, frame3, frame4
     root = Toplevel(ventana_decision)
-    root.geometry("993x540")
+    root.geometry("990x511")
     root.title("Formato de Reporte de Fallas")
     #root.resizable(False, False)  ## Especifica que la ventana no se puede ampliar
     root.iconbitmap('tele_ico.ico')
@@ -1888,61 +2019,79 @@ def exito_login():
     img_png5 = PhotoImage(file="comunicaciones_recortada.png")
     label_img = tkinter.Label(root, image=img_png5)
     label_img.place(x=594, y=10)
-    #label_img.place(x=6, y=10)
-
     img_png6 = PhotoImage(file="telecom.png")
     label_img2 = tkinter.Label(root, image=img_png6)
     label_img2.place(x=315, y=10)
-
     img_png7 = PhotoImage(file="mexsat.png")
     label_img3 = tkinter.Label(root, image=img_png7)
     label_img3.place(x=32, y=5)
-    #label_img3.place(x=740, y=5)
 
     # Textos
     frame1 = LabelFrame(root, text="= Área de Sistemas =", bg="green", bd=4, padx=50, pady=15, highlightcolor="blue", height=500)
     frame1.grid(row=1, column=0)
-
     frame2 = LabelFrame(root, text="Reporte de fallas", bg="blue", bd=4, height=350, width=300, padx=6, pady=17, highlightcolor="green")
     frame2.grid(row=1, column=1)
-
-    frame3 = LabelFrame(root, text="Reporte de fallas", bg="green", bd=4, height=350, width=300, padx=69, pady=10, highlightcolor="green")
+    frame3 = LabelFrame(root, text="Reporte de fallas", bg="green", bd=4, height=350, width=300, padx=20, pady=8, highlightcolor="green")
     frame3.grid(row=1, column=2)
-
     l3 = Label(frame1, text="No. de Ticket: ", anchor=E, font=("times", 13))
     l3.grid(row=13, column=0, sticky=E, pady=5)
-
     l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13))
     l3.grid(row=14, column=0, sticky=E, pady=5)
-
     label_type = Label(frame1, text="Tipo:", anchor=E, font=("times", 13))
     label_type.grid(row=16, column=0, sticky=E, pady=5)
-
     label_dpvo = Label(frame1, text="Dispositivo:", anchor=E, font=("times", 13))
     label_dpvo.grid(row=18, column=0, sticky=E, pady=5)
-
     label_dpvo = Label(frame1, text="Dispositivo Secundario:", anchor=E, font=("times", 13))
     label_dpvo.grid(row=19, column=0, sticky=E, pady=5)
-
     label_dpvo = Label(frame1, text="", anchor=CENTER, bg="green", font=("times", 8))
     label_dpvo.grid(row=22, column=0, sticky=W, pady=5)
+    label_name = Label(frame3, text="Operador: ", anchor=W)
+    label_name.grid(row=15, column=0, sticky=W, pady=2)
 
-    label_name = Label(frame3, text="Operador: ", anchor=W).grid(row=15, column=2, sticky=W, pady=2)
+    canvas = tkinter.Canvas(frame3, height=120, width=321, bg="yellow", borderwidth=5, background="#ffffff")
+    frame4 = tkinter.Frame(canvas, background="#ffffff")
 
     photo = PhotoImage(file="add_file.png")
     photoimagex = photo.subsample(21, 21)
+    boton = Button(frame4, text='', image=photoimagex, command=abrir_archivo, width=23)
+    boton.grid(row=0, column=0)
 
-    frame4 = LabelFrame(frame3, height=150, width=250, bg='yellow').grid(row=12, column=2)
-    Button(frame4, text="Prueba1", width=10, command=registro_incidencia).pack()
-    #Button(frame4, text='', image=photoimagex, command=abrir_archivo, width=23).grid(row=10, column=2, sticky=W)
+    vsb = tkinter.Scrollbar(frame3, orient="vertical", command=canvas.yview)
+    canvas.configure(yscrollcommand=vsb.set)
+    hsb = tkinter.Scrollbar(frame3, orient="horizontal", command=canvas.xview)
+    canvas.configure(xscrollcommand=hsb.set)
 
-    global label_file, label_file1, label_file2
-    label_file=Label(frame3, text="Seleccione archivos asociados (Máximo 10)", font=("times", 10), anchor=CENTER)
-    label_file.grid(row=11, column=2)
-    label_file1 = Label(frame4, text="¿?", font=("times", 10), anchor=CENTER)
-    label_file1.pack()
+    vsb.grid(row=12, column=1, sticky=W)
+    hsb.grid(row=13, column=0)
+    canvas.grid(row=12, column=0)
+    canvas.create_window((4, 4), window=frame4, anchor="nw")
+    frame4.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+    global label_file, label_file1, label_file2, label_file3, label_file4, label_file5, label_file6, label_file7,\
+        label_file8, label_file9
 
-    label_name = Label(frame3, text=user_name, font=("times", 15), anchor=CENTER).grid(row=19, column=2, sticky=W, pady=2)
+    label_file = Label(frame4, text="Seleccione archivos asociados (Máximo 10)", font=("times", 10), bg="yellow", anchor=CENTER)
+    label_file.grid(row=0, column=1)
+    label_file1 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file1.grid(row=1, column=1)
+    label_file2 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file2.grid(row=2, column=1)
+    label_file3 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file3.grid(row=3, column=1)
+    label_file4 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file4.grid(row=4, column=1)
+
+    label_file5 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file5.grid(row=5, column=1)
+    label_file6 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file6.grid(row=6, column=1)
+    label_file7 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file7.grid(row=7, column=1)
+    label_file8 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file8.grid(row=8, column=1)
+    label_file9 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file9.grid(row=9, column=1)
+    label_name = Label(frame3, text=user_name, font=("times", 15), anchor=CENTER)
+    label_name.grid(row=19, column=0, pady=2)
 
     l4 = Label(frame1, text="Componente: ", anchor=E, font=("times", 13))
     l4.grid(row=17, column=0, sticky=E, pady=5)
@@ -1956,14 +2105,14 @@ def exito_login():
     l6.grid(row=15, column=0, sticky=E, pady=5)
 
     l7 = Label(frame3, text="Hora actual:", anchor=W)
-    l7.grid(row=20, column=2, sticky=W, pady=2)
+    l7.grid(row=20, column=0, sticky=W, pady=2)
 
     l1 = Label(frame3, text="Fecha: ", anchor=W)
-    l1.grid(row=23, column=2, sticky=W, pady=2)
+    l1.grid(row=23, column=0, sticky=W, pady=2)
     now = datetime.now()
 
     l7 = Label(frame3, text=now.strftime("%Y-%m-%d"), font=("times", 16), anchor=CENTER)
-    l7.grid(row=24, column=2, pady=2)
+    l7.grid(row=24, column=0, pady=2)
 
     no_ticket = StringVar()
     descrip = StringVar()
@@ -2053,7 +2202,7 @@ def exito_login():
     optionmenu_d.grid(row=19, column=1, sticky=W, pady=2)
     times()
     root.protocol("WM_DELETE_WINDOW", handleProtocol)
-    Button(frame3, text="Registrar", width=10, command=registro_incidencia).grid(row=25, column=2)  # BOTÓN "Registrarse"
+    Button(frame3, text="Registrar", width=10, command=registro_incidencia).grid(row=25, column=0)  # BOTÓN "Registrarse"
     #Frame(root, height=24, width=400, bg='red').grid(row=14, column=2)
 
 
@@ -2081,7 +2230,7 @@ def borrar_exito_login():
 
 def times():
     clock = Label(frame3, font=("times", 20, "bold"))
-    clock.grid(row=21, column=2, pady=0, padx=0)
+    clock.grid(row=21, column=0, pady=0, padx=0)
     current_time = time.strftime("%H:%M:%S", time.gmtime())
     clock.config(text=current_time, font="Arial 15 bold")
     clock.after(200, times)
