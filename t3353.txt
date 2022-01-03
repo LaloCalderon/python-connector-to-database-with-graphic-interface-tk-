@@ -367,7 +367,7 @@ def registro():
     ventana_principal.state(newstate='withdraw')
     # Esta ventana (registro) tiene como ventana padre ventana_principal
     global datos1, datos2, ventana_registro, img_png3, img_png4, nombre_usuario, dom, ccs, clave, clave2, \
-        entrada_nombre, entrada_clave, entrada_dom, entrada_ccs, entrada_clave2, photoimage
+        entrada_nombre, entrada_clave, entrada_dom, entrada_ccs, entrada_clave2, photoimage, mail
     ventana_registro = Toplevel(ventana_principal)
     ventana_registro.resizable(False, False)
     ventana_registro.iconbitmap('tele_ico.ico')
@@ -389,6 +389,7 @@ def registro():
     var2.set('')
 
     nombre_usuario = StringVar()  # DECLARAMOS "string" COMO TIPO DE DATO PARA "nombre_usuario"
+    mail = StringVar()
     dom = StringVar()
     ccs = StringVar()
     clave = StringVar()  # DECLARAMOS "string" COMO TIPO DE DATO PARA "clave"
@@ -396,16 +397,15 @@ def registro():
     ttk.Label(ventana_registro, text="= Introduzca sus datos =", style="RW.TLabel").pack()
     Label(ventana_registro, text="").pack()
 
-    etiqueta_nombre = ttk.Label(ventana_registro, text="Nombre de usuario", style="GW.TLabel")
-    etiqueta_nombre.pack()
+    ttk.Label(ventana_registro, text="Nombre de usuario", style="GW.TLabel").pack()
+
     entrada_nombre = Entry(ventana_registro, textvariable=nombre_usuario)  # ESPACIO PARA INTRODUCIR EL NOMBRE.
     entrada_nombre.config(width=35)
     entrada_nombre.pack()
     Label(ventana_registro, text="").pack()
 
     # dominio
-    etiqueta_dom = ttk.Label(ventana_registro, text="Ingrese su dominio  de trabajo", style="GW.TLabel")
-    etiqueta_dom.pack()
+    ttk.Label(ventana_registro, text="Ingrese su dominio  de trabajo", style="GW.TLabel").pack()
     opciones_dom = ['Asignaciones y Monitoreo de Recursos', 'Radiofrecuencia', 'Operaciones', 'Ingeniería']
     entrada_dom = tkinter.OptionMenu(ventana_registro, var2, *opciones_dom)  # ESPACIO PARA INTRODUCIR EL dominio.
     datos2 = var2
@@ -414,8 +414,7 @@ def registro():
     Label(ventana_registro, text="").pack()
 
     # CCS:
-    etiqueta_ccs = ttk.Label(ventana_registro, text="Ingresar el CCS", style="GW.TLabel")
-    etiqueta_ccs.pack()
+    ttk.Label(ventana_registro, text="Ingresar el CCS", style="GW.TLabel").pack()
     opciones_ccs = ['Iztapalapa', 'Hermosillo']
     entrada_ccs = tkinter.OptionMenu(ventana_registro, var, *opciones_ccs)
     datos1 = var
@@ -469,9 +468,10 @@ def visualizar():
         ventana_viss, listBox, entrada_file1, entrada_file2, entrada_file3, entrada_file4, optionmenu_e,entrada_file10,\
         entrada_file5, entrada_file6, entrada_file7, entrada_file8, variable_e, variable_f, optionmenu_f, entrada_file9
     ventana_viss = Toplevel(ventana_principal)
-    ventana_viss.geometry("1550x500")
+    ventana_viss.geometry("1550x550")
     ventana_viss.title("Visualización de Incidencias")
     ventana_viss.iconbitmap('tele_ico.ico')
+    ventana_viss.resizable(False, False)
     ttk.Label(ventana_viss, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
 
     variable_e = StringVar()
@@ -563,23 +563,25 @@ def visualizar():
     cols = ('ticket', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device', 'descripción',
             'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
 
-    listBox = ttk.Treeview(ventana_viss, columns=cols, show='headings')
+    canvas = tkinter.Canvas(ventana_viss, height=285, width=1550, bg="yellow", borderwidth=5, background="#ffffff")
+    frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =", bg="yellow", bd=4,
+                        padx=5, pady=1, highlightcolor="green", height=280, width=4470)
+    listBox = ttk.Treeview(frame1, columns=cols, show='headings')
+    vsb = ttk.Scrollbar(ventana_viss, orient="vertical", command=listBox.yview)
+    vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
+    listBox.configure(yscrollcommand=vsb.set)
+
+    hsb = tkinter.Scrollbar(ventana_viss, orient="horizontal", command=canvas.xview)
+    canvas.configure(xscrollcommand=hsb.set)
+    hsb.grid(row=2, column=0)
+
+    canvas.grid(row=1, column=0)
+    canvas.create_window((4, 4), window=frame1, anchor="nw")
+    frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 
     for col in cols:
         listBox.heading(col, text=col)
-        listBox.place(x=10, y=230)
-
-    vsb = ttk.Scrollbar(ventana_viss, orient="vertical", command=listBox.yview)
-    vsb.place(relx=0.978, rely=0.355, relheight=0.600, relwidth=0.030)
-    #vsb.pack(side="bottom", fill="x")
-
-    listBox.configure(yscrollcommand=vsb.set)
-    hsb = tkinter.Scrollbar(ventana_viss, orient=tkinter.HORIZONTAL)
-    hsb.place(relx=0.978, rely=0.175, relheight=0.713, relwidth=0.020)
-    hsb.pack(side="bottom", fill="x")
-    hsb.config(command=listBox.xview)
-    listBox.config(xscrollcommand=hsb.set)
-    listBox.configure(xscrollcommand=hsb.set)
+        listBox.place(x=10, y=10)
 
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
@@ -837,10 +839,10 @@ def modifica_reg():
         entrada_file7, entrada_file8, listBox, rooot, datos_clave, datos_busqueda, variable_e, variable_f, \
         optionmenu_e, optionmenu_f, entrada_file9, entrada_file10
     rooot = Toplevel(ventana_decision)
-    rooot.geometry("1550x500")
+    rooot.geometry("1550x540")
     rooot.title("Visualización y Modificación de Incidencias")
     rooot.iconbitmap('tele_ico.ico')
-
+    rooot.resizable(False, False)
     # tk.Label(root,text="Visualización de Incidencias", fg="black", font=(None, 25)).place(x=400, y=5)
     global ventana_tickets, entrada_ope, entrada_param, varope, entrada_filter
     filtro = StringVar()
@@ -863,6 +865,7 @@ def modifica_reg():
     Button(rooot, text="Update", command=update, width=13).place(x=870, y=155)
     Button(rooot, text="Delete", command=delete, width=13).place(x=870, y=185)
     Button(rooot, text="Aplicar", command=aplicar, width=10).place(x=675, y=187)
+
     ttk.Label(rooot, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
     ttk.Label(rooot, text="Status: ", style="GW.TLabel").place(x=10, y=40)
     ttk.Label(rooot, text="Operador: ", style="GW.TLabel").place(x=10, y=70)
@@ -935,21 +938,26 @@ def modifica_reg():
     cols = ('ticket', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device', 'descripción',
             'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
 
-    listBox = ttk.Treeview(rooot, columns=cols, show='headings')
+    canvas = tkinter.Canvas(rooot, height=285, width=1550, bg="yellow", borderwidth=5, background="#ffffff")
+    frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =", bg="blue", bd=4,
+                        padx=5, pady=1, highlightcolor="green", height=280, width=4470)
+    listBox = ttk.Treeview(frame1, columns=cols, show='headings')
+    vsb = ttk.Scrollbar(rooot, orient="vertical", command=listBox.yview)
+    vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
+    listBox.configure(yscrollcommand=vsb.set)
+
+    hsb = tkinter.Scrollbar(rooot, orient="horizontal", command=canvas.xview)
+    canvas.configure(xscrollcommand=hsb.set)
+    hsb.grid(row=2, column=0)
+
+    canvas.grid(row=1, column=0)
+    canvas.create_window((4, 4), window=frame1, anchor="nw")
+    frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+
     for col in cols:
         listBox.heading(col, text=col)
-        listBox.grid(row=1, column=0)
-        listBox.place(x=10, y=230)
-
-    vsb = ttk.Scrollbar(rooot, orient="vertical", command=listBox.yview)
-    vsb.place(relx=0.978, rely=0.355, relheight=0.600, relwidth=0.030)
-    #--------------------------------------------------------------------------------
-    hsb = ttk.Scrollbar(rooot, orient="horizontal", command=listBox.xview)
-    hsb = Scrollbar(rooot, orient=tkinter.HORIZONTAL, command=listBox.xview)
-    hsb.place(relx=0.978, rely=0.175, relheight=0.713, relwidth=0.020)
-    hsb.pack(side=BOTTOM, fill='x')
-
-    listBox.configure(yscrollcommand=vsb.set)
+        listBox.grid(row=0, column=0)
+        listBox.place(x=10, y=10)
 
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
@@ -986,7 +994,7 @@ def hacia_atras4():
 
 def historial2():
     global hist_window, ticket_enter, sc_enter, ccs_enter, type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, \
-    variable_e3, variable_f3, optionmenu_e3, optionmenu_f3, variable_e1, variable_f1, optionmenu_f1, ticket_enter, sc_enter, ccs_enter, \
+    variable_e3, variable_f3, optionmenu_e3, optionmenu_f3, variable_e1, variable_f1, optionmenu_f1, sc_enter, ccs_enter, \
     type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
     new_entrada_name, new_entrada_sc, new_entrada_sitio, new_entrada_tipo, new_entrada_componente, new_entrada_componente2, new_entrada_dpvo,\
     new_entrada_descrip, new_entrada_date, new_entrada_hora, new_entrada_file1, new_entrada_file2, new_entrada_file3, new_entrada_file4, \
@@ -1014,7 +1022,7 @@ def historial2():
 
             if str(numero_ticket) == ticket_enter:
                 hist_window = Toplevel(ventana_principal)
-                hist_window.geometry("1550x500")
+                hist_window.geometry("1550x550")
                 hist_window.title("Registro histórico de seguimiento de incidencias")
                 hist_window.iconbitmap('tele_ico.ico')
                 Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=800, y=187)
@@ -1104,14 +1112,28 @@ def historial2():
                 cols2 = ('registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device',
                          'descripción', 'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
 
-                listBox2 = ttk.Treeview(hist_window, columns=cols2, show='headings')
+
+                canvas = tkinter.Canvas(hist_window, height=285, width=1550, bg="red", borderwidth=5,
+                                        background="#ffffff")
+                frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
+                                    bg="yellow", bd=4, padx=5, pady=1, highlightcolor="green", height=280, width=4470)
+                listBox2 = ttk.Treeview(frame1, columns=cols2, show='headings')
                 vsb = ttk.Scrollbar(hist_window, orient="vertical", command=listBox2.yview)
-                vsb.place(relx=0.978, rely=0.355, relheight=0.600, relwidth=0.030)
+                vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
                 listBox2.configure(yscrollcommand=vsb.set)
+
+                hsb = tkinter.Scrollbar(hist_window, orient="horizontal", command=canvas.xview)
+                canvas.configure(xscrollcommand=hsb.set)
+                hsb.place(x=700, y=520)
+
+                canvas.place(x=10, y=220)
+                canvas.create_window((4, 4), window=frame1, anchor="nw")
+                frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+
                 for col in cols2:
                     listBox2.heading(col, text=col)
                     listBox2.grid(row=1, column=0, rowspan=2, ipady=1)
-                    listBox2.place(x=10, y=230)
+                    listBox2.place(x=10, y=10)
 
                 mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
                 mycursor = mysqldb.cursor()
@@ -1145,10 +1167,10 @@ def historial():
 
     rooot.state(newstate='withdraw')
     hist_window = Toplevel(rooot)
-    hist_window.geometry("1550x500")
+    hist_window.geometry("1550x540")
     hist_window.title("Registro histórico de seguimiento de incidencias")
     hist_window.iconbitmap('tele_ico.ico')
-
+    hist_window.resizable(False, False)
     ticket_enter = entrada_ticket.get()
     sc_enter = entrada_sc.get()
     ccs_enter = entrada_sitio.get()
@@ -1249,22 +1271,36 @@ def historial():
             new_entrada_file10 = Entry(hist_window, width=35)
             new_entrada_file10.place(x=1280, y=160)
             if str(numero_ticket) == ticket_enter:
-                Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=200)
-                Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=140)
-                Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=870, y=170)
+                Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=190)
+                Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=130)
+                Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=870, y=160)
 
                 hist_window.protocol("WM_DELETE_WINDOW", handleProtocol)
                 cols2 = ('registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device', 'descripción',
                          'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
 
-                listBox2 = ttk.Treeview(hist_window, columns=cols2, show='headings')
+                canvas = tkinter.Canvas(hist_window, height=285, width=1550, bg="red", borderwidth=5,
+                                        background="#ffffff")
+                frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
+                                    bg="red", bd=4, padx=5, pady=1, highlightcolor="green", height=280, width=4470)
+                listBox2 = ttk.Treeview(frame1, columns=cols2, show='headings')
                 vsb = ttk.Scrollbar(hist_window, orient="vertical", command=listBox2.yview)
-                vsb.place(relx=0.978, rely=0.355, relheight=0.600, relwidth=0.030)
+                vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
                 listBox2.configure(yscrollcommand=vsb.set)
+
+                hsb = tkinter.Scrollbar(hist_window, orient="horizontal", command=canvas.xview)
+                canvas.configure(xscrollcommand=hsb.set)
+                hsb.place(x=700, y=520)
+
+                canvas.place(x=10, y=220)
+                canvas.create_window((4, 4), window=frame1, anchor="nw")
+                frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+
+
                 for col in cols2:
                     listBox2.heading(col, text=col)
                     listBox2.grid(row=1, column=0, rowspan=2, ipady=1)
-                    listBox2.place(x=10, y=230)
+                    listBox2.place(x=10, y=10)
 
                 mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
                 mycursor = mysqldb.cursor()
@@ -1376,66 +1412,122 @@ def destroy_window():
         ventana_viss.deiconify()
 
 def seguimiento():
-    global now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
-        photoimagex, label_filee, label_file11, label_file22, seguimiento_win
-    global entrada_ccs, entrada_spacecraft, var_spacecraft, variable_a, variable_b, variable_c, variable_d, \
-        optionmenu_b, optionmenu_c, optionmenu_d, var_ccs, optionmenu_a
-    style = ttk.Style()
+    style=ttk.Style()
     style.configure("GW.TLabel", foreground="green", background="white")
-    style3 = ttk.Style()
-    style3.configure("GB.TLabel", foreground="black", background="green")
 
-    seguimiento_win = Toplevel(rooot)
-    seguimiento_win.title("Seguimiento de incidencias")
-    seguimiento_win.geometry("993x640")
-    seguimiento_win.resizable(False, False)
-    seguimiento_win.iconbitmap('tele_ico.ico')
     hist_window.state(newstate='withdraw')
+    global seguimiento_win, now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
+        photoimagex, frame3, frame4
+    seguimiento_win = Toplevel(ventana_decision)
+    seguimiento_win.geometry("990x511")
+    seguimiento_win.title("Formato de Reporte de Fallas")
+    #seguimiento_win.resizable(False, False)  ## Especifica que la ventana no se puede ampliar
+    seguimiento_win.iconbitmap('tele_ico.ico')
 
-    canv = Canvas(seguimiento_win, width=400, height=120, bg='red').grid(row=0, column=2)
-    canv2 = Canvas(seguimiento_win, width=300, height=120, bg='green').grid(row=0, column=1)
-    canv3 = Canvas(seguimiento_win, width=280, height=120, bg='blue').grid(row=0, column=0)
+    canv = Canvas(seguimiento_win, width=400, height=120, bg='red')
+    canv.grid(row=0, column=2)
+    canv2 = Canvas(seguimiento_win, width=300, height=120, bg='green')
+    canv2.grid(row=0, column=1)
+    canv3 = Canvas(seguimiento_win, width=280, height=120, bg='blue')
+    canv3.grid(row=0, column=0)
 
     img_png5 = PhotoImage(file="comunicaciones_recortada.png")
-    label_img = tkinter.Label(seguimiento_win, image=img_png5).place(x=594, y=10)
-    # label_img.place(x=6, y=10)
-
+    label_img = tkinter.Label(seguimiento_win, image=img_png5)
+    label_img.place(x=594, y=10)
     img_png6 = PhotoImage(file="telecom.png")
-    label_img2 = tkinter.Label(seguimiento_win, image=img_png6).place(x=315, y=10)
-
+    label_img2 = tkinter.Label(seguimiento_win, image=img_png6)
+    label_img2.place(x=315, y=10)
     img_png7 = PhotoImage(file="mexsat.png")
+    label_img3 = tkinter.Label(seguimiento_win, image=img_png7)
+    label_img3.place(x=32, y=5)
 
-    label_img3 = tkinter.Label(seguimiento_win, image=img_png7).place(x=32, y=5)
-    l1 = Label(seguimiento_win, text="").grid(row=10, column=0, sticky=W, pady=2)
-    l1 = ttk.Label(seguimiento_win, text="Reporte de fallas", style="GB.TLabel", anchor=CENTER).grid(row=11, column=1, pady=2)
-    l2 = Label(seguimiento_win, text="").grid(row=12, column=2, sticky=W, pady=2)
-    l = Label(seguimiento_win, text="* * * Á r e a  d e  S i s t e m a s * * *").grid(row=11, column=0, pady=2)
-    l3 = Label(seguimiento_win, text="                        No.  de Seguimiento: ").grid(row=13, column=0, sticky=W, pady=2)
-    l3 = Label(seguimiento_win, text="                         Spacecraft:  ").grid(row=14, column=0, sticky=W, pady=2)
-    label_type = Label(seguimiento_win, text="                         Tipo: ").grid(row=16, column=0, sticky=W, pady=2)
-    label_dpvo = Label(seguimiento_win, text="                         Dispositivo: ").grid(row=18, column=0, sticky=W, pady=2)
-    label_name = Label(seguimiento_win, text="Operador: ").grid(row=18, column=2, sticky=W, pady=2)
-    Label_file = Label(seguimiento_win, text="Agregar archivos:").grid(row=20, column=2)
+    # Textos
+    frame1 = LabelFrame(seguimiento_win, text="= Área de Sistemas =", bg="green", bd=4, padx=50, pady=15, highlightcolor="blue", height=500)
+    frame1.grid(row=1, column=0)
+    frame2 = LabelFrame(seguimiento_win, text="Reporte de fallas", bg="blue", bd=4, height=350, width=300, padx=6, pady=17, highlightcolor="green")
+    frame2.grid(row=1, column=1)
+    frame3 = LabelFrame(seguimiento_win, text="Reporte de fallas", bg="green", bd=4, height=350, width=300, padx=20, pady=8, highlightcolor="green")
+    frame3.grid(row=1, column=2)
+    l3 = Label(frame1, text="No. de Seguimiento: ", anchor=E, font=("times", 13))
+    l3.grid(row=13, column=0, sticky=E, pady=5)
+    l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13))
+    l3.grid(row=14, column=0, sticky=E, pady=5)
+    label_type = Label(frame1, text="Tipo:", anchor=E, font=("times", 13))
+    label_type.grid(row=16, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="Dispositivo:", anchor=E, font=("times", 13))
+    label_dpvo.grid(row=18, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="Dispositivo Secundario:", anchor=E, font=("times", 13))
+    label_dpvo.grid(row=19, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="", anchor=CENTER, bg="green", font=("times", 8))
+    label_dpvo.grid(row=22, column=0, sticky=W, pady=5)
+    label_name = Label(frame3, text="Operador: ", anchor=W)
+    label_name.grid(row=15, column=0, sticky=W, pady=2)
+
+    canvas = tkinter.Canvas(frame3, height=120, width=321, bg="yellow", borderwidth=5, background="#ffffff")
+    frame4 = tkinter.Frame(canvas, background="#ffffff")
 
     photo = PhotoImage(file="add_file.png")
     photoimagex = photo.subsample(21, 21)
-    Button(seguimiento_win, text='', image=photoimagex, width=23).grid(row=21, column=2, sticky=W)
+    boton = Button(frame4, text='', image=photoimagex, command=abrir_archivo, width=23)
+    boton.grid(row=0, column=0)
 
-    label_filee = Label(seguimiento_win, text="Seleccione archivos asociados (Máximo 3)", font=("times", 10), anchor=CENTER)
-    label_filee.grid(row=21, column=2)
-    label_file11 = Label(seguimiento_win, text="", font=("times", 10), anchor=CENTER).grid(row=22, column=2)
-    label_file22 = Label(seguimiento_win, text="", font=("times", 10), anchor=CENTER).grid(row=23, column=2)
+    vsb = tkinter.Scrollbar(frame3, orient="vertical", command=canvas.yview)
+    canvas.configure(yscrollcommand=vsb.set)
+    hsb = tkinter.Scrollbar(frame3, orient="horizontal", command=canvas.xview)
+    canvas.configure(xscrollcommand=hsb.set)
 
-    label_name = Label(seguimiento_win, text=user_name, font=("times", 18), anchor=CENTER).grid(row=19, column=2, sticky=W, pady=2)
+    vsb.grid(row=12, column=1, sticky=W)
+    hsb.grid(row=13, column=0)
+    canvas.grid(row=12, column=0)
+    canvas.create_window((4, 4), window=frame4, anchor="nw")
+    frame4.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+    global label_file, label_file1, label_file2, label_file3, label_file4, label_file5, label_file6, label_file7,\
+        label_file8, label_file9
 
-    l4 = Label(seguimiento_win, text="                         Componente: ").grid(row=17, column=0, sticky=W, pady=2)
-    l5 = Label(seguimiento_win, text="                         Descripción de la falla: ").grid(row=20, column=0, sticky=W, pady=2)
-    Button(seguimiento_win, text="Atrás", command=hacia_atras7).grid(row=23, column=0)
-    l6 = Label(seguimiento_win, text="                         Sitio: ").grid(row=15, column=0, sticky=W, pady=2)
-    l7 = Label(seguimiento_win, text="Hora actual:").grid(row=11, column=2, sticky=W, pady=2)
-    l1 = Label(seguimiento_win, text="Fecha: ").grid(row=14, column=2, sticky=W, pady=2)
+    label_file = Label(frame4, text="Seleccione archivos asociados (Máximo 10)", font=("times", 10), bg="yellow", anchor=CENTER)
+    label_file.grid(row=0, column=1)
+    label_file1 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file1.grid(row=1, column=1)
+    label_file2 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file2.grid(row=2, column=1)
+    label_file3 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file3.grid(row=3, column=1)
+    label_file4 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file4.grid(row=4, column=1)
+
+    label_file5 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file5.grid(row=5, column=1)
+    label_file6 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file6.grid(row=6, column=1)
+    label_file7 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file7.grid(row=7, column=1)
+    label_file8 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file8.grid(row=8, column=1)
+    label_file9 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
+    label_file9.grid(row=9, column=1)
+    label_name = Label(frame3, text=user_name, font=("times", 15), anchor=CENTER)
+    label_name.grid(row=19, column=0, pady=2)
+
+    l4 = Label(frame1, text="Componente: ", anchor=E, font=("times", 13))
+    l4.grid(row=17, column=0, sticky=E, pady=5)
+
+    l5 = Label(frame1, text="Descripción de la falla:", anchor=E, font=("times", 13))
+    l5.grid(row=20, column=0, sticky=E, pady=5)
+
+    Button(frame1, text="Atrás", command=hacia_atras7).grid(row=23, column=0)
+
+    l6 = Label(frame1, text="Sitio:", anchor=E, font=("times", 13))
+    l6.grid(row=15, column=0, sticky=E, pady=5)
+
+    l7 = Label(frame3, text="Hora actual:", anchor=W)
+    l7.grid(row=20, column=0, sticky=W, pady=2)
+
+    l1 = Label(frame3, text="Fecha: ", anchor=W)
+    l1.grid(row=23, column=0, sticky=W, pady=2)
     now = datetime.now()
-    l7 = Label(seguimiento_win, text=now.strftime("%Y-%m-%d"), font=("times", 18), anchor=CENTER).grid(row=25, column=2, pady=2)
+
+    l7 = Label(frame3, text=now.strftime("%Y-%m-%d"), font=("times", 16), anchor=CENTER)
+    l7.grid(row=24, column=0, pady=2)
 
     no_ticket = StringVar()
     descrip = StringVar()
@@ -1444,40 +1536,56 @@ def seguimiento():
         cursor = db.cursor()
         cursor.execute("SELECT max(registro) FROM ticket_no_"+ticket_enter)
         myresult = cursor.fetchone()
-        # Debe de haber una incidencia para poder tomar la referencia
-        max_number = myresult[0] + 1
+        #Debe de haber una incidencia para poder tomar la referencia
+        max_number = myresult[0]+1
         no_ticket = max_number
     except Exception as e:
         print(e)
         max_number = 1
         no_ticket = max_number
+        """
+        mysqldb = mysql.connector.connect(host="localhost", user="seguimiento_win", password="313218479", database="mydb")  # Conectmydb
+        mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
+        mycursor.execute("INSERT INTO datos_incidencias2 VALUES (" + str(0) + ", 'Cerrado', 'Eduardo Calderón', 'MX3', "
+                                                                             "'Iztapalapa', 'Registro de', "
+                                                                             "'prueba, Sin este', 'registro la', 'base truena',"
+                                                                             " 'no eliminar', '2021-10-10', '10:11:12')")
+        db = MySQLdb.connect(host="localhost", user="seguimiento_win", password="313218479", database="mydb")
+        cursor = db.cursor()
+        cursor.execute("SELECT max(ticket) FROM datos_incidencias2")
+        myresult = cursor.fetchone()
+        # Debe de haber una incidencia para poder tomar la referencia
+        max_number = myresult[0] + 1
+        no_ticket = max_number"""
 
-    entrada_ticket = Label(seguimiento_win, text=no_ticket)
+    entrada_ticket = Label(frame2, text=no_ticket, font=("times", 13))
     entrada_ticket.grid(row=13, column=1, sticky=W, pady=2)
 
-    scrollbar = tkinter.Scrollbar(seguimiento_win, orient=tkinter.HORIZONTAL)
+    scrollbar = tkinter.Scrollbar(frame2, orient=tkinter.HORIZONTAL)
     scrollbar.grid(row=21, column=1)
-    scrollbarv = tkinter.Scrollbar(seguimiento_win, orient=tkinter.VERTICAL)
-    scrollbarv.grid(row=20, column=2, sticky=W)
+    scrollbarv = tkinter.Scrollbar(frame2, orient=tkinter.VERTICAL)
+    scrollbarv.grid(row=20, column=2, sticky=E)
 
-    entrada_txt = tkinter.Text(seguimiento_win, wrap="none", xscrollcommand=scrollbar.set, yscrollcommand=scrollbarv.set, width=35,
-                               relief=SUNKEN, height=4)
+    entrada_txt = tkinter.Text(frame2, wrap="none", xscrollcommand=scrollbar.set, yscrollcommand=scrollbarv.set, width=33, relief=SUNKEN, height=4)
     entrada_txt.grid(row=20, column=1)
 
     scrollbar.config(command=entrada_txt.xview)
     scrollbarv.config(command=entrada_txt.yview)
 
+    global entrada_ccs, entrada_spacecraft, var_spacecraft, variable_a, variable_b, variable_c, variable_d, \
+        optionmenu_b, optionmenu_c, optionmenu_d, var_ccs, optionmenu_a
+
     var_ccs = tkinter.StringVar(seguimiento_win)
     var_ccs.set('')
     opc_ccs = ['Iztapalapa', 'Hermosillo']
-    entrada_ccs = tkinter.OptionMenu(seguimiento_win, var_ccs, *opc_ccs)
+    entrada_ccs = tkinter.OptionMenu(frame2, var_ccs, *opc_ccs)
+    #entrada_ccs.config(width=32)
     entrada_ccs.grid(row=15, column=1, sticky=W, pady=2)
 
     var_spacecraft = tkinter.StringVar()
     var_spacecraft.set('')
     opc_spacecraft = ['MX2', 'MX3']
-    entrada_spacecraft = tkinter.OptionMenu(seguimiento_win, var_spacecraft, *opc_spacecraft)
-    # entrada_spacecraft.config(width=32)
+    entrada_spacecraft = tkinter.OptionMenu(frame2, var_spacecraft, *opc_spacecraft)
     entrada_spacecraft.grid(row=14, column=1, sticky=W, pady=2)
 
     variable_a = StringVar()
@@ -1485,13 +1593,13 @@ def seguimiento():
     variable_c = StringVar()
     variable_d = StringVar()
 
-    optionmenu_a = OptionMenu(seguimiento_win, variable_a, *data.keys())
+    optionmenu_a = OptionMenu(frame2, variable_a, *data.keys())
     optionmenu_a.config(width=32)
-    optionmenu_b = OptionMenu(seguimiento_win, variable_b, '')
+    optionmenu_b = OptionMenu(frame2, variable_b, '')
     optionmenu_b.config(width=32)
-    optionmenu_c = OptionMenu(seguimiento_win, variable_c, '')
+    optionmenu_c = OptionMenu(frame2, variable_c, '')
     optionmenu_c.config(width=32)
-    optionmenu_d = OptionMenu(seguimiento_win, variable_d, '')
+    optionmenu_d = OptionMenu(frame2, variable_d, '')
     optionmenu_d.config(width=32)
 
     variable_a.trace('w', update_options_B)
@@ -1507,11 +1615,10 @@ def seguimiento():
     optionmenu_b.grid(row=17, column=1, sticky=W, pady=2)
     optionmenu_c.grid(row=18, column=1, sticky=W, pady=2)
     optionmenu_d.grid(row=19, column=1, sticky=W, pady=2)
-    times2()
+    times()
     seguimiento_win.protocol("WM_DELETE_WINDOW", handleProtocol)
-
-    Button(seguimiento_win, text="Registrar", width=10, command=registro_incidencia2).grid(row=16, column=2)  # BOTÓN "Registrarse"
-    seguimiento_win.protocol("WM_DELETE_WINDOW", handleProtocol)
+    Button(frame3, text="Registrar", width=10, command=registro_incidencia2).grid(row=25, column=0)  # BOTÓN "Registrarse"
+    #Frame(seguimiento_win, height=24, width=400, bg='red').grid(row=14, column=2)
 
 
 def update():  #Entradas con los datos de la incidencia a modificar
@@ -2025,14 +2132,14 @@ def exito_login():
     img_png7 = PhotoImage(file="mexsat.png")
     label_img3 = tkinter.Label(root, image=img_png7)
     label_img3.place(x=32, y=5)
-
-    # Textos
+    # Frames:
     frame1 = LabelFrame(root, text="= Área de Sistemas =", bg="green", bd=4, padx=50, pady=15, highlightcolor="blue", height=500)
     frame1.grid(row=1, column=0)
-    frame2 = LabelFrame(root, text="Reporte de fallas", bg="blue", bd=4, height=350, width=300, padx=6, pady=17, highlightcolor="green")
+    frame2 = LabelFrame(root, text="= Reporte de fallas =", bg="blue", bd=4, height=350, width=300, padx=6, pady=17, highlightcolor="green")
     frame2.grid(row=1, column=1)
-    frame3 = LabelFrame(root, text="Reporte de fallas", bg="green", bd=4, height=350, width=300, padx=20, pady=8, highlightcolor="green")
+    frame3 = LabelFrame(root, text="= Archivos Asociados a la falla: =", bg="green", bd=4, height=350, width=300, padx=20, pady=8, highlightcolor="green")
     frame3.grid(row=1, column=2)
+    # Textos:
     l3 = Label(frame1, text="No. de Ticket: ", anchor=E, font=("times", 13))
     l3.grid(row=13, column=0, sticky=E, pady=5)
     l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13))
@@ -2066,6 +2173,7 @@ def exito_login():
     canvas.grid(row=12, column=0)
     canvas.create_window((4, 4), window=frame4, anchor="nw")
     frame4.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+
     global label_file, label_file1, label_file2, label_file3, label_file4, label_file5, label_file6, label_file7,\
         label_file8, label_file9
 
@@ -2164,7 +2272,6 @@ def exito_login():
     var_ccs.set('')
     opc_ccs = ['Iztapalapa', 'Hermosillo']
     entrada_ccs = tkinter.OptionMenu(frame2, var_ccs, *opc_ccs)
-    #entrada_ccs.config(width=32)
     entrada_ccs.grid(row=15, column=1, sticky=W, pady=2)
 
     var_spacecraft = tkinter.StringVar()
