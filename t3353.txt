@@ -37,11 +37,21 @@ class Incidencias(Base):
     files = Column(String(300))
     files2 = Column(String(300))
     files3 = Column(String(300))
+    files4 = Column(String(300))
+    files5 = Column(String(300))
+    files6 = Column(String(300))
+    files7 = Column(String(300))
+    files8 = Column(String(300))
+    files9 = Column(String(300))
+    files10 = Column(String(300))
 
     def __repr__(self):  # Constructor de objetos para mostrar un formato legible
-        return "<Incidencias(status='%s', operador='%s', spacecraft='%s', ccs='%s', tipo_falla='%s', componente='%s', componente2='%s', device='%s', descripcion='%s', date='%s', hora='%s', files='%s', files2='%s', files3='%s')>" % (
+        return "<Incidencias(status='%s', operador='%s', spacecraft='%s', ccs='%s', tipo_falla='%s', componente='%s', componente2='%s', " \
+               "device='%s', descripcion='%s', date='%s', hora='%s', files='%s', files2='%s', files3='%s', files4='%s', files5='%s', " \
+               "files6='%s', files7='%s', files8='%s', files9='%s', files10='%s')>" % (
             self.status, self.operador, self.spacecraft, self.ccs, self.tipo_falla, self.componente, self.componente2,
-            self.device, self.descripcion, self.date, self.hora, self.files, self.files2, self.files3)
+            self.device, self.descripcion, self.date, self.hora, self.files, self.files2, self.files3, self.files4,
+            self.files5, self.files6, self.files7, self.files8, self.files9, self.files10)
 
 
 Base.metadata.create_all(engine)  # Crear motor
@@ -56,20 +66,19 @@ class User(Base):  ####TABLA DE USUARIOS
     password = Column(String(128))
     ccs = Column(String(11))
     dominio = Column(String(40))
-    priv_key = Column(String(2000))
-    publ_key = Column(String(300))
+    mail = Column(String(70))
 
     def __repr__(self):  # Mostrar un formato legible
-        return "<User(name='%s', password='%s', ccs='%s', dominio='%s', priv_key='%s',publ_key='%s')>" % (
-            self.name, self.password, self.ccs, self.dominio, self.priv_key, self.publ_key)
+        return "<User(name='%s', password='%s', ccs='%s', dominio='%s',mail='%s')>" % (
+            self.name, self.password, self.ccs, self.dominio, self.mail)
 
 result = session.query(User).all
 result2 = session.query(Incidencias).all
 ################################################
-data = {'': [''],
+data = {#'': [''],
         'Hardware': ['Servidor', 'WS', 'Switch', 'KVM', 'Teléfono IP', 'Impresora', 'Otro'],
         'No Identificado': [''],
-        'Software': ['Iztapalapa Operaciones', 'Iztapalapa Ingeniería', 'Hermosillo Operaciones', 'Hermosillo Ing']
+        'Software': ['Iztapalapa Operaciones', 'Iztapalapa Ingeniería', 'Hermosillo Operaciones', 'Hermosillo Ingeniería']
         }
 
 data2 = {'Servidor': ["Serv Iztapalapa Operaciones", "Serv Iztapalapa Ingeniería", "Serv Iztapalapa RF",
@@ -94,7 +103,8 @@ data2 = {'Servidor': ["Serv Iztapalapa Operaciones", "Serv Iztapalapa Ingenierí
          'Hermosillo Ingeniería': ['Windows', 'Epoch', 'Ares', 'DSS MX2', 'DSS MX3', 'Oasys', 'Task Iniator',
                                    'Herramientas', 'Antivirus',
                                    'Backups', 'SureSyns', 'Archive Configuration', 'Monics', 'Complan', 'Otro'],
-         '': ['']}
+         #'': ['']
+         }
 
 data3 = {'Serv Iztapalapa Operaciones': ['izopsfep0', 'izopsfep1', 'izopsfep2', 'izopsfep3', 'izopsgs1', 'izopsgs2',
                                          'izopsmc1', 'izopsmc2'],
@@ -111,13 +121,13 @@ data3 = {'Serv Iztapalapa Operaciones': ['izopsfep0', 'izopsfep1', 'izopsfep2', 
                                 'GPS MX3', 'GPS1 MX2', 'GPS2 MX2',
                                 'BBU primario MX2', 'BBU backup MX2', 'hmm3tlns1', 'hmm3tlns2', 'hmm3tris1',
                                 'hmm3tris2', 'hmm3tris3'],
+
          'Hardware Servidor': ['Disco Duro', 'Interfaz de red', 'Tarjeta RAID', 'Ventilador', 'RAM',
                                'Fuente de alimentación'],
 
          'WS Iztapalapa Operaciones': ['izopsws1', 'izopsws2', 'izopsws3', 'izopsws4', 'izopsws5'],
          'WS Iztpalapa Ingeniería': ['izengws1', 'izengws2', 'izengws3', 'izengws4', 'izengws5', 'izengws6', 'izengws7',
-                                     'izengws8',
-                                     'izengws9', 'izengdss1', 'izengdss3'],
+                                     'izengws8', 'izengws9', 'izengdss1', 'izengdss3'],
          'WS Hermosillo Operaciones': ['hmopsws1', 'hmopsws2', 'hmopsws3', 'hmopsws4', 'hmopsws5'],
          'WS Hermosillo Ingeniería': ['hmengws1', 'hmengws2', 'hmengws3', 'hmengws4', 'hmengdss1', 'hmengdss3'],
          'Hardware WS': ['Monitor', 'Tarjeta de video', 'Disco Duro', 'Tarjeta de red', 'Fuente de alimentación',
@@ -155,7 +165,14 @@ data3 = {'Serv Iztapalapa Operaciones': ['izopsfep0', 'izopsfep1', 'izopsfep2', 
          'Mónaco': ['No aplica'],
          'Herramientas': ['No aplica'],
          'Otro': ['Ingrese una descripción:'],
-         '': ['']
+         'DSS MX2':['No aplica'],
+         'DSS MX3':['No aplica'],
+         'Oasys':['No aplica'],
+         'SureSyns':['No aplica'],
+         'Archive Configuration':['No aplica'],
+         'Monics':['No aplica'],
+         'Complan':['No aplica'],
+         #'': ['']
          }
 
 data4 = {#'': [],
@@ -413,6 +430,13 @@ def registro():
     entrada_dom.pack()
     Label(ventana_registro, text="").pack()
 
+    #Mail para recuperación de contraseña
+    ttk.Label(ventana_registro, text="Ingrese un correo electrónico", style="GW.TLabel").pack()
+    entrada_mail = Entry(ventana_registro, textvariable=mail)  # ESPACIO PARA INTRODUCIR EL NOMBRE.
+    entrada_mail.config(width=35)
+    entrada_mail.pack()
+    Label(ventana_registro, text="").pack()
+
     # CCS:
     ttk.Label(ventana_registro, text="Ingresar el CCS", style="GW.TLabel").pack()
     opciones_ccs = ['Iztapalapa', 'Hermosillo']
@@ -464,7 +488,7 @@ def visualizar():
     ventana_principal.state(newstate='withdraw')
 
     global entrada_ticket, entrada_sc, entrada_sitio, entrada_tipo, entrada_componente, entrada_name, entrada, \
-        entrada_componente2, entrada_dpvo, entrada_descrip, entrada_date, entrada_status, entrada_hora, \
+        entrada_componente2, entrada_dpvo, entrada_descrip, entrada_date, entrada_status, entrada_hora, frame1, \
         ventana_viss, listBox, entrada_file1, entrada_file2, entrada_file3, entrada_file4, optionmenu_e,entrada_file10,\
         entrada_file5, entrada_file6, entrada_file7, entrada_file8, variable_e, variable_f, optionmenu_f, entrada_file9
     ventana_viss = Toplevel(ventana_principal)
@@ -837,7 +861,7 @@ def modifica_reg():
         entrada_componente2, entrada_dpvo, entrada_descrip, entrada_date, entrada_status, entrada_hora, \
         entrada_file1, entrada_file2, entrada_file3, entrada_file4, entrada_file5, entrada_file6, \
         entrada_file7, entrada_file8, listBox, rooot, datos_clave, datos_busqueda, variable_e, variable_f, \
-        optionmenu_e, optionmenu_f, entrada_file9, entrada_file10
+        optionmenu_e, optionmenu_f, entrada_file9, entrada_file10, frame1
     rooot = Toplevel(ventana_decision)
     rooot.geometry("1550x540")
     rooot.title("Visualización y Modificación de Incidencias")
@@ -998,7 +1022,8 @@ def historial2():
     type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
     new_entrada_name, new_entrada_sc, new_entrada_sitio, new_entrada_tipo, new_entrada_componente, new_entrada_componente2, new_entrada_dpvo,\
     new_entrada_descrip, new_entrada_date, new_entrada_hora, new_entrada_file1, new_entrada_file2, new_entrada_file3, new_entrada_file4, \
-    new_entrada_file5, new_entrada_file6, new_entrada_file7, new_entrada_file8, new_entrada_file9, new_entrada_file10, listBox2
+    new_entrada_file5, new_entrada_file6, new_entrada_file7, new_entrada_file8, new_entrada_file9, new_entrada_file10, \
+    listBox2, frame11
     ventana_viss.state(newstate='withdraw')
 
     ticket_enter = entrada_ticket.get()
@@ -1115,9 +1140,9 @@ def historial2():
 
                 canvas = tkinter.Canvas(hist_window, height=285, width=1550, bg="red", borderwidth=5,
                                         background="#ffffff")
-                frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
+                frame11 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
                                     bg="yellow", bd=4, padx=5, pady=1, highlightcolor="green", height=280, width=4470)
-                listBox2 = ttk.Treeview(frame1, columns=cols2, show='headings')
+                listBox2 = ttk.Treeview(frame11, columns=cols2, show='headings')
                 vsb = ttk.Scrollbar(hist_window, orient="vertical", command=listBox2.yview)
                 vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
                 listBox2.configure(yscrollcommand=vsb.set)
@@ -1127,8 +1152,8 @@ def historial2():
                 hsb.place(x=700, y=520)
 
                 canvas.place(x=10, y=220)
-                canvas.create_window((4, 4), window=frame1, anchor="nw")
-                frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+                canvas.create_window((4, 4), window=frame11, anchor="nw")
+                frame11.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 
                 for col in cols2:
                     listBox2.heading(col, text=col)
@@ -1161,9 +1186,10 @@ def historial2():
 def historial():
     global hist_window, variable_e1, variable_f1, optionmenu_e1, optionmenu_f1, ticket_enter, sc_enter, ccs_enter, \
     type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
-    new_entrada_name, new_entrada_sc, new_entrada_sitio, new_entrada_tipo, new_entrada_componente, new_entrada_componente2, new_entrada_dpvo,\
-    new_entrada_descrip, new_entrada_date, new_entrada_hora, new_entrada_file1, new_entrada_file2, new_entrada_file3, new_entrada_file4, \
-    new_entrada_file5, new_entrada_file6, new_entrada_file7, new_entrada_file8, new_entrada_file9, new_entrada_file10, listBox2
+    new_entrada_name, new_entrada_sc, new_entrada_sitio, new_entrada_tipo, new_entrada_componente, listBox2, \
+    new_entrada_dpvo, new_entrada_descrip, new_entrada_date, new_entrada_hora, new_entrada_file1, new_entrada_file2, \
+    new_entrada_file3, new_entrada_file4, new_entrada_componente2, new_entrada_file5, new_entrada_file6, \
+    new_entrada_file7, new_entrada_file8, new_entrada_file9, new_entrada_file10, frame11
 
     rooot.state(newstate='withdraw')
     hist_window = Toplevel(rooot)
@@ -1281,9 +1307,9 @@ def historial():
 
                 canvas = tkinter.Canvas(hist_window, height=285, width=1550, bg="red", borderwidth=5,
                                         background="#ffffff")
-                frame1 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
+                frame11 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
                                     bg="red", bd=4, padx=5, pady=1, highlightcolor="green", height=280, width=4470)
-                listBox2 = ttk.Treeview(frame1, columns=cols2, show='headings')
+                listBox2 = ttk.Treeview(frame11, columns=cols2, show='headings')
                 vsb = ttk.Scrollbar(hist_window, orient="vertical", command=listBox2.yview)
                 vsb.place(relx=0.978, rely=0.355, relheight=0.6, relwidth=0.03)
                 listBox2.configure(yscrollcommand=vsb.set)
@@ -1293,8 +1319,8 @@ def historial():
                 hsb.place(x=700, y=520)
 
                 canvas.place(x=10, y=220)
-                canvas.create_window((4, 4), window=frame1, anchor="nw")
-                frame1.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+                canvas.create_window((4, 4), window=frame11, anchor="nw")
+                frame11.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
 
 
                 for col in cols2:
@@ -1416,8 +1442,19 @@ def seguimiento():
     style.configure("GW.TLabel", foreground="green", background="white")
 
     hist_window.state(newstate='withdraw')
-    global seguimiento_win, now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
-        photoimagex, frame3, frame4
+    global seguimiento_win, now, no_ticket, descrip,entrada_txt,number_of_rows,max_number,img_png5,img_png6, img_png7, \
+    photoimagex, frame3, frame4, archivo_abierto, archivo_abierto, archivo_abierto2, archivo_abierto4,archivo_abierto5,\
+        archivo_abierto6, archivo_abierto7, archivo_abierto8, archivo_abierto9, archivo_abierto3, archivo_abierto10
+    archivo_abierto=""
+    archivo_abierto2=""
+    archivo_abierto3=""
+    archivo_abierto4=""
+    archivo_abierto5=""
+    archivo_abierto6=""
+    archivo_abierto7=""
+    archivo_abierto8=""
+    archivo_abierto9=""
+    archivo_abierto10=""
     seguimiento_win = Toplevel(ventana_decision)
     seguimiento_win.geometry("990x511")
     seguimiento_win.title("Formato de Reporte de Fallas")
@@ -1579,7 +1616,6 @@ def seguimiento():
     var_ccs.set('')
     opc_ccs = ['Iztapalapa', 'Hermosillo']
     entrada_ccs = tkinter.OptionMenu(frame2, var_ccs, *opc_ccs)
-    #entrada_ccs.config(width=32)
     entrada_ccs.grid(row=15, column=1, sticky=W, pady=2)
 
     var_spacecraft = tkinter.StringVar()
@@ -1736,12 +1772,13 @@ def aplicar():
     cols = ('ticket', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device', 'descripción',
             'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
     try:
-        listBox = ttk.Treeview(rooot, columns=cols, show='headings')
+        listBox = ttk.Treeview(frame1, columns=cols, show='headings')
     except Exception as e:
+        print(e)
         listBox = ttk.Treeview(ventana_viss, columns=cols, show='headings')
     for col in cols:
         listBox.heading(col, text=col)
-        listBox.place(x=10, y=230)
+        listBox.place(x=10, y=10)
 
     data = variable_e.get()
     operador = variable_f.get()
@@ -1785,10 +1822,10 @@ def aplicar2():
     global myresult, listBox2
     cols = ('registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device', 'descripción',
             'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7', 'files8', 'files9', 'files10')
-    listBox2 = ttk.Treeview(hist_window, columns=cols, show='headings')
+    listBox2 = ttk.Treeview(frame11, columns=cols, show='headings')
     for col in cols:
         listBox2.heading(col, text=col)
-        listBox2.place(x=10, y=230)
+        listBox2.place(x=10, y=10)
 
     data = variable_e1.get()
     operador = variable_f1.get()
@@ -1938,7 +1975,7 @@ def quitar_path9():
 
 
 def abrir_archivo10():
-    global photoimage15, buton_garbage_co, archivo_abierto10, photoimage40
+    global photoimage15, buton_garbage_co, photoimage40, archivo_abierto10
     archivo_abierto10 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file9.configure(text="File 10: " + archivo_abierto10)
@@ -1950,7 +1987,7 @@ def abrir_archivo10():
 
 
 def abrir_archivo9():
-    global photoimage14, buton_garbage_c, archivo_abierto9, photoimage40, buton_file9
+    global photoimage14, buton_garbage_c, photoimage40, buton_file9, archivo_abierto9
     archivo_abierto9 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file8.configure(text="File 9: " + archivo_abierto9)
@@ -1966,7 +2003,7 @@ def abrir_archivo9():
     buton_file9.grid(row=9, column=0, sticky=W)
 
 def abrir_archivo8():
-    global photoimage13, buton_garbage_, archivo_abierto8, buton_file8, photoimage39
+    global photoimage13, buton_garbage_, buton_file8, photoimage39, archivo_abierto8
     archivo_abierto8 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file7.configure(text="File 8: " + archivo_abierto8)
@@ -1982,7 +2019,7 @@ def abrir_archivo8():
     buton_file8.grid(row=8, column=0, sticky=W)
 
 def abrir_archivo7():
-    global photoimage12, buton_garbage, archivo_abierto7, buton_file7, photoimage38
+    global photoimage12, buton_garbage, buton_file7, photoimage38, archivo_abierto7
     archivo_abierto7 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file6.configure(text="File 7: " + archivo_abierto7)
@@ -1998,7 +2035,7 @@ def abrir_archivo7():
     buton_file7.grid(row=7, column=0, sticky=W)
 
 def abrir_archivo6():
-    global photoimage11, buton_garbag, archivo_abierto6, buton_file6, photoimage37
+    global photoimage11, buton_garbag, buton_file6, photoimage37, archivo_abierto6
     archivo_abierto6 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file5.configure(text="File 6: " + archivo_abierto6)
@@ -2014,7 +2051,7 @@ def abrir_archivo6():
     buton_file6.grid(row=6, column=0, sticky=W)
 
 def abrir_archivo5():
-    global photoimage10, buton_garba, archivo_abierto5, photoimage36, buton_file5
+    global photoimage10, buton_garba, photoimage36, buton_file5, archvio_abierto5
     archivo_abierto5 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file4.configure(text="File 5: " + archivo_abierto5)
@@ -2030,7 +2067,7 @@ def abrir_archivo5():
     buton_file5.grid(row=5, column=0, sticky=W)
 
 def abrir_archivo4():
-    global photoimage9, buton_garb, archivo_abierto4, buton_file4, photoimage35
+    global photoimage9, buton_garb, buton_file4, photoimage35, archivo_abierto4
     archivo_abierto4 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file3.configure(text="File 4: " + archivo_abierto4)
@@ -2046,7 +2083,7 @@ def abrir_archivo4():
     buton_file4.grid(row=4, column=0, sticky=W)
 
 def abrir_archivo3():
-    global photoimage8, buton_gar, archivo_abierto3, photoimage34, buton_file3
+    global photoimage8, buton_gar, photoimage34, buton_file3, archivo_abierto3
     archivo_abierto3 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file2.configure(text="File 3: " + archivo_abierto3)
@@ -2066,7 +2103,7 @@ def abrir_archivo3():
     #    buton_gar.grid(row=23, column=2, sticky=E)
 
 def abrir_archivo2():
-    global photoimage7, photoimage33, buton_gar2, archivo_abierto2, buton_file2
+    global photoimage7, photoimage33, buton_gar2, buton_file2, archivo_abierto2
     archivo_abierto2 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file1.configure(text="File 2: " + archivo_abierto2)
@@ -2083,7 +2120,7 @@ def abrir_archivo2():
 
 
 def abrir_archivo():
-    global datos1, datos2, datos3, photoimage2, photoimage3, photoimage4, buton_gar3, archivo_abierto, buton_file
+    global datos3, photoimage2, photoimage3, photoimage4, buton_gar3, buton_file, archivo_abierto
     archivo_abierto = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                  filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file.configure(text="File 1: " + archivo_abierto)
@@ -2109,7 +2146,20 @@ def exito_login():
 
     ventana_decision.state(newstate='withdraw')
     global root, now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
-        photoimagex, frame3, frame4
+        photoimagex, frame3, frame4, archivo_abierto, archivo_abierto, archivo_abierto, archivo_abierto2,\
+        archivo_abierto4, archivo_abierto5, archivo_abierto6, archivo_abierto7, archivo_abierto8, archivo_abierto9, \
+        archivo_abierto3, archivo_abierto10
+    archivo_abierto=""
+    archivo_abierto2=""
+    archivo_abierto3=""
+    archivo_abierto4=""
+    archivo_abierto5=""
+    archivo_abierto6=""
+    archivo_abierto7=""
+    archivo_abierto8=""
+    archivo_abierto9=""
+    archivo_abierto10=""
+
     root = Toplevel(ventana_decision)
     root.geometry("990x511")
     root.title("Formato de Reporte de Fallas")
@@ -2140,20 +2190,13 @@ def exito_login():
     frame3 = LabelFrame(root, text="= Archivos Asociados a la falla: =", bg="green", bd=4, height=350, width=300, padx=20, pady=8, highlightcolor="green")
     frame3.grid(row=1, column=2)
     # Textos:
-    l3 = Label(frame1, text="No. de Ticket: ", anchor=E, font=("times", 13))
-    l3.grid(row=13, column=0, sticky=E, pady=5)
-    l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13))
-    l3.grid(row=14, column=0, sticky=E, pady=5)
-    label_type = Label(frame1, text="Tipo:", anchor=E, font=("times", 13))
-    label_type.grid(row=16, column=0, sticky=E, pady=5)
-    label_dpvo = Label(frame1, text="Dispositivo:", anchor=E, font=("times", 13))
-    label_dpvo.grid(row=18, column=0, sticky=E, pady=5)
-    label_dpvo = Label(frame1, text="Dispositivo Secundario:", anchor=E, font=("times", 13))
-    label_dpvo.grid(row=19, column=0, sticky=E, pady=5)
-    label_dpvo = Label(frame1, text="", anchor=CENTER, bg="green", font=("times", 8))
-    label_dpvo.grid(row=22, column=0, sticky=W, pady=5)
-    label_name = Label(frame3, text="Operador: ", anchor=W)
-    label_name.grid(row=15, column=0, sticky=W, pady=2)
+    l3 = Label(frame1, text="No. de Ticket: ", anchor=E, font=("times", 13)).grid(row=13, column=0, sticky=E, pady=5)
+    l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13)).grid(row=14, column=0, sticky=E, pady=5)
+    label_type = Label(frame1, text="Tipo:", anchor=E, font=("times", 13)).grid(row=16, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="Dispositivo:", anchor=E, font=("times", 13)).grid(row=18, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="Dispositivo Secundario:", anchor=E, font=("times", 13)).grid(row=19, column=0, sticky=E, pady=5)
+    label_dpvo = Label(frame1, text="", anchor=CENTER, bg="green", font=("times", 8)).grid(row=22, column=0, sticky=W, pady=5)
+    label_name = Label(frame3, text="Operador: ", anchor=W).grid(row=15, column=0, sticky=W, pady=2)
 
     canvas = tkinter.Canvas(frame3, height=120, width=321, bg="yellow", borderwidth=5, background="#ffffff")
     frame4 = tkinter.Frame(canvas, background="#ffffff")
@@ -2198,6 +2241,7 @@ def exito_login():
     label_file8.grid(row=8, column=1)
     label_file9 = Label(frame4, text="", font=("times", 10), bg="white", anchor=W)
     label_file9.grid(row=9, column=1)
+
     label_name = Label(frame3, text=user_name, font=("times", 15), anchor=CENTER)
     label_name.grid(row=19, column=0, pady=2)
 
@@ -2351,15 +2395,16 @@ def times2():
 
 
 def update_options_B(*args):
-    #try:
-    countries = data[variable_a.get()]
-    variable_b.set(countries[0])
-    #except Exception as e:
-    #    print(e)
-    menu = optionmenu_b['menu']
-    menu.delete(0, 'end')
-    for country in countries:
-        menu.add_command(label=country, command=lambda nation=country: variable_b.set(nation))
+    try:
+        countries = data[variable_a.get()]
+        variable_b.set(countries[0])
+        menu = optionmenu_b['menu']
+        menu.delete(0, 'end')
+        for country in countries:
+            menu.add_command(label=country, command=lambda nation=country: variable_b.set(nation))
+    except Exception as e:
+        print(e)
+
 
 def update_options_F(*args):
     try:
@@ -2385,48 +2430,196 @@ def update_options_F1(*args):
 
 
 def update_options_C(*args):
-    cities = data2[variable_b.get()]
-    variable_c.set(cities[0])
-    menu = optionmenu_c['menu']
-    menu.delete(0, "end")
-    for city in cities:
-        menu.add_command(label=city, command=lambda nation=city: variable_c.set(nation))
+    try:
+        cities = data2[variable_b.get()]
+        variable_c.set(cities[0])
+        menu = optionmenu_c['menu']
+        menu.delete(0, "end")
+        for city in cities:
+            menu.add_command(label=city, command=lambda nation=city: variable_c.set(nation))
+    except Exception as e:
+        print(e)
+
 
 def update_options_D(*args):
-    componentes = data3[variable_c.get()]
-    variable_d.set(componentes[0])
-    menu = optionmenu_d['menu']
-    menu.delete(0, "end")
-    for comp in componentes:
-        menu.add_command(label=comp, command=lambda nation=comp: variable_d.set(nation))
+    try:
+        componentes = data3[variable_c.get()]
+        variable_d.set(componentes[0])
+        menu = optionmenu_d['menu']
+        menu.delete(0, "end")
+        for comp in componentes:
+            menu.add_command(label=comp, command=lambda nation=comp: variable_d.set(nation))
+    except Exception as e:
+        print(e)
+
 
 def borrar_ventana():
-    ventana_ticket_ok.destroy()
-    ventana_decision.state(newstate='normal')
-    ventana_decision.deiconify()
+    try:
+        ventana_ticket_ok.state(newstate='withdraw')
+        ventana_decision.state(newstate='normal')
+        ventana_decision.deiconify()
+    except Exception as e:
+        pass
+
 
 def registro_incidencia2():
-    global datos
-    try:
-        datos = [archivo_abierto, archivo_abierto2, archivo_abierto3]
-    except:
-        datos = [archivo_abierto, archivo_abierto2]
+    global datos, lastid1, lastid2, lastid3, lastid4, lastid5, lastid6, lastid7, lastid8, lastid9, lastid10
+
+    if (archivo_abierto == ""):
+        archivo_abierto == "sin archivo adjunto"
+        lastid1 = ""
     else:
-        datos = [archivo_abierto]
+        try:
+            first = archivo_abierto.split("/")  # separa el path
+            lastid1 = first.pop()  # extrae el nombre del archivo
+            print(lastid1)
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto2 == ""):
+        archivo_abierto2 == "sin archivo adjunto"
+        lastid2 = ""
+    else:
+        try:
+            second = archivo_abierto2.split("/")  # separa el path
+            lastid2 = second.pop()  # extrae el nombre del archivo
+            print(lastid2)
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto3 == ""):
+        archivo_abierto3 == "sin archivo adjunto"
+        lastid3 = ""
+    else:
+        try:
+            three = archivo_abierto3.split("/")  # separa el path
+            lastid3 = three.pop()  # extrae el nombre del archivo
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto4 == ""):
+        archivo_abierto4 == "sin archivo adjunto"
+        lastid4 = ""
+    else:
+        try:
+            four = archivo_abierto4.split("/")  # arreglo de palabras separadas
+            lastid4 = four.pop()  # Nombre del archivo
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto5 == ""):
+        archivo_abierto5 == "sin archivo adjunto"
+        lastid5 = ""
+    else:
+        try:
+            five = archivo_abierto5.split("/")
+            lastid5 = five.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto6 == ""):
+        archivo_abierto6 == "sin archivo adjunto"
+        lastid6 = ""
+    else:
+        try:
+            six = archivo_abierto6.split("/")
+            lastid6 = six.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto7 == ""):
+        archivo_abierto7 == "sin archivo adjunto"
+        lastid7 = ""
+    else:
+        try:
+            seven = archivo_abierto7.split("/")  # arreglo de palabras separadas
+            lastid7 = seven.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto8 == ""):
+        archivo_abierto8 == "sin archivo adjunto"
+        lastid8 = ""
+    else:
+        try:
+            eigth = archivo_abierto8.split("/")
+            lastid8 = eigth.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto9 == ""):
+        archivo_abierto9 == "sin archivo adjunto"
+        lastid9 = ""
+    else:
+        try:
+            nine = archivo_abierto9.split("/")
+            lastid9 = nine.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto10 == ""):
+        archivo_abierto10 == "sin archivo adjunto"
+        lastid10 = ""
+    else:
+        try:
+            ten = archivo_abierto10.split("/")
+            lastid10 = ten.pop()
+        except Exception as e:
+            print(e)
 
     path = "/home/sistemas/Downloads"
-    try:
-        os.system("scp " + archivo_abierto + " sistemas@192.168.9.69:" + path)
-    except Exception as e:
-        print(e)
-    try:
-        os.system("scp " + archivo_abierto2 + " sistemas@192.168.9.69:" + path)
-    except Exception as e:
-        print(e)
-    try:
-        os.system("scp " + archivo_abierto3 + " sistemas@192.168.9.69:" + path)
-    except Exception as e:
-        print(e)
+    name_file = "incidencia No. "
+
+#    try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+#       os.system(
+#            "scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto2 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid2)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto3 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid3)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto4 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid4)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto5 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid5)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto6 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid6)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto7 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid7)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto8 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid8)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto9 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid9)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system(
+#            "scp " + archivo_abierto10 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid10)
+#    except Exception as e:
+#        print(e)
 
     datos_ticket = str(no_ticket)  # imprime el valor de ticket que le pasamos en la tabla de registro
     datos_operador = user_name
@@ -2444,17 +2637,22 @@ def registro_incidencia2():
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  #Conectmydb
     mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
-    mycursor.execute("INSERT INTO " + stringg + datos_ticket + " VALUES(1, 'Abierto', '" + datos_operador + "','"
-                     + datos_spacecraft + "','" + datos_ccs + "','" + datos_tfalla + "','" + datos_componente + "','" + datos_componente2
-                     + "','" + datos_device + "','" + datos_descripcion + "','" + datos_date + "','" + current_time2 + "','" +
-                     archivo_abierto + "','" + archivo_abierto2 + "','" + archivo_abierto3 +"','" + archivo_abierto4 +"','" + archivo_abierto5 +"','" + archivo_abierto6 +"','" + archivo_abierto7 +"','" + archivo_abierto8 +"','" + archivo_abierto9 +"','" + archivo_abierto10 + "')")
+    try:
+        mycursor.execute("INSERT INTO " + stringg + datos_ticket + " VALUES(1, 'Abierto', '" + datos_operador + "','"
+        + datos_spacecraft + "','" + datos_ccs + "','" + datos_tfalla + "','" + datos_componente + "','" + datos_componente2
+        + "','" + datos_device + "','" + datos_descripcion + "','" + datos_date + "','" + current_time2 + "','" +
+        archivo_abierto + "','" + archivo_abierto2 + "','" + archivo_abierto3 +"','" + archivo_abierto4 +"','" + archivo_abierto5 +"','" + archivo_abierto6 +"','" + archivo_abierto7 +"','" + archivo_abierto8 +"','" + archivo_abierto9 +"','" + archivo_abierto10 + "')")
+    except Exception as e:
+        print(e)
+
     mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
 
-    label_succes = Label(root, text="Resgistro Exitoso")  # En caso de ser un registro exitoso, se manda este mensaje
+    label_succes = Label(seguimiento_win, text="Resgistro Exitoso")  # En caso de ser un registro exitoso, se manda este mensaje
     label_succes.grid(row=17, column=2, sticky=W, pady=2)
     session.commit()
     session.close()
     seguimiento_win.destroy()
+    global ventana_ticket_ok
     ventana_ticket_ok = Tk()
     ventana_ticket_ok.title("Informe")
     ventana_ticket_ok.geometry("200x150")
@@ -2463,43 +2661,154 @@ def registro_incidencia2():
 
 
 def registro_incidencia():
-    global datos
-    try:
-        datos = [archivo_abierto, archivo_abierto2, archivo_abierto3]
-    except:
-        datos = [archivo_abierto, archivo_abierto2]
+    global datos, lastid1, lastid2, lastid3, lastid4, lastid5, lastid6, lastid7, lastid8, lastid9, lastid10
+
+    if(archivo_abierto == ""):
+        archivo_abierto == "sin archivo adjunto"
+        lastid1=""
     else:
-        datos = [archivo_abierto]
-    print(datos)
-    #first = archivo_abierto.split("/")   # arreglo de palabras separadas
-    #second = archivo_abierto2.split("/")
-    #three = archivo_abierto3.split("/")
-    #lastid1 = first.pop()   #Nombre del archivo
-    #lastid2 = second.pop()
-    #lastid3 = three.pop()
-    global archivo_abierto4, archivo_abierto5, archivo_abierto6, archivo_abierto7, archivo_abierto8, archivo_abierto9, archivo_abierto10
+        try:
+            first = archivo_abierto.split("/")   # separa el path
+            lastid1 = first.pop()  # extrae el nombre del archivo
+            print(lastid1)
+        except Exception as e:
+            print(e)
+
+    if(archivo_abierto2 == ""):
+        archivo_abierto2 == "sin archivo adjunto"
+        lastid2 = ""
+    else:
+        try:
+            second = archivo_abierto2.split("/")  # separa el path
+            lastid2 = second.pop()  # extrae el nombre del archivo
+            print(lastid2)
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto3 == ""):
+        archivo_abierto3 == "sin archivo adjunto"
+        lastid3 = ""
+    else:
+        try:
+            three = archivo_abierto3.split("/")  # separa el path
+            lastid3 = three.pop()  # extrae el nombre del archivo
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto4 == ""):
+        archivo_abierto4 == "sin archivo adjunto"
+        lastid4 = ""
+    else:
+        try:
+            four = archivo_abierto4.split("/")  # arreglo de palabras separadas
+            lastid4 = four.pop()  # Nombre del archivo
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto5 == ""):
+        archivo_abierto5 == "sin archivo adjunto"
+        lastid5 = ""
+    else:
+        try:
+            five = archivo_abierto5.split("/")
+            lastid5 = five.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto6 == ""):
+        archivo_abierto6 == "sin archivo adjunto"
+        lastid6 = ""
+    else:
+        try:
+            six = archivo_abierto6.split("/")
+            lastid6 = six.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto7 == ""):
+        archivo_abierto7 == "sin archivo adjunto"
+        lastid7 = ""
+    else:
+        try:
+            seven = archivo_abierto7.split("/")  # arreglo de palabras separadas
+            lastid7 = seven.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto8 == ""):
+        archivo_abierto8 == "sin archivo adjunto"
+        lastid8 = ""
+    else:
+        try:
+            eigth = archivo_abierto8.split("/")
+            lastid8 = eigth.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto9 == ""):
+        archivo_abierto9 == "sin archivo adjunto"
+        lastid9 = ""
+    else:
+        try:
+            nine = archivo_abierto9.split("/")
+            lastid9 = nine.pop()
+        except Exception as e:
+            print(e)
+
+    if (archivo_abierto10 == ""):
+        archivo_abierto10 == "sin archivo adjunto"
+        lastid10 = ""
+    else:
+        try:
+            ten = archivo_abierto10.split("/")
+            lastid10 = ten.pop()
+        except Exception as e:
+            print(e)
+
     path = "/home/sistemas/Downloads"
-    archivo_abierto4=path
-    archivo_abierto5=path
-    archivo_abierto6=path
-    archivo_abierto7=path
-    archivo_abierto8=path
-    archivo_abierto9=path
-    archivo_abierto10=path
+    name_file= "incidencia No. "
 
-    try:
-        os.system("scp "+archivo_abierto+" sistemas@192.168.9.69:"+path)
 
-    except Exception as e:
-        print(e)
-    try:
-        os.system("scp "+archivo_abierto2+" sistemas@192.168.9.69:"+path)
-    except Exception as e:
-        print(e)
-    try:
-        os.system("scp "+archivo_abierto3+" sistemas@192.168.9.69:"+path)
-    except Exception as e:
-        print(e)
+#    try: #envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+#        os.system("scp "+archivo_abierto+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid1)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto2+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid2)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto3+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid3)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto4+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid4)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto5+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid5)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto6+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid6)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto7+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid7)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto8+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid8)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto9+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid9)
+#    except Exception as e:
+#        print(e)
+#    try:
+#        os.system("scp "+archivo_abierto10+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid10)
+#    except Exception as e:
+#       print(e)
 
     datos_ticket = str(no_ticket)   #imprime el valor de ticket que le pasamos en la tabla de registro
     print(datos_ticket)
@@ -2516,27 +2825,33 @@ def registro_incidencia():
     datos_date = now.strftime("%Y-%m-%d")
     current_time2 = time.strftime("%H:%M:%S")
     #registramos la nueva incidencia en la tabla donde vienen todas las incidencias
-    new_user = Incidencias(status="Abierto", operador=datos_operador, spacecraft=datos_spacecraft, ccs=datos_ccs, tipo_falla=datos_tfalla,
-                           componente=datos_componente, componente2=datos_componente2, device=datos_device,
-                           descripcion=datos_descripcion, date=datos_date, hora=current_time2, files=archivo_abierto, files2=archivo_abierto2, files3=archivo_abierto3)
+    new_user = Incidencias(status="Abierto", operador=datos_operador, spacecraft=datos_spacecraft, ccs=datos_ccs,
+    tipo_falla=datos_tfalla, componente=datos_componente, componente2=datos_componente2, device=datos_device,
+    descripcion=datos_descripcion, date=datos_date, hora=current_time2, files=archivo_abierto, files2=archivo_abierto2,
+    files3=archivo_abierto3, files4=archivo_abierto4, files5=archivo_abierto5, files6=archivo_abierto6,
+    files7=archivo_abierto7, files8=archivo_abierto8, files9=archivo_abierto9, files10=archivo_abierto10)
 
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  #Conectmydb
     mycursor = mysqldb.cursor()  #nos posicionamos en la base de datos
     #A la par se crea la tabla que almacenará los históricos de la incidencias
-    mycursor.execute("Create table " + stringg + datos_ticket + " (registro INT NOT NULL AUTO_INCREMENT, status "
+    mycursor.execute("Create table " + str(stringg) + str(datos_ticket) + " (registro INT NOT NULL AUTO_INCREMENT, status "
                 "VARCHAR(20), operador VARCHAR(50), spacecraft VARCHAR(15), ccs VARCHAR(13), tipo_falla VARCHAR(15), "
-        "componente VARCHAR(40), componente2 VARCHAR(30), device VARCHAR(20), descripcion VARCHAR(400), date Date, "
-        "hora Time, files VARCHAR(300), files2 VARCHAR(300), files3 VARCHAR(300), files4 VARCHAR(300), files5 VARCHAR(300), files6 VARCHAR(300), files7 VARCHAR(300), files8 VARCHAR(300), files9 VARCHAR(300), files10 VARCHAR(300) PRIMARY KEY (registro))") #Ejecutamos CREATE para crear una tabla asociada a una incidencia
+        "componente VARCHAR(40), componente2 VARCHAR(30), device VARCHAR(60), descripcion VARCHAR(400), date Date, "
+    "hora Time, files VARCHAR(300), files2 VARCHAR(300), files3 VARCHAR(300), files4 VARCHAR(300), files5 VARCHAR(300),"
+    "files6 VARCHAR(300), files7 VARCHAR(300), files8 VARCHAR(300), files9 VARCHAR(300), files10 VARCHAR(300), PRIMARY "
+                                "KEY (registro))") #Ejecutamos CREATE para crear una tabla asociada a una incidencia
 
     #Esta primera inserción a la tabla recién generada debe hacerse de esta manera debido a que si declaramos una clase
     #o plantilla de una determinada tabla, bien podría aplicar para cualquier de las tablas generadas con la peti-
     #ción de arriba, al tener cada una un nombre diferente no funcionaría ya que se le tendría que cambiar el nombre ala
     #clase o tener una clase por cada tabla, lo cuál no es nada conveniente. Entonces debemos decirle que agregue la inf
-    mycursor.execute("INSERT INTO " + stringg + datos_ticket + " VALUES(1, 'Abierto', '" + datos_operador + "','"
-    + datos_spacecraft + "','" + datos_ccs + "','" + datos_tfalla + "','" + datos_componente + "','" + datos_componente2
-    + "','" + datos_device + "','" + datos_descripcion + "','" + datos_date + "','" + current_time2 + "','" +
-                     archivo_abierto + "','" + archivo_abierto2 + "','" + archivo_abierto3 +"','" + archivo_abierto4 +"','" + archivo_abierto5 +"','" + archivo_abierto6 +"','" + archivo_abierto7 +"','" + archivo_abierto8 +"','" + archivo_abierto9 + "','" + archivo_abierto10 +"')")
+    mycursor.execute("INSERT INTO " + str(stringg) + str(datos_ticket) + " VALUES(1, 'Abierto', '" + str(datos_operador) + "','"
+    + str(datos_spacecraft) + "','" + str(datos_ccs) + "','" + str(datos_tfalla) + "','" + str(datos_componente) + "','" + str(datos_componente2)
+    + "','" + str(datos_device) + "','" + str(datos_descripcion) + "','" + str(datos_date) + "','" + str(current_time2) + "','" +
+    str(archivo_abierto) + "','" + str(archivo_abierto2) + "','" + str(archivo_abierto3) +"','" + str(archivo_abierto4) +"','" +
+    str(archivo_abierto5) +"','" + str(archivo_abierto6) +"','" + str(archivo_abierto7) +"','" + str(archivo_abierto8) +"','" +
+    str(archivo_abierto9) + "','" + str(archivo_abierto10) +"')")
     mysqldb.commit()                #Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
 
     label_succes = Label(root, text="Resgistro Exitoso")     #En caso de ser un registro exitoso, se manda este mensaje
@@ -2584,6 +2899,8 @@ def registro_usuario():
     clave_info2 = clave2.get()
     ccs_info = datos1.get()
     dom_info = datos2.get()
+    correo = mail.get()
+    print(correo)
 
     usuario_sn_spaces = usuario_info.replace(" ", "")
     valida_nombre = usuario_sn_spaces.isalpha()  # True o False
@@ -2613,8 +2930,7 @@ def registro_usuario():
             entrada_nombre.delete(0, END)
             entrada_clave.delete(0, END)
             ##############Insertar info en la bdd########################
-            new_user = User(name=usuario_info, password=clave_info, ccs=ccs_info, dominio=dom_info, priv_key='1234',
-                            publ_key='3132')
+            new_user = User(name=usuario_info, password=clave_info, ccs=ccs_info, dominio=dom_info, mail=correo)
             session.add(new_user)
             session.commit()
             session.close()
