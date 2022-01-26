@@ -601,18 +601,19 @@ def visualizar():
     entrada_file3.place(x=950, y=70)
     entrada_file4 = tkinter.Entry(ventana_viss, width=35)
     entrada_file4.place(x=950, y=100)
+
     entrada_file5 = Entry(ventana_viss, width=38)
-    entrada_file5.place(x=1280, y=10)
+    entrada_file5.place(x=1270, y=10)
     entrada_file6 = Entry(ventana_viss, width=38)
-    entrada_file6.place(x=1280, y=40)
+    entrada_file6.place(x=1270, y=40)
     entrada_file7 = Entry(ventana_viss, width=38)
-    entrada_file7.place(x=1280, y=70)
+    entrada_file7.place(x=1270, y=70)
     entrada_file8 = Entry(ventana_viss, width=38)
-    entrada_file8.place(x=1280, y=100)
+    entrada_file8.place(x=1270, y=100)
     entrada_file9 = Entry(ventana_viss, width=38)
-    entrada_file9.place(x=1280, y=130)
+    entrada_file9.place(x=1270, y=130)
     entrada_file10 = Entry(ventana_viss, width=38)
-    entrada_file10.place(x=1280, y=160)
+    entrada_file10.place(x=1270, y=160)
     ventana_viss.grid_columnconfigure(0, weight=1)
     ventana_viss.grid_rowconfigure(0, weight=1)
 
@@ -727,7 +728,52 @@ def login():
 # VENTANA "VERIFICACION DE LOGIN".
 
 def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
-    global file_1, im, im2, photoimage2
+    global file_1, im, im2, im3, im4, im5, im6,im7,im8,im9,im10, photo_image, photo_image2, photo_image3, photo_image4,\
+        photo_image5, photo_image6, photo_image7, photo_image8, photo_image9, photo_image10, file_2, file_3, file_4, \
+        file_5, file_6, file_7, file_8, file_9, file_10, boton11, boton22, boton33, boton44, boton55, boton66, boton77,\
+        boton88, boton99, boton10
+    photo = PhotoImage(file="ver_imagen.png")
+    photo_image = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen2.png")
+    photo_image2 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen3.png")
+    photo_image3 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen4.png")
+    photo_image4 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen5.png")
+    photo_image5 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen6.png")
+    photo_image6 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen7.png")
+    photo_image7 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen8.png")
+    photo_image8 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen9.png")
+    photo_image9 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen10.png")
+    photo_image10 = photo.subsample(10, 10)
+
+    boton11 = Button(ventana_viss, text="", image=photo_image, command=ver_foto, width=10)
+    boton22 = Button(ventana_viss, text="", image=photo_image2, command=ver_foto2, width=10)
+    boton33 = Button(ventana_viss, text="", image=photo_image3, command=ver_foto3, width=10)
+    boton44 = Button(ventana_viss, text="", image=photo_image4, command=ver_foto4, width=10)
+    boton55 = Button(ventana_viss, text="", image=photo_image5, command=ver_foto5, width=10)
+    boton66 = Button(ventana_viss, text="", image=photo_image6, command=ver_foto6, width=10)
+    boton77 = Button(ventana_viss, text="", image=photo_image7, command=ver_foto7, width=10)
+    boton88 = Button(ventana_viss, text="", image=photo_image8, command=ver_foto8, width=10)
+    boton99 = Button(ventana_viss, text="", image=photo_image9, command=ver_foto9, width=10)
+    boton10 = Button(ventana_viss, text="", image=photo_image10, command=ver_foto10, width=10)
+    boton11.forget
+    boton22.forget
+    boton33.forget
+    boton44.forget
+    boton55.forget
+    boton66.forget
+    boton77.forget
+    boton88.forget
+    boton99.forget
+    boton10.forget
+    photo_image.configure()
     entrada_ticket.delete(0, END)
     entrada_status.delete(0, END)
     entrada_name.delete(0, END)
@@ -769,34 +815,113 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
 
         entrada_file1.insert(0, select['files'])
         file_1 = entrada_file1.get()
-        print(file_1)
         entrada_file2.insert(0, select['files2'])
         file_2 = entrada_file2.get()
-        print(file_2)
         entrada_file3.insert(0, select['files3'])
+        file_3 = entrada_file3.get()
         entrada_file4.insert(0, select['files4'])
+        file_4 = entrada_file4.get()
         entrada_file5.insert(0, select['files5'])
+        file_5 = entrada_file5.get()
         entrada_file6.insert(0, select['files6'])
+        file_6 = entrada_file6.get()
         entrada_file7.insert(0, select['files7'])
+        file_7 = entrada_file7.get()
         entrada_file8.insert(0, select['files8'])
+        file_8 = entrada_file8.get()
         entrada_file9.insert(0, select['files9'])
+        file_9 = entrada_file9.get()
         entrada_file10.insert(0, select['files10'])
+        file_10 = entrada_file10.get()
 
         try:
             im = Image.open(file_1)
-            photo = PhotoImage(file="ver_imagen.png")
-            photoimage = photo.subsample(12, 12)
-            Button(ventana_viss, text="Ap", image=photoimage, command=ver_foto, width=10).place(x=900, y=185)
-
+            try:
+                boton11.place(x=1175, y=10)
+            except Exception as e:
+                boton11 = Button(rooot, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1175, y=10)
         except Exception as e:
             print(e)
 
         try:
             im2 = Image.open(file_2)
-            photo = PhotoImage(file="ver_imagen2.png")
-            photoimage2 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photoimage2, command=ver_foto2, width=10).place(x=1180, y=40)
-            print("Si llega")
+            try:
+                boton22.place(x=1175, y=40)
+            except Exception as e:
+                boton22 = Button(rooot, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1175, y=40)
+        except Exception as e:
+            print(e)
+
+        try:
+            im3 = Image.open(file_3)
+            try:
+                boton33.place(x=1175, y=70)
+            except Exception as e:
+                boton33 = Button(rooot, text="", image=photo_image3, command=ver_foto3, width=10).place(x=1175, y=70)
+        except Exception as e:
+            print(e)
+
+        try:
+            im4 = Image.open(file_4)
+            try:
+                boton44.place(x=1175, y=100)
+            except Exception as e:
+                boton44 = Button(rooot, text="", image=photo_image4, command=ver_foto4, width=10).place(x=1175, y=100)
+        except Exception as e:
+            print(e)
+
+        try:
+            im5 = Image.open(file_5)
+            try:
+                boton55.place(x=1515, y=10)
+            except Exception as e:
+                boton55 = Button(rooot, text="", image=photo_image5, command=ver_foto5, width=10).place(x=1515, y=10)
+        except Exception as e:
+            print(e)
+
+        try:
+            im6 = Image.open(file_6)
+            try:
+                boton66.place(x=1515, y=40)
+            except Exception as e:
+                print(e)
+                boton66 = Button(rooot, text="", image=photo_image6, command=ver_foto6, width=10).place(x=1515, y=40)
+        except Exception as e:
+            print(e)
+
+        try:
+            im7 = Image.open(file_7)
+            try:
+                boton77.place(x=1515, y=70)
+            except Exception as e:
+                boton77 = Button(rooot, text="", image=photo_image7, command=ver_foto7, width=10).place(x=1515, y=70)
+        except Exception as e:
+            print(e)
+
+        try:
+            im8 = Image.open(file_8)
+            try:
+                boton88.place(x=1515, y=100)
+            except Exception as e:
+                boton88 = Button(rooot, text="", image=photo_image8, command=ver_foto8, width=10).place(x=1515, y=100)
+        except Exception as e:
+            print(e)
+
+        try:
+            im9 = Image.open(file_9)
+            try:
+                boton99.place(x=1515, y=130)
+            except Exception as e:
+                boton99 = Button(rooot, text="", image=photo_image9, command=ver_foto9, width=10).place(x=1515, y=130)
+        except Exception as e:
+            print(e)
+
+        try:
+            im10 = Image.open(file_10)
+            try:
+                boton10.place(x=1515, y=160)
+            except Exception as e:
+                boton10 = Button(rooot, text="", image=photo_image10, command=ver_foto10, width=10).place(x=1515, y=160)
         except Exception as e:
             print(e)
 
@@ -804,14 +929,30 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
         print(e)
 
 def ver_foto():
-    #imagen = Image.open(file_1)
     im.show()
-
 def ver_foto2():
-    #imagen = Image.open(file_1)
     im2.show()
+def ver_foto3():
+    im3.show()
+def ver_foto4():
+    im4.show()
+def ver_foto5():
+    im5.show()
+def ver_foto6():
+    im6.show()
+def ver_foto7():
+    im7.show()
+def ver_foto8():
+    im8.show()
+def ver_foto9():
+    im9.show()
+def ver_foto10():
+    im10.show()
 
 def GetValue2(event):  #El que se usa en historial2, aplicar2 y historial2
+    global file_1, im, im2, im3, im4,im5,im6,im7,im8,im9, im10, photo_image, photo_image2, photo_image3, photo_image4, \
+        photo_image5, photo_image6, photo_image7, photo_image8, photo_image9, photo_image10, file_2, file_3, file_4, \
+        file_5, file_6, file_7, file_8, file_9, file_10
     new_entrada_ticket.delete(0, END)
     new_entrada_status.delete(0, END)
     new_entrada_name.delete(0, END)
@@ -850,16 +991,107 @@ def GetValue2(event):  #El que se usa en historial2, aplicar2 y historial2
         new_entrada_descrip.insert(0, select['descripción'])
         new_entrada_date.insert(0, select['date'])
         new_entrada_hora.insert(0, select['hora'])
+
         new_entrada_file1.insert(0, select['files'])
+        file_1 = new_entrada_file1.get()
         new_entrada_file2.insert(0, select['files2'])
+        file_2 = new_entrada_file2.get()
         new_entrada_file3.insert(0, select['files3'])
+        file_3 = new_entrada_file3.get()
         new_entrada_file4.insert(0, select['files4'])
+        file_4 = new_entrada_file4.get()
         new_entrada_file5.insert(0, select['files5'])
+        file_5 = new_entrada_file5.get()
         new_entrada_file6.insert(0, select['files6'])
+        file_6 = new_entrada_file6.get()
         new_entrada_file7.insert(0, select['files7'])
+        file_7 = new_entrada_file7.get()
         new_entrada_file8.insert(0, select['files8'])
+        file_8 = new_entrada_file8.get()
         new_entrada_file9.insert(0, select['files9'])
+        file_9 = new_entrada_file9.get()
         new_entrada_file10.insert(0, select['files10'])
+        file_10 = new_entrada_file10.get()
+        try:
+            im = Image.open(file_1)
+            photo = PhotoImage(file="ver_imagen.png")
+            photo_image = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image, command=ver_foto, width=10).place(x=1190, y=10)
+        except Exception as e:
+            print(e)
+
+        try:
+            im2 = Image.open(file_2)
+            photo = PhotoImage(file="ver_imagen2.png")
+            photo_image2 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1180, y=40)
+        except Exception as e:
+            print(e)
+
+        try:
+            im3 = Image.open(file_3)
+            photo = PhotoImage(file="ver_imagen3.png")
+            photo_image3 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image3, command=ver_foto3, width=10).place(x=1170, y=70)
+        except Exception as e:
+            print(e)
+
+        try:
+            im4 = Image.open(file_4)
+            photo = PhotoImage(file="ver_imagen4.png")
+            photo_image4 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image4, command=ver_foto4, width=10).place(x=1180, y=100)
+        except Exception as e:
+            print(e)
+
+        try:
+            im5 = Image.open(file_5)
+            photo = PhotoImage(file="ver_imagen5.png")
+            photo_image5 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image5, command=ver_foto5, width=10).place(x=1180, y=130)
+        except Exception as e:
+            print(e)
+
+        try:
+            im6 = Image.open(file_6)
+            photo = PhotoImage(file="ver_imagen6.png")
+            photo_image6 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image6, command=ver_foto6, width=10).place(x=1180, y=40)
+        except Exception as e:
+            print(e)
+
+        try:
+            im7 = Image.open(file_7)
+            photo = PhotoImage(file="ver_imagen7.png")
+            photo_image7 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image7, command=ver_foto7, width=10).place(x=900, y=185)
+        except Exception as e:
+            print(e)
+
+        try:
+            im8 = Image.open(file_8)
+            photo = PhotoImage(file="ver_imagen8.png")
+            photo_image8 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image8, command=ver_foto8, width=10).place(x=1180, y=40)
+        except Exception as e:
+            print(e)
+
+        try:
+            im9 = Image.open(file_9)
+            photo = PhotoImage(file="ver_imagen9.png")
+            photo_image9 = photo.subsample(12, 12)
+            Button(ventana_viss, text="", image=photo_image9, command=ver_foto9, width=10).place(x=900, y=185)
+        except Exception as e:
+            print(e)
+
+        try:
+            im10 = Image.open(file_10)
+            photo = PhotoImage(file="ver_imagen2.png")
+            photo_image10 = photo.subsample(10, 10)
+            Button(ventana_viss, text="", image=photo_image10, command=ver_foto10, width=10).place(x=1180, y=40)
+        except Exception as e:
+            print(e)
+
     except Exception as e:
         print("Aquí se está cortando")
         print(e)
@@ -1021,18 +1253,19 @@ def modifica_reg():
     entrada_file3.place(x=950, y=70)
     entrada_file4 = Entry(rooot, width=35)
     entrada_file4.place(x=950, y=100)
+
     entrada_file5 = Entry(rooot, width=35)
-    entrada_file5.place(x=1280, y=10)
+    entrada_file5.place(x=1270, y=10)
     entrada_file6 = Entry(rooot, width=35)
-    entrada_file6.place(x=1280, y=40)
+    entrada_file6.place(x=1270, y=40)
     entrada_file7 = Entry(rooot, width=35)
-    entrada_file7.place(x=1280, y=70)
+    entrada_file7.place(x=1270, y=70)
     entrada_file8 = Entry(rooot, width=35)
-    entrada_file8.place(x=1280, y=100)
+    entrada_file8.place(x=1270, y=100)
     entrada_file9 = Entry(rooot, width=35)
-    entrada_file9.place(x=1280, y=130)
+    entrada_file9.place(x=1270, y=130)
     entrada_file10 = Entry(rooot, width=35)
-    entrada_file10.place(x=1280, y=160)
+    entrada_file10.place(x=1270, y=160)
     rooot.grid_columnconfigure(0, weight=1)
     rooot.grid_rowconfigure(0, weight=1)
     cols = ('ticket', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device',
@@ -1200,17 +1433,17 @@ def historial2():
                 new_entrada_file4 = Entry(hist_window, width=35)
                 new_entrada_file4.place(x=950, y=100)
                 new_entrada_file5 = Entry(hist_window, width=35)
-                new_entrada_file5.place(x=1280, y=10)
+                new_entrada_file5.place(x=1270, y=10)
                 new_entrada_file6 = Entry(hist_window, width=35)
-                new_entrada_file6.place(x=1280, y=40)
+                new_entrada_file6.place(x=1270, y=40)
                 new_entrada_file7 = Entry(hist_window, width=35)
-                new_entrada_file7.place(x=1280, y=70)
+                new_entrada_file7.place(x=1270, y=70)
                 new_entrada_file8 = Entry(hist_window, width=35)
-                new_entrada_file8.place(x=1280, y=100)
+                new_entrada_file8.place(x=1270, y=100)
                 new_entrada_file9 = Entry(hist_window, width=35)
-                new_entrada_file9.place(x=1280, y=130)
+                new_entrada_file9.place(x=1270, y=130)
                 new_entrada_file10 = Entry(hist_window, width=35)
-                new_entrada_file10.place(x=1280, y=160)
+                new_entrada_file10.place(x=1270, y=160)
 
                 Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=710, y=187)
                 ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
@@ -1373,18 +1606,19 @@ def historial():
             new_entrada_file3.place(x=950, y=70)
             new_entrada_file4 = Entry(hist_window, width=35)
             new_entrada_file4.place(x=950, y=100)
+
             new_entrada_file5 = Entry(hist_window, width=35)
-            new_entrada_file5.place(x=1280, y=10)
+            new_entrada_file5.place(x=1270, y=10)
             new_entrada_file6 = Entry(hist_window, width=35)
-            new_entrada_file6.place(x=1280, y=40)
+            new_entrada_file6.place(x=1270, y=40)
             new_entrada_file7 = Entry(hist_window, width=35)
-            new_entrada_file7.place(x=1280, y=70)
+            new_entrada_file7.place(x=1270, y=70)
             new_entrada_file8 = Entry(hist_window, width=35)
-            new_entrada_file8.place(x=1280, y=100)
+            new_entrada_file8.place(x=1270, y=100)
             new_entrada_file9 = Entry(hist_window, width=35)
-            new_entrada_file9.place(x=1280, y=130)
+            new_entrada_file9.place(x=1270, y=130)
             new_entrada_file10 = Entry(hist_window, width=35)
-            new_entrada_file10.place(x=1280, y=160)
+            new_entrada_file10.place(x=1270, y=160)
             if str(numero_ticket) == ticket_enter:
                 Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=190)
                 Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=130)
@@ -1800,10 +2034,10 @@ def update():  # Entradas con los datos de la incidencia a modificar
         mysqldb.commit()
         prefix = "ticket_no_"
 
-        mycursor.execute("INSERT INTO " + prefix + tick + " VALUES(" + str(0) + ", '" + stat + "', '" + user_name
-                         + "', '" + spacecraft + "', '" + ccs + "', '" + falla_type + "', '" + comp + "', '" + comp2 + "', '"
-                         + device + "', '" + desc + "', '" + date + "', '" + hora + "', '" + file + "', '" + file2 + "', '" + file3 + "', '" + file4 + "', '" + file5 + "', '" + file6 + "', '" + file7 + "', '" + file8 + "', '" + file9 + "', '" + file10 + "')")
-        mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
+        #mycursor.execute("INSERT INTO " + prefix + tick + " VALUES(" + str(0) + ", '" + stat + "', '" + user_name
+        #                 + "', '" + spacecraft + "', '" + ccs + "', '" + falla_type + "', '" + comp + "', '" + comp2 + "', '"
+        #                 + device + "', '" + desc + "', '" + date + "', '" + hora + "', '" + file + "', '" + file2 + "', '" + file3 + "', '" + file4 + "', '" + file5 + "', '" + file6 + "', '" + file7 + "', '" + file8 + "', '" + file9 + "', '" + file10 + "')")
+        #mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
         messagebox.showinfo("information", "Record Updated successfully..")
         # Limpiamos las entradas para confirmar la actualización
         entrada_ticket.delete(0, END)
@@ -2032,7 +2266,7 @@ def quitar_path():
     label_file.grid(row=0, column=1)
     buton_gar3.grid_forget()
     if (label_file1.cget('text') == ""):
-        buton_file.destroy()
+        buton_file.grid_forget()
     else:
         pass
     # rutas_files.pop(0)
@@ -2044,7 +2278,7 @@ def quitar_path1():
     label_file1.grid(row=1, column=1)
     buton_gar2.grid_forget()
     if (label_file2.cget('text') == ""):
-        buton_file2.destroy()
+        buton_file2.grid_forget()
     else:
         pass
 
@@ -2053,31 +2287,49 @@ def quitar_path2():
     label_file2.configure(text="")
     label_file2.grid(row=2, column=1)
     buton_gar.grid_forget()
+    if (label_file3.cget('text') == ""):
+        buton_file3.grid_forget()
+    else:
+        pass
 
 
 def quitar_path3():
     label_file3.configure(text="")
     label_file3.grid(row=3, column=1)
     buton_garb.grid_forget()
+    if (label_file4.cget('text') == ""):
+        buton_file4.grid_forget()
+    else:
+        pass
 
 
 def quitar_path4():
     label_file4.configure(text="")
     label_file4.grid(row=4, column=1)
     buton_garba.grid_forget()
-
+    if (label_file5.cget('text') == ""):
+        buton_file5.grid_forget()
+    else:
+        pass
 
 def quitar_path5():
     label_file5.configure(text="")
     label_file5.grid(row=5, column=1)
     buton_garbag.grid_forget()
+    if (label_file6.cget('text') == ""):
+        buton_file6.grid_forget()
+    else:
+        pass
 
 
 def quitar_path6():
     label_file6.configure(text="")
     label_file6.grid(row=6, column=1)
     buton_garbage.grid_forget()
-
+    if (label_file7.cget('text') == ""):
+        buton_file7.grid_forget()
+    else:
+        pass
 
 def quitar_path7():
     label_file7.configure(text="")
@@ -2708,66 +2960,100 @@ def registro_incidencia2():
             print(e)
 
         #en Linux:  path = "/home/sistemas/Downloads
-        name_file = "incidencia No. "
-
+        incidencia = str(no_ticket) # imprime el valor de ticket que le pasamos en la tabla de registro
         try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-    #       os.system(
-    #            "scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
-            os.system("scp " + archivo_abierto + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\"+ lastid1)
-# Para Hosts en l amisma red o dominio
+              #os.system("scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
+            os.system("scp " + archivo_abierto + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid1)
         except Exception as e:
             print(e)
-            try:
-                os.system("copy " + archivo_abierto + " \\10.0.2.4\\c$\\incidencia_no_")
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid1)
             except Exception as e:
                 print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto2 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid2)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto3 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid3)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto4 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid4)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto5 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid5)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto6 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid6)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto7 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid7)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto8 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid8)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto9 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid9)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system(
-    #            "scp " + archivo_abierto10 + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid10)
-    #    except Exception as e:
-    #        print(e)
 
-    datos_ticket = str(no_ticket)  # imprime el valor de ticket que le pasamos en la tabla de registro
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto2 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\" + lastid2)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto2 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid2)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto3 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_" + incidencia+"\\" + lastid3)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto3 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid3)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+              #os.system("scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
+            os.system("scp " + archivo_abierto4 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+ incidencia+"\\"+ lastid4)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto4 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid4)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto5 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid5)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto5 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid5)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto6 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid6)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto6 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid6)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto7 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid7)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto7 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid7)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto8 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid8)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto8 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid8)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto9 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid9)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto9 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid9)
+            except Exception as e:
+                print(e)
+
+        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
+            os.system("scp " + archivo_abierto10 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid10)
+        except Exception as e:
+            print(e)
+            try:# Para Hosts en la misma red o dominio
+                os.system("copy " + archivo_abierto10 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid10)
+            except Exception as e:
+                print(e)
+
+    print(no_ticket)
     datos_operador = user_name
     datos_spacecraft = var_spacecraft.get()
     datos_ccs = var_ccs.get()
@@ -2781,8 +3067,7 @@ def registro_incidencia2():
     # registramos la nueva incidencia en la tabla donde vienen todas las incidencias
 
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479",
-                                      database="mydb")  # Conectmydb
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  #Conectmydb
     mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
     ticket_enter = entrada_ticket.get()
 
