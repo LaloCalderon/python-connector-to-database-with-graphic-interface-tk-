@@ -1,3 +1,4 @@
+import os
 import tkinter
 from tkinter import *  # IMPORTAMOS LIBRERÍAS NECESARIAS.
 from datetime import datetime
@@ -8,18 +9,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String
 from PIL import Image
-import os
 
 # MOTOR DE LA BDD, RUTA HASTA MY LOCALHOST
-# engine = create_engine("mysql+pymysql://root:313218479@localhost/mydb2",
-#                        encoding="utf-8",
-#                        echo=True)
-# Base = declarative_base()
-engine = create_engine("mysql+pymysql://root:313218479@localhost/mydb",
-                       encoding="utf-8",
-                       echo=True)
+engine = create_engine("mysql+pymysql://root:313218479@localhost/mydb", encoding="utf-8", echo=True)
 Base = declarative_base()
-
 
 ####TABLA DE USUARIOS
 class Incidencias(Base):
@@ -55,14 +48,11 @@ class Incidencias(Base):
                    self.status, self.operador, self.spacecraft, self.ccs, self.tipo_falla, self.componente,
                    self.componente2,
                    self.device, self.descripcion, self.date, self.hora, self.files, self.files2, self.files3,
-                   self.files4,
-                   self.files5, self.files6, self.files7, self.files8, self.files9, self.files10)
-
+                   self.files4, self.files5, self.files6, self.files7, self.files8, self.files9, self.files10)
 
 Base.metadata.create_all(engine)  # Crear motor
 DBsession = sessionmaker(bind=engine)  # Manejador de sesiones unido a nuestro motor
 session = DBsession()  # Asignación a método
-
 
 class User(Base):  ####TABLA DE USUARIOS
     __tablename__ = "users_table"
@@ -70,7 +60,7 @@ class User(Base):  ####TABLA DE USUARIOS
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     password = Column(String(128))
-    ccs = Column(String(11))
+    ccs = Column(String(13))
     dominio = Column(String(40))
     mail = Column(String(70))
 
@@ -179,11 +169,9 @@ data3 = {'Serv Iztapalapa Operaciones': ['izopsfep0', 'izopsfep1', 'izopsfep2', 
          'Archive Configuration': ['No aplica'],
          'Monics': ['No aplica'],
          'Complan': ['No aplica'],
-         # '': ['']
          }
 
-data4 = {  # '': [],
-    'tipo_falla': ['Software', 'Hardware', 'No Identificado'],
+data4 = {  'tipo_falla': ['Software', 'Hardware', 'No Identificado'],
     'componente': ['Teléfono IP', 'Impresora', 'Servidor', 'Switch', 'KVM', 'WS', 'Otro', 'Iztapalapa Operaciones',
                    'Hermosillo Operaciones', 'Iztapalapa Ingeniería', 'Hermosillo Ingeniería',
                    'Windows', 'Epoch', 'Ares', 'Task Iniator', 'Antivirus', 'Backups', 'Cortex', 'Compass',
@@ -414,23 +402,15 @@ def registro():
     style2.configure("RW.TLabel", foreground="white", background="red")
     ventana_principal.state(newstate='withdraw')
     # Esta ventana (registro) tiene como ventana padre ventana_principal
-    global datos1, datos2, ventana_registro, img_png3, img_png4, nombre_usuario, dom, ccs, clave, clave2, \
-        entrada_nombre, entrada_clave, entrada_dom, entrada_ccs, entrada_clave2, photoimage, mail
+    global datos1, datos2, ventana_registro, img_png3, img_png4,nombre_usuario, dom, ccs, clave, clave2, entrada_mail2,\
+        entrada_nombre, entrada_clave, entrada_dom, entrada_ccs, entrada_clave2, photoimage, mail, mail2, entrada_mail
     ventana_registro = Toplevel(ventana_principal)
     ventana_registro.resizable(False, False)
     ventana_registro.iconbitmap('tele_ico.ico')
 
-    img_png3 = PhotoImage(file="mexico_2021.png")
-    label_img = tkinter.Label(ventana_registro, image=img_png3)
-    label_img.place(x=2, y=0)
-
-    img_png4 = PhotoImage(file="mexsat (1).png")
-    label_img2 = tkinter.Label(ventana_registro, image=img_png4)
-    label_img2.place(x=2, y=140)
-
     # ventana_registro = Tk()
     ventana_registro.title("Formulario de Registro")  # Título de la ventana
-    ventana_registro.geometry("370x500")  # Tamaño
+    ventana_registro.geometry("370x550")  # Tamaño
     var = tkinter.StringVar(ventana_registro)  # Menú de opción múltiple ccs
     var.set('')
     var2 = tkinter.StringVar(ventana_registro)  # Menú de opción múltiple dominio
@@ -438,6 +418,7 @@ def registro():
 
     nombre_usuario = StringVar()  # DECLARAMOS "string" COMO TIPO DE DATO PARA "nombre_usuario"
     mail = StringVar()
+    mail2 = StringVar()
     dom = StringVar()
     ccs = StringVar()
     clave = StringVar()  # DECLARAMOS "string" COMO TIPO DE DATO PARA "clave"
@@ -466,6 +447,12 @@ def registro():
     entrada_mail = Entry(ventana_registro, textvariable=mail)  # ESPACIO PARA INTRODUCIR EL NOMBRE.
     entrada_mail.config(width=35)
     entrada_mail.pack()
+    Label(ventana_registro, text="").pack()
+
+    ttk.Label(ventana_registro, text="Confirma tu correo electrónico", style="GW.TLabel").pack()
+    entrada_mail2 = Entry(ventana_registro, textvariable=mail2)  # ESPACIO PARA INTRODUCIR EL NOMBRE.
+    entrada_mail2.config(width=35)
+    entrada_mail2.pack()
     Label(ventana_registro, text="").pack()
 
     # CCS:
@@ -752,17 +739,29 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
     photo_image9 = photo.subsample(10, 10)
     photo = PhotoImage(file="ver_imagen10.png")
     photo_image10 = photo.subsample(10, 10)
+    try:
+        boton11 = Button(ventana_viss, text="", image=photo_image, command=ver_foto, width=10)
+        boton22 = Button(ventana_viss, text="", image=photo_image2, command=ver_foto2, width=10)
+        boton33 = Button(ventana_viss, text="", image=photo_image3, command=ver_foto3, width=10)
+        boton44 = Button(ventana_viss, text="", image=photo_image4, command=ver_foto4, width=10)
+        boton55 = Button(ventana_viss, text="", image=photo_image5, command=ver_foto5, width=10)
+        boton66 = Button(ventana_viss, text="", image=photo_image6, command=ver_foto6, width=10)
+        boton77 = Button(ventana_viss, text="", image=photo_image7, command=ver_foto7, width=10)
+        boton88 = Button(ventana_viss, text="", image=photo_image8, command=ver_foto8, width=10)
+        boton99 = Button(ventana_viss, text="", image=photo_image9, command=ver_foto9, width=10)
+        boton10 = Button(ventana_viss, text="", image=photo_image10, command=ver_foto10, width=10)
 
-    boton11 = Button(ventana_viss, text="", image=photo_image, command=ver_foto, width=10)
-    boton22 = Button(ventana_viss, text="", image=photo_image2, command=ver_foto2, width=10)
-    boton33 = Button(ventana_viss, text="", image=photo_image3, command=ver_foto3, width=10)
-    boton44 = Button(ventana_viss, text="", image=photo_image4, command=ver_foto4, width=10)
-    boton55 = Button(ventana_viss, text="", image=photo_image5, command=ver_foto5, width=10)
-    boton66 = Button(ventana_viss, text="", image=photo_image6, command=ver_foto6, width=10)
-    boton77 = Button(ventana_viss, text="", image=photo_image7, command=ver_foto7, width=10)
-    boton88 = Button(ventana_viss, text="", image=photo_image8, command=ver_foto8, width=10)
-    boton99 = Button(ventana_viss, text="", image=photo_image9, command=ver_foto9, width=10)
-    boton10 = Button(ventana_viss, text="", image=photo_image10, command=ver_foto10, width=10)
+    except Exception as e:
+        boton11 = Button(rooot, text="", image=photo_image, command=ver_foto, width=10)
+        boton22 = Button(rooot, text="", image=photo_image2, command=ver_foto2, width=10)
+        boton33 = Button(rooot, text="", image=photo_image3, command=ver_foto3, width=10)
+        boton44 = Button(rooot, text="", image=photo_image4, command=ver_foto4, width=10)
+        boton55 = Button(rooot, text="", image=photo_image5, command=ver_foto5, width=10)
+        boton66 = Button(rooot, text="", image=photo_image6, command=ver_foto6, width=10)
+        boton77 = Button(rooot, text="", image=photo_image7, command=ver_foto7, width=10)
+        boton88 = Button(rooot, text="", image=photo_image8, command=ver_foto8, width=10)
+        boton99 = Button(rooot, text="", image=photo_image9, command=ver_foto9, width=10)
+        boton10 = Button(rooot, text="", image=photo_image10, command=ver_foto10, width=10)
     boton11.forget
     boton22.forget
     boton33.forget
@@ -773,7 +772,7 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
     boton88.forget
     boton99.forget
     boton10.forget
-    photo_image.configure()
+
     entrada_ticket.delete(0, END)
     entrada_status.delete(0, END)
     entrada_name.delete(0, END)
@@ -836,92 +835,61 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
 
         try:
             im = Image.open(file_1)
-            try:
-                boton11.place(x=1175, y=10)
-            except Exception as e:
-                boton11 = Button(rooot, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1175, y=10)
+            boton11.place(x=1175, y=10)
         except Exception as e:
             print(e)
 
         try:
             im2 = Image.open(file_2)
-            try:
-                boton22.place(x=1175, y=40)
-            except Exception as e:
-                boton22 = Button(rooot, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1175, y=40)
+            boton22.place(x=1175, y=40)
         except Exception as e:
             print(e)
 
         try:
             im3 = Image.open(file_3)
-            try:
-                boton33.place(x=1175, y=70)
-            except Exception as e:
-                boton33 = Button(rooot, text="", image=photo_image3, command=ver_foto3, width=10).place(x=1175, y=70)
+            boton33.place(x=1175, y=70)
         except Exception as e:
             print(e)
 
         try:
             im4 = Image.open(file_4)
-            try:
-                boton44.place(x=1175, y=100)
-            except Exception as e:
-                boton44 = Button(rooot, text="", image=photo_image4, command=ver_foto4, width=10).place(x=1175, y=100)
+            boton44.place(x=1175, y=100)
         except Exception as e:
             print(e)
 
         try:
             im5 = Image.open(file_5)
-            try:
-                boton55.place(x=1515, y=10)
-            except Exception as e:
-                boton55 = Button(rooot, text="", image=photo_image5, command=ver_foto5, width=10).place(x=1515, y=10)
+            boton55.place(x=1515, y=10)
         except Exception as e:
             print(e)
 
         try:
             im6 = Image.open(file_6)
-            try:
-                boton66.place(x=1515, y=40)
-            except Exception as e:
-                print(e)
-                boton66 = Button(rooot, text="", image=photo_image6, command=ver_foto6, width=10).place(x=1515, y=40)
+            boton66.place(x=1515, y=40)
         except Exception as e:
             print(e)
 
         try:
             im7 = Image.open(file_7)
-            try:
-                boton77.place(x=1515, y=70)
-            except Exception as e:
-                boton77 = Button(rooot, text="", image=photo_image7, command=ver_foto7, width=10).place(x=1515, y=70)
+            boton77.place(x=1515, y=70)
         except Exception as e:
             print(e)
 
         try:
             im8 = Image.open(file_8)
-            try:
-                boton88.place(x=1515, y=100)
-            except Exception as e:
-                boton88 = Button(rooot, text="", image=photo_image8, command=ver_foto8, width=10).place(x=1515, y=100)
+            boton88.place(x=1515, y=100)
         except Exception as e:
             print(e)
 
         try:
             im9 = Image.open(file_9)
-            try:
-                boton99.place(x=1515, y=130)
-            except Exception as e:
-                boton99 = Button(rooot, text="", image=photo_image9, command=ver_foto9, width=10).place(x=1515, y=130)
+            boton99.place(x=1515, y=130)
         except Exception as e:
             print(e)
 
         try:
             im10 = Image.open(file_10)
-            try:
-                boton10.place(x=1515, y=160)
-            except Exception as e:
-                boton10 = Button(rooot, text="", image=photo_image10, command=ver_foto10, width=10).place(x=1515, y=160)
+            boton10.place(x=1515, y=160)
         except Exception as e:
             print(e)
 
@@ -949,10 +917,52 @@ def ver_foto9():
 def ver_foto10():
     im10.show()
 
-def GetValue2(event):  #El que se usa en historial2, aplicar2 y historial2
-    global file_1, im, im2, im3, im4,im5,im6,im7,im8,im9, im10, photo_image, photo_image2, photo_image3, photo_image4, \
+def GetValue2(event):  #El que se usa en historial, aplicar2 y historial2
+    global file_1, im, im2, im3, im4, im5, im6, im7, im8, im9, im10, photo_image, photo_image2, photo_image3, photo_image4, \
         photo_image5, photo_image6, photo_image7, photo_image8, photo_image9, photo_image10, file_2, file_3, file_4, \
-        file_5, file_6, file_7, file_8, file_9, file_10
+        file_5, file_6, file_7, file_8, file_9, file_10, boton11, boton22, boton33, boton44, boton55, boton66, boton77, \
+        boton88, boton99, boton10
+    photo = PhotoImage(file="ver_imagen.png")
+    photo_image = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen2.png")
+    photo_image2 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen3.png")
+    photo_image3 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen4.png")
+    photo_image4 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen5.png")
+    photo_image5 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen6.png")
+    photo_image6 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen7.png")
+    photo_image7 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen8.png")
+    photo_image8 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen9.png")
+    photo_image9 = photo.subsample(10, 10)
+    photo = PhotoImage(file="ver_imagen10.png")
+    photo_image10 = photo.subsample(10, 10)
+    boton11 = Button(hist_window, text="", image=photo_image, command=ver_foto, width=10)
+    boton22 = Button(hist_window, text="", image=photo_image2, command=ver_foto2, width=10)
+    boton33 = Button(hist_window, text="", image=photo_image3, command=ver_foto3, width=10)
+    boton44 = Button(hist_window, text="", image=photo_image4, command=ver_foto4, width=10)
+    boton55 = Button(hist_window, text="", image=photo_image5, command=ver_foto5, width=10)
+    boton66 = Button(hist_window, text="", image=photo_image6, command=ver_foto6, width=10)
+    boton77 = Button(hist_window, text="", image=photo_image7, command=ver_foto7, width=10)
+    boton88 = Button(hist_window, text="", image=photo_image8, command=ver_foto8, width=10)
+    boton99 = Button(hist_window, text="", image=photo_image9, command=ver_foto9, width=10)
+    boton10 = Button(hist_window, text="", image=photo_image10, command=ver_foto10, width=10)
+    boton11.forget
+    boton22.forget
+    boton33.forget
+    boton44.forget
+    boton55.forget
+    boton66.forget
+    boton77.forget
+    boton88.forget
+    boton99.forget
+    boton10.forget
+
     new_entrada_ticket.delete(0, END)
     new_entrada_status.delete(0, END)
     new_entrada_name.delete(0, END)
@@ -1012,88 +1022,68 @@ def GetValue2(event):  #El que se usa en historial2, aplicar2 y historial2
         file_9 = new_entrada_file9.get()
         new_entrada_file10.insert(0, select['files10'])
         file_10 = new_entrada_file10.get()
+
         try:
             im = Image.open(file_1)
-            photo = PhotoImage(file="ver_imagen.png")
-            photo_image = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image, command=ver_foto, width=10).place(x=1190, y=10)
+            boton11.place(x=1175, y=10)
         except Exception as e:
             print(e)
 
         try:
             im2 = Image.open(file_2)
-            photo = PhotoImage(file="ver_imagen2.png")
-            photo_image2 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image2, command=ver_foto2, width=10).place(x=1180, y=40)
+            boton22.place(x=1175, y=40)
         except Exception as e:
             print(e)
 
         try:
             im3 = Image.open(file_3)
-            photo = PhotoImage(file="ver_imagen3.png")
-            photo_image3 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image3, command=ver_foto3, width=10).place(x=1170, y=70)
+            boton33.place(x=1175, y=70)
         except Exception as e:
             print(e)
 
         try:
             im4 = Image.open(file_4)
-            photo = PhotoImage(file="ver_imagen4.png")
-            photo_image4 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image4, command=ver_foto4, width=10).place(x=1180, y=100)
+            boton44.place(x=1175, y=100)
         except Exception as e:
             print(e)
 
         try:
             im5 = Image.open(file_5)
-            photo = PhotoImage(file="ver_imagen5.png")
-            photo_image5 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image5, command=ver_foto5, width=10).place(x=1180, y=130)
+            boton55.place(x=1515, y=10)
         except Exception as e:
             print(e)
 
         try:
             im6 = Image.open(file_6)
-            photo = PhotoImage(file="ver_imagen6.png")
-            photo_image6 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image6, command=ver_foto6, width=10).place(x=1180, y=40)
+            boton66.place(x=1515, y=40)
         except Exception as e:
             print(e)
 
         try:
             im7 = Image.open(file_7)
-            photo = PhotoImage(file="ver_imagen7.png")
-            photo_image7 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image7, command=ver_foto7, width=10).place(x=900, y=185)
+            boton77.place(x=1515, y=70)
         except Exception as e:
             print(e)
 
         try:
             im8 = Image.open(file_8)
-            photo = PhotoImage(file="ver_imagen8.png")
-            photo_image8 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image8, command=ver_foto8, width=10).place(x=1180, y=40)
+            boton88.place(x=1515, y=100)
         except Exception as e:
             print(e)
 
         try:
             im9 = Image.open(file_9)
-            photo = PhotoImage(file="ver_imagen9.png")
-            photo_image9 = photo.subsample(12, 12)
-            Button(ventana_viss, text="", image=photo_image9, command=ver_foto9, width=10).place(x=900, y=185)
+            boton99.place(x=1515, y=130)
         except Exception as e:
             print(e)
 
         try:
             im10 = Image.open(file_10)
-            photo = PhotoImage(file="ver_imagen2.png")
-            photo_image10 = photo.subsample(10, 10)
-            Button(ventana_viss, text="", image=photo_image10, command=ver_foto10, width=10).place(x=1180, y=40)
+            boton10.place(x=1515, y=160)
         except Exception as e:
             print(e)
 
     except Exception as e:
-        print("Aquí se está cortando")
         print(e)
 
 
@@ -1322,13 +1312,14 @@ def sin_coincidencia():
 
 
 def hacia_atras4():
-    try:
-        hist_window.state(newstate='withdraw')
-        rooot.state(newstate='normal')
-        rooot.deiconify()
-    except Exception as e:
-        ventana_viss.state(newstate='normal')
-        ventana_viss.deiconify()
+    hist_window.state(newstate='withdraw')
+    ventana_viss.state(newstate='normal')
+    ventana_viss.deiconify()
+
+def hacia_atras8():
+    hist_window.state(newstate='withdraw')
+    rooot.state(newstate='normal')
+    rooot.deiconify()
 
 
 def historial2():
@@ -1622,7 +1613,7 @@ def historial():
             if str(numero_ticket) == ticket_enter:
                 Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=190)
                 Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=130)
-                Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=870, y=160)
+                Button(hist_window, text="Atrás", command=hacia_atras8, width=20).place(x=870, y=160)
 
                 hist_window.protocol("WM_DELETE_WINDOW", handleProtocol)
                 cols2 = (
@@ -1778,7 +1769,7 @@ def seguimiento():
     style.configure("GW.TLabel", foreground="green", background="white")
 
     hist_window.state(newstate='withdraw')
-    global seguimiento_win, now, no_ticket, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
+    global seguimiento_win, now, no_ticket_s, descrip, entrada_txt, number_of_rows, max_number, img_png5, img_png6, img_png7, \
         photoimagex, frame3, frame4, archivo_abierto, archivo_abierto, archivo_abierto2, archivo_abierto4, archivo_abierto5, \
         archivo_abierto6, archivo_abierto7, archivo_abierto8, archivo_abierto9, archivo_abierto3, archivo_abierto10
     archivo_abierto = ""
@@ -1906,7 +1897,7 @@ def seguimiento():
     l7 = Label(frame3, text=now.strftime("%Y-%m-%d"), font=("times", 16), anchor=CENTER)
     l7.grid(row=24, column=0, pady=2)
 
-    no_ticket = StringVar()
+    no_ticket_s = StringVar()
     descrip = StringVar()
     try:
         db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
@@ -1915,11 +1906,11 @@ def seguimiento():
         myresult = cursor.fetchone()
         # Debe de haber una incidencia para poder tomar la referencia
         max_number = myresult[0] + 1
-        no_ticket = max_number
+        no_ticket_s = max_number
     except Exception as e:
         print(e)
         max_number = 1
-        no_ticket = max_number
+        no_ticket_s = max_number
         """
         mysqldb = mysql.connector.connect(host="localhost", user="seguimiento_win", password="313218479", database="mydb")  # Conectmydb
         mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
@@ -1935,7 +1926,7 @@ def seguimiento():
         max_number = myresult[0] + 1
         no_ticket = max_number"""
 
-    entrada_ticket = Label(frame2, text=no_ticket, font=("times", 13))
+    entrada_ticket = Label(frame2, text=no_ticket_s, font=("times", 13))
     entrada_ticket.grid(row=13, column=1, sticky=W, pady=2)
 
     scrollbar = tkinter.Scrollbar(frame2, orient=tkinter.HORIZONTAL)
@@ -2221,46 +2212,26 @@ def aplicar2():
 def verifica_login():
     global user_name
     user_name = StringVar()
-    user_name = verifica_usuario.get()
-
-    gestor_sesiones = sessionmaker()
-    gestor_sesiones.configure(bind=engine)
-    sesion = gestor_sesiones()
-    clave1 = verifica_clave.get()
+    password=StringVar()
+    user_name = entrada_login_usuario.get()
+    password = entrada_login_clave.get()
     entrada_login_usuario.delete(0, END)  # BORRA INFORMACIÓN DEL CAMPO "Nombre usuario *" AL MOSTRAR NUEVA VENTANA.
     entrada_login_clave.delete(0, END)  # BORRA INFORMACIÓN DEL CAMPO "Contraseña *" AL MOSTRAR NUEVA VENTANA.
     ##############################################   bdd  =  Mysql   #####################################
-    if sesion.query(User).filter_by(name=user_name):
-        if sesion.query(User).filter_by(password=clave1).all:
-            print(user_name)
-            decision()
-        else:
-            no_clave()
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
+    mycursor = mysqldb.cursor()
+    sql = "select * from users_table where name = %s and password = %s"
+    mycursor.execute(sql, [(user_name), (password)])
+    results = mycursor.fetchall()
+    if results:
+        #messagebox.showinfo("", "Login Success")
+        ventana_login.state(newstate="withdraw")
+        decision()
     else:
-        print(clave1)
-        no_usuario()
-
-    """
-    lista_archivos = os.listdir()  # GENERA LISTA DE ARCHIVOS UBICADOS EN EL DIRECTORIO.
-
-     # SI EL NOMBRE SE ENCUENTRA EN LA LISTA DE ARCHIVOS..
-     if usuario1 in lista_archivos:
-         archivo1 = open(usuario1, "r")  # APERTURA DE ARCHIVO EN MODO LECTURA
-         verifica = archivo1.read().splitlines()  # LECTURA DEL ARCHIVO QUE CONTIENE EL nombre Y contraseña.
-         # SI LA CONTRASEÑA INTRODUCIDA SE ENCUENTRA EN EL ARCHIVO...
-         if clave1 in verifica:
-             exito_login()  # ...EJECUTAR FUNCIÓN "exito_login()"
-         # SI LA CONTRASEÑA NO SE ENCUENTRA EN EL ARCHIVO....
-         else:
-             no_clave()  # ...EJECUTAR "no_clave()"
-     else:
-         no_usuario()  # ..EJECUTA "no_usuario()"."""
-    ########################################################################################
-    # VENTANA "Login finalizado con exito".
+        messagebox.showinfo("", "Incorrect Username or Password")
+        return False
 
 
-# global rutas_files
-# rutas_files=[]
 def quitar_path():
     label_file.configure(text="Seleccione archivos asociados (Máximo 10)")
     label_file.grid(row=0, column=1)
@@ -2335,13 +2306,19 @@ def quitar_path7():
     label_file7.configure(text="")
     label_file7.grid(row=7, column=1)
     buton_garbage_.grid_forget()
-
+    if (label_file8.cget('text') == ""):
+        buton_file8.grid_forget()
+    else:
+        pass
 
 def quitar_path8():
     label_file8.configure(text="")
     label_file8.grid(row=8, column=1)
     buton_garbage_c.grid_forget()
-
+    if (label_file9.cget('text') == ""):
+        buton_file9.grid_forget()
+    else:
+        pass
 
 def quitar_path9():
     label_file9.configure(text="")
@@ -2430,7 +2407,7 @@ def abrir_archivo6():
 
 
 def abrir_archivo5():
-    global photoimage10, buton_garba, photoimage36, buton_file5, archvio_abierto5
+    global photoimage10, buton_garba, photoimage36, buton_file5, archivo_abierto5
     archivo_abierto5 = filedialog.askopenfilename(initialdir="/", title="Seleccione un archivo",
                                                   filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
     label_file4.configure(text="File 5: " + archivo_abierto5)
@@ -2670,7 +2647,7 @@ def exito_login():
         print(e)
         max_number = 1
         no_ticket = max_number
-        """
+        """ Para probar cuando la tabla está vacía:
         mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
         mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
         mycursor.execute("INSERT INTO datos_incidencias2 VALUES (" + str(0) + ", 'Cerrado', 'Eduardo Calderón', 'MX3', "
@@ -2744,10 +2721,7 @@ def exito_login():
     optionmenu_d.grid(row=19, column=1, sticky=W, pady=2)
     times()
     root.protocol("WM_DELETE_WINDOW", handleProtocol)
-    Button(frame3, text="Registrar", width=10, command=registro_incidencia).grid(row=25,
-                                                                                 column=0)  # BOTÓN "Registrarse"
-    # Frame(root, height=24, width=400, bg='red').grid(row=14, column=2)
-
+    Button(frame3, text="Registrar", width=10, command=registro_incidencia).grid(row=25, column=0) #BOTÓN "Registrarse"
 
 # VENTANA DE "Contraseña incorrecta".
 def no_clave():
@@ -2854,206 +2828,62 @@ def borrar_ventana():
         pass
 
 
-def registro_incidencia2():
-    global datos, lastid1, lastid2, lastid3, lastid4, lastid5, lastid6, lastid7, lastid8, lastid9, lastid10
+def registro_incidencia2():  #Registra seguimientos
+    global datos
 
     if (archivo_abierto == ""):
         archivo_abierto == "sin archivo adjunto"
-        lastid1 = ""
     else:
-        try:
-            first = archivo_abierto.split("/")  # separa el path
-            lastid1 = first.pop()  # extrae el nombre del archivo
-            print(lastid1)
-        except Exception as e:
-            print(e)
+        archivo_abiertoo = archivo_abierto.replace("/", "\\")
 
     if (archivo_abierto2 == ""):
         archivo_abierto2 == "sin archivo adjunto"
-        lastid2 = ""
     else:
-        try:
-            second = archivo_abierto2.split("/")  # separa el path
-            lastid2 = second.pop()  # extrae el nombre del archivo
-            print(lastid2)
-        except Exception as e:
-            print(e)
+        archivo_abiertoo2 = archivo_abierto2.replace("/", "\\")
 
     if (archivo_abierto3 == ""):
         archivo_abierto3 == "sin archivo adjunto"
-        lastid3 = ""
     else:
-        try:
-            three = archivo_abierto3.split("/")  # separa el path
-            lastid3 = three.pop()  # extrae el nombre del archivo
-        except Exception as e:
-            print(e)
+        archivo_abiertoo3 = archivo_abierto3.replace("/", "\\")
 
     if (archivo_abierto4 == ""):
         archivo_abierto4 == "sin archivo adjunto"
-        lastid4 = ""
     else:
-        try:
-            four = archivo_abierto4.split("/")  # arreglo de palabras separadas
-            lastid4 = four.pop()  # Nombre del archivo
-        except Exception as e:
-            print(e)
+        archivo_abiertoo4 = archivo_abierto4.replace("/", "\\")
 
     if (archivo_abierto5 == ""):
         archivo_abierto5 == "sin archivo adjunto"
-        lastid5 = ""
     else:
-        try:
-            five = archivo_abierto5.split("/")
-            lastid5 = five.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo5 = archivo_abierto5.replace("/", "\\")
 
     if (archivo_abierto6 == ""):
         archivo_abierto6 == "sin archivo adjunto"
-        lastid6 = ""
     else:
-        try:
-            six = archivo_abierto6.split("/")
-            lastid6 = six.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo6 = archivo_abierto6.replace("/", "\\")
 
     if (archivo_abierto7 == ""):
         archivo_abierto7 == "sin archivo adjunto"
-        lastid7 = ""
     else:
-        try:
-            seven = archivo_abierto7.split("/")  # arreglo de palabras separadas
-            lastid7 = seven.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo7 = archivo_abierto7.replace("/", "\\")
 
     if (archivo_abierto8 == ""):
         archivo_abierto8 == "sin archivo adjunto"
-        lastid8 = ""
     else:
-        try:
-            eigth = archivo_abierto8.split("/")
-            lastid8 = eigth.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo8 = archivo_abierto8.replace("/", "\\")
 
     if (archivo_abierto9 == ""):
         archivo_abierto9 == "sin archivo adjunto"
-        lastid9 = ""
     else:
-        try:
-            nine = archivo_abierto9.split("/")
-            lastid9 = nine.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo9 = archivo_abierto9.replace("/", "\\")
 
     if (archivo_abierto10 == ""):
         archivo_abierto10 == "sin archivo adjunto"
-        lastid10 = ""
     else:
-        try:
-            ten = archivo_abierto10.split("/")
-            lastid10 = ten.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo10 = archivo_abierto10.replace("/", "\\")
 
-        #en Linux:  path = "/home/sistemas/Downloads
-        incidencia = str(no_ticket) # imprime el valor de ticket que le pasamos en la tabla de registro
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-              #os.system("scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
-            os.system("scp " + archivo_abierto + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid1)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid1)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto2 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\" + lastid2)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto2 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid2)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto3 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_" + incidencia+"\\" + lastid3)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto3 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid3)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-              #os.system("scp " + archivo_abierto + " sistemas@192.168.9.69:" + path + "/" + name_file + str(no_ticket) + "/" + lastid1)
-            os.system("scp " + archivo_abierto4 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+ incidencia+"\\"+ lastid4)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto4 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid4)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto5 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid5)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto5 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid5)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto6 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid6)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto6 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid6)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto7 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid7)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto7 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid7)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto8 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid8)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto8 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid8)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto9 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid9)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto9 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid9)
-            except Exception as e:
-                print(e)
-
-        try:  # envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-            os.system("scp " + archivo_abierto10 + " lalo@192.168.1.110:\\Users\\Administrator\\Downloads\\incidencia_no_"+incidencia+"\\"+ lastid10)
-        except Exception as e:
-            print(e)
-            try:# Para Hosts en la misma red o dominio
-                os.system("copy " + archivo_abierto10 + " \\10.0.2.4\\c$\\incidencia_no_"+incidencia+"\\"+lastid10)
-            except Exception as e:
-                print(e)
-
-    print(no_ticket)
+    incidencia = str(no_ticket_s -1) # imprime el valor de ticket que le pasamos en la tabla de registro
+    print(no_ticket_s)
+    ticket_enter = entrada_ticket.get()
     datos_operador = user_name
     datos_spacecraft = var_spacecraft.get()
     datos_ccs = var_ccs.get()
@@ -3066,23 +2896,51 @@ def registro_incidencia2():
     current_time2 = time.strftime("%H:%M:%S")
     # registramos la nueva incidencia en la tabla donde vienen todas las incidencias
 
+    db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
+    cursor = db.cursor()
+    cursor.execute("SELECT max(registro) FROM ticket_no_"+ticket_enter)
+    myresult = cursor.fetchone()
+    # Debe de haber una incidencia para poder tomar la referencia
+    max_numberr = myresult[0] + 1
+    no_seguim = max_number
+
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  #Conectmydb
     mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
-    ticket_enter = entrada_ticket.get()
-
+    print(ticket_enter) #7 -> ticket
+    print("+")
+    print(no_ticket_s)  #3 -> seguimiento
     try:
         mycursor.execute(
-            "INSERT INTO " + stringg + ticket_enter + " VALUES(" + str(0) + ", 'Abierto', '" + datos_operador
-            + "', '" + datos_spacecraft + "', '" + datos_ccs + "', '" + datos_tfalla + "', '" + datos_componente + "', '" + datos_componente2 + "', '"
-            + datos_device + "', '" + datos_descripcion + "', '" + datos_date + "', '" + current_time2 + "', '" + lastid1 + "', '" + lastid2 + "', '" + lastid3 + "', '" + lastid4 + "', '" + lastid5 + "', '" + lastid6 + "', '" + lastid7 + "', '" + lastid8 + "', '" + lastid9 + "', '" + lastid10 + "')")
+            "INSERT INTO " + stringg + ticket_enter + " VALUES(" + str(0) + ", 'Abierto', '" + datos_operador+ "', '" +
+            datos_spacecraft + "', '" + datos_ccs + "', '" + datos_tfalla + "', '" + datos_componente + "', '" + datos_componente2 + "', '"
+            + datos_device + "', '" + datos_descripcion + "', '" + datos_date + "', '" + current_time2 + "', '" + archivo_abierto + "', '" + archivo_abierto2 +
+            "', '" + archivo_abierto3 + "', '" + archivo_abierto4 + "', '" + archivo_abierto5 + "', '" + archivo_abierto6
+            + "', '" + archivo_abierto7 + "', '" + archivo_abierto8 + "', '" + archivo_abierto9 + "', '" + archivo_abierto10 + "')")
+
     except Exception as e:
         print(e)
-
+    datos_ticket=str(no_ticket_s)
+    print(no_seguim) #3
     mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
-
-    label_succes = Label(seguimiento_win,
-                         text="Resgistro Exitoso")  # En caso de ser un registro exitoso, se manda este mensaje
+    try:  # La carpeta incidencias debe ser creada antes de ejecutar el programa.
+        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' +ticket_enter+"\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo2 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo3 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo4 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo5 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+    except Exception as e:
+        print(e)
+    try:
+        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+    except Exception as e:
+        print(e)
+    label_succes = Label(seguimiento_win, text="Resgistro Exitoso") # En caso de ser un registro exitoso, se manda este mensaje
     label_succes.grid(row=17, column=2, sticky=W, pady=2)
     session.commit()
     session.close()
@@ -3096,153 +2954,59 @@ def registro_incidencia2():
 
 
 def registro_incidencia():
-    global datos, lastid1, lastid2, lastid3, lastid4, lastid5, lastid6, lastid7, lastid8, lastid9, lastid10
 
     if (archivo_abierto == ""):
         archivo_abierto == "sin archivo adjunto"
-        lastid1 = ""
     else:
-        try:
-            first = archivo_abierto.split("/")  # separa el path
-            lastid1 = first.pop()  # extrae el nombre del archivo
-            print(lastid1)
-        except Exception as e:
-            print(e)
+        archivo_abiertoo = archivo_abierto.replace("/", "\\")
 
     if (archivo_abierto2 == ""):
         archivo_abierto2 == "sin archivo adjunto"
-        lastid2 = ""
     else:
-        try:
-            second = archivo_abierto2.split("/")  # separa el path
-            lastid2 = second.pop()  # extrae el nombre del archivo
-            print(lastid2)
-        except Exception as e:
-            print(e)
+        archivo_abiertoo2 = archivo_abierto2.replace("/", "\\")
 
     if (archivo_abierto3 == ""):
         archivo_abierto3 == "sin archivo adjunto"
-        lastid3 = ""
     else:
-        try:
-            three = archivo_abierto3.split("/")  # separa el path
-            lastid3 = three.pop()  # extrae el nombre del archivo
-        except Exception as e:
-            print(e)
+        archivo_abiertoo3 = archivo_abierto3.replace("/", "\\")
 
     if (archivo_abierto4 == ""):
         archivo_abierto4 == "sin archivo adjunto"
-        lastid4 = ""
     else:
-        try:
-            four = archivo_abierto4.split("/")  # arreglo de palabras separadas
-            lastid4 = four.pop()  # Nombre del archivo
-        except Exception as e:
-            print(e)
+       archivo_abiertoo4 = archivo_abierto4.replace("/", "\\")
 
     if (archivo_abierto5 == ""):
         archivo_abierto5 == "sin archivo adjunto"
-        lastid5 = ""
     else:
-        try:
-            five = archivo_abierto5.split("/")
-            lastid5 = five.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo5 = archivo_abierto5.replace("/", "\\")
 
     if (archivo_abierto6 == ""):
         archivo_abierto6 == "sin archivo adjunto"
-        lastid6 = ""
     else:
-        try:
-            six = archivo_abierto6.split("/")
-            lastid6 = six.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo6 = archivo_abierto6.replace("/", "\\")
 
     if (archivo_abierto7 == ""):
         archivo_abierto7 == "sin archivo adjunto"
-        lastid7 = ""
     else:
-        try:
-            seven = archivo_abierto7.split("/")  # arreglo de palabras separadas
-            lastid7 = seven.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo7 = archivo_abierto7.replace("/", "\\")
 
     if (archivo_abierto8 == ""):
         archivo_abierto8 == "sin archivo adjunto"
-        lastid8 = ""
     else:
-        try:
-            eigth = archivo_abierto8.split("/")
-            lastid8 = eigth.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo8 = archivo_abierto8.replace("/", "\\")
 
     if (archivo_abierto9 == ""):
         archivo_abierto9 == "sin archivo adjunto"
-        lastid9 = ""
     else:
-        try:
-            nine = archivo_abierto9.split("/")
-            lastid9 = nine.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo9 = archivo_abierto9.replace("/", "\\")
 
     if (archivo_abierto10 == ""):
         archivo_abierto10 == "sin archivo adjunto"
-        lastid10 = ""
     else:
-        try:
-            ten = archivo_abierto10.split("/")
-            lastid10 = ten.pop()
-        except Exception as e:
-            print(e)
+        archivo_abiertoo10 = archivo_abierto10.replace("/", "\\")
 
     path = "/home/sistemas/Downloads"
     name_file = "incidencia No. "
-
-    #    try: #envía archivo_abierto (Complete path), genera una carpeta y coloca el archivo
-    #        os.system("scp "+archivo_abierto+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid1)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto2+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid2)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto3+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid3)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto4+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid4)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto5+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid5)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto6+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid6)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto7+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid7)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto8+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid8)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto9+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid9)
-    #    except Exception as e:
-    #        print(e)
-    #    try:
-    #        os.system("scp "+archivo_abierto10+" sistemas@192.168.9.69:"+path+"/"+name_file+str(no_ticket)+"/"+lastid10)
-    #    except Exception as e:
-    #       print(e)
 
     datos_ticket = str(no_ticket)  # imprime el valor de ticket que le pasamos en la tabla de registro
     print(datos_ticket)
@@ -3260,12 +3024,10 @@ def registro_incidencia():
     current_time2 = time.strftime("%H:%M:%S")
     # registramos la nueva incidencia en la tabla donde vienen todas las incidencias
     new_user = Incidencias(status="Abierto", operador=datos_operador, spacecraft=datos_spacecraft, ccs=datos_ccs,
-                           tipo_falla=datos_tfalla, componente=datos_componente, componente2=datos_componente2,
-                           device=datos_device,
-                           descripcion=datos_descripcion, date=datos_date, hora=current_time2, files=lastid1,
-                           files2=lastid2,
-                           files3=lastid3, files4=lastid4, files5=lastid5, files6=lastid6,
-                           files7=lastid7, files8=lastid8, files9=lastid9, files10=lastid10)
+                tipo_falla=datos_tfalla, componente=datos_componente, componente2=datos_componente2,device=datos_device,
+                descripcion=datos_descripcion, date=datos_date, hora=current_time2, files=archivo_abierto,
+                files2=archivo_abierto2, files3=archivo_abierto3, files4=archivo_abierto4, files5=archivo_abierto5,
+                files6=archivo_abierto6, files7=archivo_abierto7, files8=archivo_abierto8, files9=archivo_abierto9, files10=archivo_abierto10)
 
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
     mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479",
@@ -3285,15 +3047,29 @@ def registro_incidencia():
     # ción de arriba, al tener cada una un nombre diferente no funcionaría ya que se le tendría que cambiar el nombre ala
     # clase o tener una clase por cada tabla, lo cuál no es nada conveniente. Entonces debemos decirle que agregue la inf
     mycursor.execute(
-        "INSERT INTO " + str(stringg) + str(datos_ticket) + " VALUES(1, 'Abierto', '" + str(datos_operador) + "','"
-        + str(datos_spacecraft) + "','" + str(datos_ccs) + "','" + str(datos_tfalla) + "','" + str(
-            datos_componente) + "','" + str(datos_componente2)
-        + "','" + str(datos_device) + "','" + str(datos_descripcion) + "','" + str(datos_date) + "','" + str(
-            current_time2) + "','" +
-        str(lastid1) + "','" + str(lastid2) + "','" + str(lastid3) + "','" + str(lastid4) + "','" +
-        str(lastid5) + "','" + str(lastid6) + "','" + str(lastid7) + "','" + str(lastid8) + "','" +
-        str(lastid9) + "','" + str(lastid10) + "')")
+        "INSERT INTO " + str(stringg) + str(datos_ticket) + " VALUES(1, 'Abierto', '" + str(datos_operador) + "', '" + str(datos_spacecraft) + "', '" + str(datos_ccs) + "', '" + str(datos_tfalla) + "','" + str(datos_componente) + "','" + str(datos_componente2) + "', '" + str(datos_device) + "', '" + str(datos_descripcion) + "', '" + datos_date + "', '" + current_time2 + "', '" + str(archivo_abierto) + "', '" + str(archivo_abierto2) + "', '" + str(archivo_abierto3) + "', '" + str(archivo_abierto4) + "', '" + str(archivo_abierto5) + "', '" + str(archivo_abierto6) + "', '" + str(archivo_abierto7) + "', '" + str(archivo_abierto8) + "', '" + str(archivo_abierto9) + "', '" + str(archivo_abierto10) + "')")
+
     mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
+
+    try: #La carpeta incidencias debe ser creada antes de ejecutar el programa.
+        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket)
+        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo+' C:\\Users\\413ed\\incidencias\incidencia_no_'+ datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo2+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo3+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo4+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo5+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        #os.mkdir('C:\\Users\CtrlSat_MexSat\incidencias\incidnecia_no_'+datos_ticket)
+    except Exception as e:
+        print(e)
+    try:
+        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+    except Exception as e:
+        print(e)
 
     label_succes = Label(root, text="Resgistro Exitoso")  # En caso de ser un registro exitoso, se manda este mensaje
     label_succes.grid(row=17, column=2, sticky=W, pady=2)
@@ -3347,6 +3123,7 @@ def registro_usuario():
     ccs_info = datos1.get()
     dom_info = datos2.get()
     correo = mail.get()
+    correo2 = mail2.get()
     print(correo)
 
     usuario_sn_spaces = usuario_info.replace(" ", "")
@@ -3367,21 +3144,29 @@ def registro_usuario():
             Label(ventana_verifica, text="Las contraseñas no son iguales").pack()
             # Button(ventana_verifica, text="OK", command=borrar_no_clave).pack()
         else:
-            file = open(usuario_info, "w")  # CREACION DE ARCHIVO
-            file.write(usuario_info + "\n")  # nombre
-            file.write(ccs_info + "\n")  # ccs
-            file.write(dom_info + "\n")  # dom
-            file.write(clave_info)
-            file.close()
-            entrada_clave2.delete(0, END)
-            entrada_nombre.delete(0, END)
-            entrada_clave.delete(0, END)
-            ##############Insertar info en la bdd########################
-            new_user = User(name=usuario_info, password=clave_info, ccs=ccs_info, dominio=dom_info, mail=correo)
-            session.add(new_user)
-            session.commit()
-            session.close()
-            Label(ventana_registro, text="Registro completado con éxito", font=("calibri", 11)).pack()
+            if correo != correo2:
+                ventana_verifica = Toplevel(ventana_registro)
+                ventana_verifica.title("ERROR")
+                ventana_verifica.geometry("300x150")
+                Label(ventana_verifica, text="Los correos ingresados no son iguales").pack()
+            else:
+                file = open(usuario_info, "w")  # CREACION DE ARCHIVO
+                file.write(usuario_info + "\n")  # nombre
+                file.write(ccs_info + "\n")  # ccs
+                file.write(dom_info + "\n")  # dom
+                file.write(clave_info)
+                file.close()
 
+                entrada_clave2.delete(0, END)
+                entrada_nombre.delete(0, END)
+                entrada_clave.delete(0, END)
+                entrada_mail.delete(0, END)
+                entrada_mail2.delete(0, END)
+                ##############Insertar info en la bdd########################
+                new_user = User(name=usuario_info, password=clave_info, ccs=ccs_info, dominio=dom_info, mail=correo)
+                session.add(new_user)
+                session.commit()
+                session.close()
+                Label(ventana_registro, text="Registro completado con éxito", font=("calibri", 11)).pack()
 
 ventana_inicio()  # EJECUCIÓN DE LA VENTANA DE INICIO.
