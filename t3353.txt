@@ -1,14 +1,15 @@
+import mysql.connector
 import os
+import time
 import tkinter
-from tkinter import *  # IMPORTAMOS LIBRERÍAS NECESARIAS.
 from datetime import datetime
+from tkinter import *  # IMPORTAMOS LIBRERÍAS NECESARIAS.
 from tkinter import ttk, messagebox, filedialog
-import time, MySQLdb, mysql.connector
+from PIL import Image
+from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String
-from PIL import Image
 
 # MOTOR DE LA BDD, RUTA HASTA MY LOCALHOST
 engine = create_engine("mysql+pymysql://root:313218479@localhost/mydb", encoding="utf-8", echo=True)
@@ -177,14 +178,10 @@ data4 = {  'tipo_falla': ['Software', 'Hardware', 'No Identificado'],
                    'Windows', 'Epoch', 'Ares', 'Task Iniator', 'Antivirus', 'Backups', 'Cortex', 'Compass',
                    'Mónaco', 'Herramientas'],
     'spacecraft': ['MX2', 'MX3'],
-    'operador': ['Ingresa el nombre del operador: '],
+    #'operador': ['Ingresa el nombre del operador: '],
     'status': ['Abierto', 'Cerrado'],
     'device': ['Serv Iztapalapa Operaciones', 'Serv Iztapalapa Ingeniería', 'Serv Iztapalapa RF',
-               'Serv Hermosillo Operaciones', 'Serv Hermosillo Ingeniería', 'Serv Hermosillo RF',
-               'Hardware Servidor'],
-    'ticket': ['Ingresa un número: '],
-    'date': ['Lunes', 'Martes'],
-    'hora': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+               'Serv Hermosillo Operaciones', 'Serv Hermosillo Ingeniería', 'Serv Hermosillo RF', 'Hardware Servidor'],
     'ccs': ['Iztapalapa', 'Hermosillo']
 }
 
@@ -197,9 +194,7 @@ data5 = {'Software': [], 'Hardware': [], 'No Identificado': [], 'Teléfono IP': 
          'Serv Iztapalapa Operaciones': [], 'Serv Iztapalapa Ingeniería': [], 'Serv Iztapalapa RF': [],
          'Serv Hermosillo Operaciones': [],
          'Serv Hermosillo Ingeniería': [], 'Serv Hermosillo RF': [], 'Hardware Servidor': [], 'Ingresa un número: ': [],
-         'Lunes': [], 'Martes': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': [], '8': [], '9': [],
-         '10': [],
-         '11': [], '12': [], 'Iztapalapa': [], 'Hermosillo': []
+         'Iztapalapa': [], 'Hermosillo': []
          }
 
 
@@ -340,11 +335,16 @@ def helpp4():
     ventana_help4.geometry("450x400")
     ventana_help4.title("Soporte y ayuda: Ventana con menú")
 
+def handleProtocol():
+    # open a dialog
+    if tkinter.messagebox.askokcancel("Notice", "Are you sure to close the window?"):
+        # close the application
+        ventana_principal.destroy()
 
 def ventana_inicio():
     global ventana_principal, optionmenu_f
     ventana_principal = Tk()
-    ventana_principal.resizable(False, False)
+    #ventana_principal.resizable(False, False)
     ventana_principal.iconbitmap('tele_ico.ico')
     ventana_principal.geometry("360x280")  # DIMENSIONES DE LA VENTANA bxh
     ventana_principal.title("Sistema de Gestión de incidencias")  # TITULO DE LA VENTANA
@@ -363,13 +363,12 @@ def ventana_inicio():
     boton3 = tkinter.Button(text="Ver Tickets", width="30", command=visualizar, bd=15)
     boton3.pack()  # BOTÓN "Ver Tickets".
     Label(text="").pack()
-
+    ventana_principal.protocol("WM_DELETE_WINDOW", handleProtocol)
     menubar = tkinter.Menu(ventana_principal)
     filemenu = tkinter.Menu(menubar, tearoff=0)
     filemenu.add_command(label="Help", command=helpp)
     filemenu.add_command(label="Exit", command=ventana_principal.quit)
     menubar.add_cascade(label="Ayuda", menu=filemenu)
-
     ventana_principal.config(menu=menubar)
     ventana_principal.mainloop()
 
@@ -387,14 +386,6 @@ def hacia_atras2():
     ventana_principal.state(newstate='normal')
     ventana_principal.deiconify()
 
-
-def handleProtocol():
-    # open a dialog
-    if tkinter.messagebox.askokcancel("Notice", "Are you sure to close the window?"):
-        # close the application
-        ventana_principal.destroy()
-
-
 def registro():
     style = ttk.Style()
     style.configure("GW.TLabel", foreground="green", background="white")
@@ -405,7 +396,7 @@ def registro():
     global datos1, datos2, ventana_registro, img_png3, img_png4,nombre_usuario, dom, ccs, clave, clave2, entrada_mail2,\
         entrada_nombre, entrada_clave, entrada_dom, entrada_ccs, entrada_clave2, photoimage, mail, mail2, entrada_mail
     ventana_registro = Toplevel(ventana_principal)
-    ventana_registro.resizable(False, False)
+    #ventana_registro.resizable(False, False)
     ventana_registro.iconbitmap('tele_ico.ico')
 
     # ventana_registro = Tk()
@@ -514,7 +505,7 @@ def visualizar():
     ventana_viss.geometry("1550x550")
     ventana_viss.title("Visualización de Incidencias")
     ventana_viss.iconbitmap('tele_ico.ico')
-    ventana_viss.resizable(False, False)
+    #ventana_viss.resizable(True, False)
     ttk.Label(ventana_viss, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
 
     variable_e = StringVar()
@@ -538,69 +529,75 @@ def visualizar():
     ttk.Label(ventana_viss, text="Operador: ", style="GW.TLabel").place(x=10, y=70)
     ttk.Label(ventana_viss, text="Spacecraft", style="GW.TLabel").place(x=10, y=100)
     ttk.Label(ventana_viss, text="CCS: ", style="GW.TLabel").place(x=10, y=130)
-    ttk.Label(ventana_viss, text="Tipo de falla: ", style="GW.TLabel").place(x=300, y=10)
-    ttk.Label(ventana_viss, text="Componente: ", style="GW.TLabel").place(x=300, y=40)
-    ttk.Label(ventana_viss, text="Comp Secundario: ", style="GW.TLabel").place(x=300, y=70)
-    ttk.Label(ventana_viss, text="Dispositivo: ", style="GW.TLabel").place(x=300, y=100)
-    ttk.Label(ventana_viss, text="Descripción de la falla: ", style="GW.TLabel").place(x=300, y=130)
-    ttk.Label(ventana_viss, text="Fecha: ", style="GW.TLabel").place(x=590, y=10)
-    ttk.Label(ventana_viss, text="Hora: ", style="GW.TLabel").place(x=590, y=40)
 
-    ttk.Label(ventana_viss, text="File 1: ", style="GW.TLabel").place(x=870, y=10)
-    ttk.Label(ventana_viss, text="File 2: ", style="GW.TLabel").place(x=870, y=40)
-    ttk.Label(ventana_viss, text="File 3: ", style="GW.TLabel").place(x=870, y=70)
-    ttk.Label(ventana_viss, text="File 4: ", style="GW.TLabel").place(x=870, y=100)
-    ttk.Label(ventana_viss, text="File 5: ", style="GW.TLabel").place(x=1200, y=10)
-    ttk.Label(ventana_viss, text="File 6: ", style="GW.TLabel").place(x=1200, y=40)
-    ttk.Label(ventana_viss, text="File 7: ", style="GW.TLabel").place(x=1200, y=70)
-    ttk.Label(ventana_viss, text="File 8: ", style="GW.TLabel").place(x=1200, y=100)
-    ttk.Label(ventana_viss, text="File 9: ", style="GW.TLabel").place(x=1200, y=130)
-    ttk.Label(ventana_viss, text="File 10: ", style="GW.TLabel").place(x=1200, y=160)
+    ttk.Label(ventana_viss, text="Tipo de falla: ", style="GW.TLabel").place(x=240, y=10)
+    ttk.Label(ventana_viss, text="Componente: ", style="GW.TLabel").place(x=240, y=40)
+    ttk.Label(ventana_viss, text="Comp Secundario: ", style="GW.TLabel").place(x=240, y=70)
+    ttk.Label(ventana_viss, text="Dispositivo: ", style="GW.TLabel").place(x=240, y=100)
+    ttk.Label(ventana_viss, text="Descripción de falla: ", style="GW.TLabel").place(x=240, y=130)
+
+    ttk.Label(ventana_viss, text="Fecha: ", style="GW.TLabel").place(x=530, y=10)
+    ttk.Label(ventana_viss, text="Hora: ", style="GW.TLabel").place(x=530, y=40)
+
+    ttk.Label(ventana_viss, text="File 1: ", style="GW.TLabel").place(x=750, y=10)
+    ttk.Label(ventana_viss, text="File 2: ", style="GW.TLabel").place(x=750, y=40)
+    ttk.Label(ventana_viss, text="File 3: ", style="GW.TLabel").place(x=750, y=70)
+    ttk.Label(ventana_viss, text="File 4: ", style="GW.TLabel").place(x=750, y=100)
+
+    ttk.Label(ventana_viss, text="File 5: ", style="GW.TLabel").place(x=1060, y=10)
+    ttk.Label(ventana_viss, text="File 6: ", style="GW.TLabel").place(x=1060, y=40)
+    ttk.Label(ventana_viss, text="File 7: ", style="GW.TLabel").place(x=1060, y=70)
+    ttk.Label(ventana_viss, text="File 8: ", style="GW.TLabel").place(x=1060, y=100)
+    ttk.Label(ventana_viss, text="File 9: ", style="GW.TLabel").place(x=1060, y=130)
+    ttk.Label(ventana_viss, text="File 10: ", style="GW.TLabel").place(x=1060, y=160)
     entrada_ticket = tkinter.Entry(ventana_viss)
-    entrada_ticket.place(x=140, y=10)
+    entrada_ticket.place(x=80, y=10)
     entrada_status = tkinter.Entry(ventana_viss)
-    entrada_status.place(x=140, y=40)
+    entrada_status.place(x=80, y=40)
     entrada_name = tkinter.Entry(ventana_viss)
-    entrada_name.place(x=140, y=70)
+    entrada_name.place(x=80, y=70)
     entrada_sc = tkinter.Entry(ventana_viss)
-    entrada_sc.place(x=140, y=100)
+    entrada_sc.place(x=80, y=100)
     entrada_sitio = tkinter.Entry(ventana_viss)
-    entrada_sitio.place(x=140, y=130)
+    entrada_sitio.place(x=80, y=130)
+
     entrada_tipo = tkinter.Entry(ventana_viss)
-    entrada_tipo.place(x=430, y=10)
+    entrada_tipo.place(x=360, y=10)
     entrada_componente = tkinter.Entry(ventana_viss)
-    entrada_componente.place(x=430, y=40)
+    entrada_componente.place(x=360, y=40)
     entrada_componente2 = tkinter.Entry(ventana_viss)
-    entrada_componente2.place(x=430, y=70)
+    entrada_componente2.place(x=360, y=70)
     entrada_dpvo = tkinter.Entry(ventana_viss)
-    entrada_dpvo.place(x=430, y=100)
+    entrada_dpvo.place(x=360, y=100)
     entrada_descrip = tkinter.Entry(ventana_viss, width=75)
-    entrada_descrip.place(x=430, y=130)
+    entrada_descrip.place(x=360, y=130)
+
     entrada_date = tkinter.Entry(ventana_viss)
-    entrada_date.place(x=700, y=10)
+    entrada_date.place(x=580, y=10)
     entrada_hora = tkinter.Entry(ventana_viss)
-    entrada_hora.place(x=700, y=40)
+    entrada_hora.place(x=580, y=40) #-15
+#-15
     entrada_file1 = tkinter.Entry(ventana_viss, width=35)
-    entrada_file1.place(x=950, y=10)
+    entrada_file1.place(x=800, y=10) #-15
     entrada_file2 = tkinter.Entry(ventana_viss, width=35)
-    entrada_file2.place(x=950, y=40)
+    entrada_file2.place(x=800, y=40)
     entrada_file3 = tkinter.Entry(ventana_viss, width=35)
-    entrada_file3.place(x=950, y=70)
+    entrada_file3.place(x=800, y=70)
     entrada_file4 = tkinter.Entry(ventana_viss, width=35)
-    entrada_file4.place(x=950, y=100)
+    entrada_file4.place(x=800, y=100)
 
     entrada_file5 = Entry(ventana_viss, width=38)
-    entrada_file5.place(x=1270, y=10)
+    entrada_file5.place(x=1110, y=10)
     entrada_file6 = Entry(ventana_viss, width=38)
-    entrada_file6.place(x=1270, y=40)
+    entrada_file6.place(x=1110, y=40)
     entrada_file7 = Entry(ventana_viss, width=38)
-    entrada_file7.place(x=1270, y=70)
+    entrada_file7.place(x=1110, y=70)
     entrada_file8 = Entry(ventana_viss, width=38)
-    entrada_file8.place(x=1270, y=100)
+    entrada_file8.place(x=1110, y=100)
     entrada_file9 = Entry(ventana_viss, width=38)
-    entrada_file9.place(x=1270, y=130)
+    entrada_file9.place(x=1110, y=130)
     entrada_file10 = Entry(ventana_viss, width=38)
-    entrada_file10.place(x=1270, y=160)
+    entrada_file10.place(x=1110, y=160)
     ventana_viss.grid_columnconfigure(0, weight=1)
     ventana_viss.grid_rowconfigure(0, weight=1)
 
@@ -675,7 +672,7 @@ def login():
     ventana_login = Toplevel(ventana_principal)
     ventana_login.title("Acceso a la cuenta")
     ventana_login.geometry("250x250")
-    ventana_login.resizable(False, False)
+    #ventana_login.resizable(False, False)
     ventana_login.iconbitmap('tele_ico.ico')
 
     img_png8 = PhotoImage(file="telecomm_circular.png")
@@ -835,61 +832,61 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
 
         try:
             im = Image.open(file_1)
-            boton11.place(x=1175, y=10)
+            boton11.place(x=1022, y=10)
         except Exception as e:
             print(e)
 
         try:
             im2 = Image.open(file_2)
-            boton22.place(x=1175, y=40)
+            boton22.place(x=1022, y=40)
         except Exception as e:
             print(e)
 
         try:
             im3 = Image.open(file_3)
-            boton33.place(x=1175, y=70)
+            boton33.place(x=1022, y=70)
         except Exception as e:
             print(e)
 
         try:
             im4 = Image.open(file_4)
-            boton44.place(x=1175, y=100)
+            boton44.place(x=1022, y=100)
         except Exception as e:
             print(e)
 
         try:
             im5 = Image.open(file_5)
-            boton55.place(x=1515, y=10)
+            boton55.place(x=1350, y=10)
         except Exception as e:
             print(e)
 
         try:
             im6 = Image.open(file_6)
-            boton66.place(x=1515, y=40)
+            boton66.place(x=1350, y=40)
         except Exception as e:
             print(e)
 
-        try:
+        try:#-15
             im7 = Image.open(file_7)
-            boton77.place(x=1515, y=70)
+            boton77.place(x=1350, y=70)
         except Exception as e:
             print(e)
 
         try:
             im8 = Image.open(file_8)
-            boton88.place(x=1515, y=100)
+            boton88.place(x=1350, y=100)
         except Exception as e:
             print(e)
 
         try:
             im9 = Image.open(file_9)
-            boton99.place(x=1515, y=130)
+            boton99.place(x=1350, y=130)
         except Exception as e:
             print(e)
 
         try:
             im10 = Image.open(file_10)
-            boton10.place(x=1515, y=160)
+            boton10.place(x=1350, y=160)
         except Exception as e:
             print(e)
 
@@ -1025,61 +1022,61 @@ def GetValue2(event):  #El que se usa en historial, aplicar2 y historial2
 
         try:
             im = Image.open(file_1)
-            boton11.place(x=1175, y=10)
+            boton11.place(x=1022, y=10) #-10
         except Exception as e:
             print(e)
 
         try:
             im2 = Image.open(file_2)
-            boton22.place(x=1175, y=40)
+            boton22.place(x=1022, y=40)#-15
         except Exception as e:
             print(e)
 
         try:
             im3 = Image.open(file_3)
-            boton33.place(x=1175, y=70)
+            boton33.place(x=1022, y=70)
         except Exception as e:
             print(e)
 
         try:
             im4 = Image.open(file_4)
-            boton44.place(x=1175, y=100)
+            boton44.place(x=1022, y=100)
         except Exception as e:
             print(e)
 
         try:
             im5 = Image.open(file_5)
-            boton55.place(x=1515, y=10)
+            boton55.place(x=1350, y=10)
         except Exception as e:
             print(e)
 
         try:
             im6 = Image.open(file_6)
-            boton66.place(x=1515, y=40)
+            boton66.place(x=1350, y=40)
         except Exception as e:
             print(e)
 
         try:
             im7 = Image.open(file_7)
-            boton77.place(x=1515, y=70)
+            boton77.place(x=1350, y=70)
         except Exception as e:
             print(e)
 
         try:
             im8 = Image.open(file_8)
-            boton88.place(x=1515, y=100)
+            boton88.place(x=1350, y=100)
         except Exception as e:
             print(e)
 
         try:
             im9 = Image.open(file_9)
-            boton99.place(x=1515, y=130)
+            boton99.place(x=1350, y=130)
         except Exception as e:
             print(e)
 
         try:
             im10 = Image.open(file_10)
-            boton10.place(x=1515, y=160)
+            boton10.place(x=1350, y=160)
         except Exception as e:
             print(e)
 
@@ -1099,7 +1096,7 @@ def cerrar_sesion():
     ventana_cerrars = Tk()
     ventana_cerrars.title("Status: Cierre de sesión")
     ventana_cerrars.geometry("315x100")
-    ventana_cerrars.resizable(False, False)
+    #ventana_cerrars.resizable(False, False)
     Label(ventana_cerrars, text="La sesión se cerró correctamente").pack()
     Label(ventana_cerrars, text="¡ Hasta luego !").pack()
     Button(ventana_cerrars, text="OK", command=destroy_window2).pack()
@@ -1111,7 +1108,7 @@ def decision():
     global ventana_decision
     ventana_decision = Toplevel(ventana_login)  # Indica que la ventana padre es la del login
     ventana_decision.iconbitmap('tele_ico.ico')
-    ventana_decision.resizable(False, False)  # No se pueden cambiar las dimensiones de la ventana
+    #ventana_decision.resizable(False, False)  # No se pueden cambiar las dimensiones de la ventana
     ventana_decision.geometry("360x200")  # DIMENSIONES DE LA VENTANA bxh
     ventana_decision.title("Gestión de incidencias")  # TITULO DE LA VENTANA
     Label(ventana_decision, text="Escoja una opción", width="300",
@@ -1164,7 +1161,7 @@ def modifica_reg():
     rooot.geometry("1550x540")
     rooot.title("Visualización y Modificación de Incidencias")
     rooot.iconbitmap('tele_ico.ico')
-    rooot.resizable(False, False)
+    #rooot.resizable(False, False)
     # tk.Label(root,text="Visualización de Incidencias", fg="black", font=(None, 25)).place(x=400, y=5)
     global ventana_tickets, entrada_ope, entrada_param, varope, entrada_filter
     filtro = StringVar()
@@ -1181,11 +1178,11 @@ def modifica_reg():
     variable_e.trace('w', update_options_F)
     variable_e.set('')
     variable_f.set('')
-
-    Button(rooot, text="Atrás", command=hacia_atras5, width=13).place(x=970, y=155)
-    Button(rooot, text="Ver histórico", command=historial, width=13).place(x=970, y=185)
-    Button(rooot, text="Update", command=update, width=13).place(x=870, y=155)
-    Button(rooot, text="Delete", command=delete, width=13).place(x=870, y=185)
+    #Botones en la ventana rooot
+    Button(rooot, text="Atrás", command=hacia_atras5, width=13).place(x=940, y=165)
+    Button(rooot, text="Ver histórico", command=historial, width=13).place(x=940, y=195)
+    Button(rooot, text="Update", command=update, width=13).place(x=840, y=165)
+    Button(rooot, text="Delete", command=delete, width=13).place(x=840, y=195)
     Button(rooot, text="Aplicar", command=aplicar, width=10).place(x=675, y=187)
 
     ttk.Label(rooot, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
@@ -1193,69 +1190,73 @@ def modifica_reg():
     ttk.Label(rooot, text="Operador: ", style="GW.TLabel").place(x=10, y=70)
     ttk.Label(rooot, text="Spacecraft", style="GW.TLabel").place(x=10, y=100)
     ttk.Label(rooot, text="CCS: ", style="GW.TLabel").place(x=10, y=130)
-    ttk.Label(rooot, text="Tipo de falla: ", style="GW.TLabel").place(x=300, y=10)
-    ttk.Label(rooot, text="Componente: ", style="GW.TLabel").place(x=300, y=40)
-    ttk.Label(rooot, text="Comp Secundario: ", style="GW.TLabel").place(x=300, y=70)
-    ttk.Label(rooot, text="Dispositivo: ", style="GW.TLabel").place(x=300, y=100)
-    ttk.Label(rooot, text="Descripción de la falla: ", style="GW.TLabel").place(x=300, y=130)
-    ttk.Label(rooot, text="Fecha: ", style="GW.TLabel").place(x=590, y=10)
-    ttk.Label(rooot, text="Hora: ", style="GW.TLabel").place(x=590, y=40)
-    ttk.Label(rooot, text="File 1: ", style="GW.TLabel").place(x=870, y=10)
-    ttk.Label(rooot, text="File 2: ", style="GW.TLabel").place(x=870, y=40)
-    ttk.Label(rooot, text="File 3: ", style="GW.TLabel").place(x=870, y=70)
-    ttk.Label(rooot, text="File 4: ", style="GW.TLabel").place(x=870, y=100)
-    ttk.Label(rooot, text="File 5: ", style="GW.TLabel").place(x=1200, y=10)
-    ttk.Label(rooot, text="File 6: ", style="GW.TLabel").place(x=1200, y=40)
-    ttk.Label(rooot, text="File 7: ", style="GW.TLabel").place(x=1200, y=70)
-    ttk.Label(rooot, text="File 8: ", style="GW.TLabel").place(x=1200, y=100)
-    ttk.Label(rooot, text="File 9: ", style="GW.TLabel").place(x=1200, y=130)
-    ttk.Label(rooot, text="File 10: ", style="GW.TLabel").place(x=1200, y=160)
+
+    ttk.Label(rooot, text="Tipo de falla: ", style="GW.TLabel").place(x=240, y=10)
+    ttk.Label(rooot, text="Componente: ", style="GW.TLabel").place(x=240, y=40)
+    ttk.Label(rooot, text="Comp Secundario: ", style="GW.TLabel").place(x=240, y=70)
+    ttk.Label(rooot, text="Dispositivo: ", style="GW.TLabel").place(x=240, y=100)
+    ttk.Label(rooot, text="Descripción de falla: ", style="GW.TLabel").place(x=240, y=130)
+    ttk.Label(rooot, text="Fecha: ", style="GW.TLabel").place(x=530, y=10)
+    ttk.Label(rooot, text="Hora: ", style="GW.TLabel").place(x=530, y=40)
+    ttk.Label(rooot, text="File 1: ", style="GW.TLabel").place(x=750, y=10)
+    ttk.Label(rooot, text="File 2: ", style="GW.TLabel").place(x=750, y=40)
+    ttk.Label(rooot, text="File 3: ", style="GW.TLabel").place(x=750, y=70)
+    ttk.Label(rooot, text="File 4: ", style="GW.TLabel").place(x=750, y=100)
+    ttk.Label(rooot, text="File 5: ", style="GW.TLabel").place(x=1060, y=10)
+    ttk.Label(rooot, text="File 6: ", style="GW.TLabel").place(x=1060, y=40)
+    ttk.Label(rooot, text="File 7: ", style="GW.TLabel").place(x=1060, y=70)
+    ttk.Label(rooot, text="File 8: ", style="GW.TLabel").place(x=1060, y=100)
+    ttk.Label(rooot, text="File 9: ", style="GW.TLabel").place(x=1060, y=130)
+    ttk.Label(rooot, text="File 10: ", style="GW.TLabel").place(x=1060, y=160)
 
     entrada_ticket = Entry(rooot)
-    entrada_ticket.place(x=140, y=10)
+    entrada_ticket.place(x=80, y=10)
     entrada_status = Entry(rooot)
-    entrada_status.place(x=140, y=40)
+    entrada_status.place(x=80, y=40)
     entrada_name = Entry(rooot)
-    entrada_name.place(x=140, y=70)
+    entrada_name.place(x=80, y=70)
     entrada_sc = Entry(rooot)
-    entrada_sc.place(x=140, y=100)
+    entrada_sc.place(x=80, y=100)
     entrada_sitio = Entry(rooot)
-    entrada_sitio.place(x=140, y=130)
+    entrada_sitio.place(x=80, y=130)
+
     entrada_tipo = Entry(rooot)
-    entrada_tipo.place(x=430, y=10)
+    entrada_tipo.place(x=360, y=10)
     entrada_componente = Entry(rooot)
-    entrada_componente.place(x=430, y=40)
+    entrada_componente.place(x=360, y=40)
     entrada_componente2 = Entry(rooot)
-    entrada_componente2.place(x=430, y=70)
+    entrada_componente2.place(x=360, y=70)
     entrada_dpvo = Entry(rooot)
-    entrada_dpvo.place(x=430, y=100)
-    entrada_descrip = Entry(rooot, width=60)
-    entrada_descrip.place(x=430, y=130)
+    entrada_dpvo.place(x=360, y=100)
+    entrada_descrip = Entry(rooot, width=85)
+    entrada_descrip.place(x=360, y=130)
+
     entrada_date = Entry(rooot)
-    entrada_date.place(x=700, y=10)
+    entrada_date.place(x=580, y=10)
     entrada_hora = Entry(rooot)
-    entrada_hora.place(x=700, y=40)
+    entrada_hora.place(x=580, y=40)
+
     entrada_file1 = Entry(rooot, width=35)
-    entrada_file1.place(x=950, y=10)
+    entrada_file1.place(x=800, y=10)
     entrada_file2 = Entry(rooot, width=35)
-    entrada_file2.place(x=950, y=40)
+    entrada_file2.place(x=800, y=40)
     entrada_file3 = Entry(rooot, width=35)
-    entrada_file3.place(x=950, y=70)
+    entrada_file3.place(x=800, y=70)
     entrada_file4 = Entry(rooot, width=35)
-    entrada_file4.place(x=950, y=100)
+    entrada_file4.place(x=800, y=100)
 
     entrada_file5 = Entry(rooot, width=35)
-    entrada_file5.place(x=1270, y=10)
+    entrada_file5.place(x=1105, y=10)
     entrada_file6 = Entry(rooot, width=35)
-    entrada_file6.place(x=1270, y=40)
+    entrada_file6.place(x=1105, y=40)
     entrada_file7 = Entry(rooot, width=35)
-    entrada_file7.place(x=1270, y=70)
+    entrada_file7.place(x=1105, y=70)
     entrada_file8 = Entry(rooot, width=35)
-    entrada_file8.place(x=1270, y=100)
+    entrada_file8.place(x=1105, y=100)
     entrada_file9 = Entry(rooot, width=35)
-    entrada_file9.place(x=1270, y=130)
+    entrada_file9.place(x=1105, y=130)
     entrada_file10 = Entry(rooot, width=35)
-    entrada_file10.place(x=1270, y=160)
+    entrada_file10.place(x=1105, y=160)
     rooot.grid_columnconfigure(0, weight=1)
     rooot.grid_rowconfigure(0, weight=1)
     cols = ('ticket', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2', 'device',
@@ -1322,7 +1323,7 @@ def hacia_atras8():
     rooot.deiconify()
 
 
-def historial2():
+def historial2(): #Este es el historial que no se modifica
     global hist_window, ticket_enter, sc_enter, ccs_enter, type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, \
         variable_e3, variable_f3, optionmenu_e3, optionmenu_f3, variable_e1, variable_f1, optionmenu_f1, sc_enter, ccs_enter, \
         type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
@@ -1353,7 +1354,7 @@ def historial2():
 
             if str(numero_ticket) == ticket_enter:
                 hist_window = Toplevel(ventana_principal)
-                hist_window.geometry("1550x550")
+                hist_window.geometry("1750x550")
                 hist_window.title("Registro histórico de seguimiento de incidencias")
                 hist_window.iconbitmap('tele_ico.ico')
                 Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=800, y=187)
@@ -1369,85 +1370,95 @@ def historial2():
                 variable_e1.set('')
                 variable_f1.set('')
 
-                ttk.Label(hist_window, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
+                ttk.Label(hist_window, text="No. registro: ", style="GW.TLabel").place(x=10, y=10)
                 ttk.Label(hist_window, text="Status: ", style="GW.TLabel").place(x=10, y=40)
                 ttk.Label(hist_window, text="Operador: ", style="GW.TLabel").place(x=10, y=70)
                 ttk.Label(hist_window, text="Spacecraft", style="GW.TLabel").place(x=10, y=100)
                 ttk.Label(hist_window, text="CCS: ", style="GW.TLabel").place(x=10, y=130)
-                ttk.Label(hist_window, text="Tipo de falla: ", style="GW.TLabel").place(x=300, y=10)
-                ttk.Label(hist_window, text="Componente: ", style="GW.TLabel").place(x=300, y=40)
-                ttk.Label(hist_window, text="Comp Secundario: ", style="GW.TLabel").place(x=300, y=70)
-                ttk.Label(hist_window, text="Dispositivo: ", style="GW.TLabel").place(x=300, y=100)
-                ttk.Label(hist_window, text="Descripción de la falla: ", style="GW.TLabel").place(x=300, y=130)
-                ttk.Label(hist_window, text="Fecha: ", style="GW.TLabel").place(x=590, y=10)
-                ttk.Label(hist_window, text="Hora: ", style="GW.TLabel").place(x=590, y=40)
-                ttk.Label(hist_window, text="File 1: ", style="GW.TLabel").place(x=870, y=10)
-                ttk.Label(hist_window, text="File 2: ", style="GW.TLabel").place(x=870, y=40)
-                ttk.Label(hist_window, text="File 3: ", style="GW.TLabel").place(x=870, y=70)
-                ttk.Label(hist_window, text="File 4: ", style="GW.TLabel").place(x=870, y=100)
-                ttk.Label(hist_window, text="File 5: ", style="GW.TLabel").place(x=1200, y=10)
-                ttk.Label(hist_window, text="File 6: ", style="GW.TLabel").place(x=1200, y=40)
-                ttk.Label(hist_window, text="File 7: ", style="GW.TLabel").place(x=1200, y=70)
-                ttk.Label(hist_window, text="File 8: ", style="GW.TLabel").place(x=1200, y=100)
-                ttk.Label(hist_window, text="File 9: ", style="GW.TLabel").place(x=1200, y=130)
-                ttk.Label(hist_window, text="File 10: ", style="GW.TLabel").place(x=1200, y=160)
+                ttk.Label(hist_window, text="No. ticket: ", style="GW.TLabel").place(x=10, y=160)
+
+                ttk.Label(hist_window, text="Tipo de falla: ", style="GW.TLabel").place(x=240, y=10)
+                ttk.Label(hist_window, text="Componente: ", style="GW.TLabel").place(x=240, y=40)
+                ttk.Label(hist_window, text="Comp Secundario: ", style="GW.TLabel").place(x=240, y=70)
+                ttk.Label(hist_window, text="Dispositivo: ", style="GW.TLabel").place(x=240, y=100)
+                ttk.Label(hist_window, text="Descripción de falla: ", style="GW.TLabel").place(x=240, y=130)
+
+                ttk.Label(hist_window, text="Fecha: ", style="GW.TLabel").place(x=530, y=10)
+                ttk.Label(hist_window, text="Hora: ", style="GW.TLabel").place(x=530, y=40)
+
+                ttk.Label(hist_window, text="File 1: ", style="GW.TLabel").place(x=750, y=10)
+                ttk.Label(hist_window, text="File 2: ", style="GW.TLabel").place(x=750, y=40)
+                ttk.Label(hist_window, text="File 3: ", style="GW.TLabel").place(x=750, y=70)
+                ttk.Label(hist_window, text="File 4: ", style="GW.TLabel").place(x=750, y=100)
+
+                ttk.Label(hist_window, text="File 5: ", style="GW.TLabel").place(x=1060, y=10)
+                ttk.Label(hist_window, text="File 6: ", style="GW.TLabel").place(x=1060, y=40)
+                ttk.Label(hist_window, text="File 7: ", style="GW.TLabel").place(x=1060, y=70)
+                ttk.Label(hist_window, text="File 8: ", style="GW.TLabel").place(x=1060, y=100)
+                ttk.Label(hist_window, text="File 9: ", style="GW.TLabel").place(x=1060, y=130)
+                ttk.Label(hist_window, text="File 10: ", style="GW.TLabel").place(x=1060, y=160)
                 new_entrada_ticket = Entry(hist_window)
-                new_entrada_ticket.place(x=140, y=10)
+
+                new_entrada_ticket.place(x=85, y=10)
+                new_entrada_reg = Entry(hist_window)
+                new_entrada_reg.insert(0, numero_ticket)
+                new_entrada_reg.place(x=85, y=160)
                 new_entrada_status = Entry(hist_window)
-                new_entrada_status.place(x=140, y=40)
+                new_entrada_status.place(x=85, y=40)
                 new_entrada_name = Entry(hist_window)
-                new_entrada_name.place(x=140, y=70)
+                new_entrada_name.place(x=85, y=70)
                 new_entrada_sc = Entry(hist_window)
-                new_entrada_sc.place(x=140, y=100)
+                new_entrada_sc.place(x=85, y=100)
                 new_entrada_sitio = Entry(hist_window)
-                new_entrada_sitio.place(x=140, y=130)
+                new_entrada_sitio.place(x=85, y=130)
+
                 new_entrada_tipo = Entry(hist_window)
-                new_entrada_tipo.place(x=430, y=10)
+                new_entrada_tipo.place(x=360, y=10)
                 new_entrada_componente = Entry(hist_window)
-                new_entrada_componente.place(x=430, y=40)
+                new_entrada_componente.place(x=360, y=40)
                 new_entrada_componente2 = Entry(hist_window)
-                new_entrada_componente2.place(x=430, y=70)
+                new_entrada_componente2.place(x=360, y=70)
                 new_entrada_dpvo = Entry(hist_window)
-                new_entrada_dpvo.place(x=430, y=100)
-                new_entrada_descrip = Entry(hist_window, width=60)
-                new_entrada_descrip.place(x=430, y=130)
+                new_entrada_dpvo.place(x=360, y=100)
+                new_entrada_descrip = Entry(hist_window, width=75)
+                new_entrada_descrip.place(x=360, y=130)
+
                 new_entrada_date = Entry(hist_window)
-                new_entrada_date.place(x=700, y=10)
+                new_entrada_date.place(x=580, y=10)
                 new_entrada_hora = Entry(hist_window)
-                new_entrada_hora.place(x=700, y=40)
+                new_entrada_hora.place(x=580, y=40)
+
                 new_entrada_file1 = Entry(hist_window, width=35)
-                new_entrada_file1.place(x=950, y=10)
+                new_entrada_file1.place(x=800, y=10)
                 new_entrada_file2 = Entry(hist_window, width=35)
-                new_entrada_file2.place(x=950, y=40)
+                new_entrada_file2.place(x=800, y=40)
                 new_entrada_file3 = Entry(hist_window, width=35)
-                new_entrada_file3.place(x=950, y=70)
+                new_entrada_file3.place(x=800, y=70)
                 new_entrada_file4 = Entry(hist_window, width=35)
-                new_entrada_file4.place(x=950, y=100)
-                new_entrada_file5 = Entry(hist_window, width=35)
-                new_entrada_file5.place(x=1270, y=10)
-                new_entrada_file6 = Entry(hist_window, width=35)
-                new_entrada_file6.place(x=1270, y=40)
-                new_entrada_file7 = Entry(hist_window, width=35)
-                new_entrada_file7.place(x=1270, y=70)
-                new_entrada_file8 = Entry(hist_window, width=35)
-                new_entrada_file8.place(x=1270, y=100)
-                new_entrada_file9 = Entry(hist_window, width=35)
-                new_entrada_file9.place(x=1270, y=130)
-                new_entrada_file10 = Entry(hist_window, width=35)
-                new_entrada_file10.place(x=1270, y=160)
+                new_entrada_file4.place(x=800, y=100)
+
+                new_entrada_file5 = Entry(hist_window, width=38)
+                new_entrada_file5.place(x=1110, y=10)
+                new_entrada_file6 = Entry(hist_window, width=38)
+                new_entrada_file6.place(x=1110, y=40)
+                new_entrada_file7 = Entry(hist_window, width=38)
+                new_entrada_file7.place(x=1110, y=70)
+                new_entrada_file8 = Entry(hist_window, width=38)
+                new_entrada_file8.place(x=1110, y=100)
+                new_entrada_file9 = Entry(hist_window, width=38)
+                new_entrada_file9.place(x=1110, y=130)
+                new_entrada_file10 = Entry(hist_window, width=38)
+                new_entrada_file10.place(x=1110, y=160)
 
                 Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=710, y=187)
                 ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
 
                 hist_window.protocol("WM_DELETE_WINDOW", handleProtocol)
-                cols2 = (
-                'registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla', 'componente', 'componente2',
-                'device',
-                'descripción', 'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6', 'files7',
-                'files8', 'files9', 'files10')
+                cols2 = ('registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla','componente','componente2',
+                'device', 'descripción', 'date', 'hora', 'files', 'files2', 'files3', 'files4', 'files5', 'files6',
+                'files7','files8', 'files9', 'files10')
 
-                canvas = tkinter.Canvas(hist_window, height=285, width=1550, bg="red", borderwidth=5,
-                                        background="#ffffff")
+                canvas = tkinter.Canvas(hist_window, height=285, width=1550,bg="red",borderwidth=5,background="#ffffff")
                 frame11 = LabelFrame(canvas, text="= Listado de incidencias en el Centro de Control Satelital =",
                                      bg="yellow", bd=4, padx=5, pady=1, highlightcolor="green", height=280, width=4470)
                 listBox2 = ttk.Treeview(frame11, columns=cols2, show='headings')
@@ -1506,10 +1517,10 @@ def historial():
 
     rooot.state(newstate='withdraw')
     hist_window = Toplevel(rooot)
-    hist_window.geometry("1550x540")
+    hist_window.geometry("1750x540")
     hist_window.title("Registro histórico de seguimiento de incidencias")
     hist_window.iconbitmap('tele_ico.ico')
-    hist_window.resizable(False, False)
+    #hist_window.resizable(True, False)
     ticket_enter = entrada_ticket.get()
     sc_enter = entrada_sc.get()
     ccs_enter = entrada_sitio.get()
@@ -1528,28 +1539,32 @@ def historial():
             mycursor.execute("SELECT ticket FROM datos_incidencias2 where ticket=" + str(ticket_enter))
             records = mycursor.fetchone()
             numero_ticket = records[0]
-            ttk.Label(hist_window, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
+            ttk.Label(hist_window, text="No. registro: ", style="GW.TLabel").place(x=10, y=10)
             ttk.Label(hist_window, text="Status: ", style="GW.TLabel").place(x=10, y=40)
             ttk.Label(hist_window, text="Operador: ", style="GW.TLabel").place(x=10, y=70)
             ttk.Label(hist_window, text="Spacecraft", style="GW.TLabel").place(x=10, y=100)
             ttk.Label(hist_window, text="CCS: ", style="GW.TLabel").place(x=10, y=130)
-            ttk.Label(hist_window, text="Tipo de falla: ", style="GW.TLabel").place(x=300, y=10)
-            ttk.Label(hist_window, text="Componente: ", style="GW.TLabel").place(x=300, y=40)
-            ttk.Label(hist_window, text="Comp Secundario: ", style="GW.TLabel").place(x=300, y=70)
-            ttk.Label(hist_window, text="Dispositivo: ", style="GW.TLabel").place(x=300, y=100)
-            ttk.Label(hist_window, text="Descripción de la falla: ", style="GW.TLabel").place(x=300, y=130)
-            ttk.Label(hist_window, text="Fecha: ", style="GW.TLabel").place(x=590, y=10)
-            ttk.Label(hist_window, text="Hora: ", style="GW.TLabel").place(x=590, y=40)
-            ttk.Label(hist_window, text="File 1: ", style="GW.TLabel").place(x=870, y=10)
-            ttk.Label(hist_window, text="File 2: ", style="GW.TLabel").place(x=870, y=40)
-            ttk.Label(hist_window, text="File 3: ", style="GW.TLabel").place(x=870, y=70)
-            ttk.Label(hist_window, text="File 4: ", style="GW.TLabel").place(x=870, y=100)
-            ttk.Label(hist_window, text="File 5: ", style="GW.TLabel").place(x=1200, y=10)
-            ttk.Label(hist_window, text="File 6: ", style="GW.TLabel").place(x=1200, y=40)
-            ttk.Label(hist_window, text="File 7: ", style="GW.TLabel").place(x=1200, y=70)
-            ttk.Label(hist_window, text="File 8: ", style="GW.TLabel").place(x=1200, y=100)
-            ttk.Label(hist_window, text="File 9: ", style="GW.TLabel").place(x=1200, y=130)
-            ttk.Label(hist_window, text="File 10: ", style="GW.TLabel").place(x=1200, y=160)
+            ttk.Label(hist_window, text="No. ticket: ", style="GW.TLabel").place(x=10, y=160)
+
+            ttk.Label(hist_window, text="Tipo de falla: ", style="GW.TLabel").place(x=240, y=10)
+            ttk.Label(hist_window, text="Componente: ", style="GW.TLabel").place(x=240, y=40)
+            ttk.Label(hist_window, text="Comp Secundario: ", style="GW.TLabel").place(x=240, y=70)
+            ttk.Label(hist_window, text="Dispositivo: ", style="GW.TLabel").place(x=240, y=100)
+            ttk.Label(hist_window, text="Descripción de falla: ", style="GW.TLabel").place(x=240, y=130)
+
+            ttk.Label(hist_window, text="Fecha: ", style="GW.TLabel").place(x=530, y=10)
+            ttk.Label(hist_window, text="Hora: ", style="GW.TLabel").place(x=530, y=40)
+            ttk.Label(hist_window, text="File 1: ", style="GW.TLabel").place(x=750, y=10)
+            ttk.Label(hist_window, text="File 2: ", style="GW.TLabel").place(x=750, y=40)
+            ttk.Label(hist_window, text="File 3: ", style="GW.TLabel").place(x=750, y=70)
+            ttk.Label(hist_window, text="File 4: ", style="GW.TLabel").place(x=750, y=100)
+
+            ttk.Label(hist_window, text="File 5: ", style="GW.TLabel").place(x=1060, y=10)
+            ttk.Label(hist_window, text="File 6: ", style="GW.TLabel").place(x=1060, y=40)
+            ttk.Label(hist_window, text="File 7: ", style="GW.TLabel").place(x=1060, y=70)
+            ttk.Label(hist_window, text="File 8: ", style="GW.TLabel").place(x=1060, y=100)
+            ttk.Label(hist_window, text="File 9: ", style="GW.TLabel").place(x=1060, y=130)
+            ttk.Label(hist_window, text="File 10: ", style="GW.TLabel").place(x=1060, y=160)
             ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
 
             variable_e1 = StringVar()
@@ -1566,50 +1581,56 @@ def historial():
 
             Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=675, y=187)
             new_entrada_ticket = Entry(hist_window)
-            new_entrada_ticket.place(x=140, y=10)
+            new_entrada_ticket.place(x=85, y=10)
             new_entrada_status = Entry(hist_window)
-            new_entrada_status.place(x=140, y=40)
+            new_entrada_status.place(x=85, y=40)
             new_entrada_name = Entry(hist_window)
-            new_entrada_name.place(x=140, y=70)
+            new_entrada_name.place(x=85, y=70)
             new_entrada_sc = Entry(hist_window)
-            new_entrada_sc.place(x=140, y=100)
+            new_entrada_sc.place(x=85, y=100)
             new_entrada_sitio = Entry(hist_window)
-            new_entrada_sitio.place(x=140, y=130)
-            new_entrada_tipo = Entry(hist_window)
-            new_entrada_tipo.place(x=430, y=10)
-            new_entrada_componente = Entry(hist_window)
-            new_entrada_componente.place(x=430, y=40)
-            new_entrada_componente2 = Entry(hist_window)
-            new_entrada_componente2.place(x=430, y=70)
-            new_entrada_dpvo = Entry(hist_window)
-            new_entrada_dpvo.place(x=430, y=100)
-            new_entrada_descrip = Entry(hist_window, width=60)
-            new_entrada_descrip.place(x=430, y=130)
-            new_entrada_date = Entry(hist_window)
-            new_entrada_date.place(x=700, y=10)
-            new_entrada_hora = Entry(hist_window)
-            new_entrada_hora.place(x=700, y=40)
-            new_entrada_file1 = Entry(hist_window, width=35)
-            new_entrada_file1.place(x=950, y=10)
-            new_entrada_file2 = Entry(hist_window, width=35)
-            new_entrada_file2.place(x=950, y=40)
-            new_entrada_file3 = Entry(hist_window, width=35)
-            new_entrada_file3.place(x=950, y=70)
-            new_entrada_file4 = Entry(hist_window, width=35)
-            new_entrada_file4.place(x=950, y=100)
+            new_entrada_sitio.place(x=85, y=130)
+            new_entrada_reg = Entry(hist_window)
+            new_entrada_reg.insert(0, numero_ticket)
+            new_entrada_reg.place(x=85, y=160)
 
-            new_entrada_file5 = Entry(hist_window, width=35)
-            new_entrada_file5.place(x=1270, y=10)
-            new_entrada_file6 = Entry(hist_window, width=35)
-            new_entrada_file6.place(x=1270, y=40)
-            new_entrada_file7 = Entry(hist_window, width=35)
-            new_entrada_file7.place(x=1270, y=70)
-            new_entrada_file8 = Entry(hist_window, width=35)
-            new_entrada_file8.place(x=1270, y=100)
-            new_entrada_file9 = Entry(hist_window, width=35)
-            new_entrada_file9.place(x=1270, y=130)
-            new_entrada_file10 = Entry(hist_window, width=35)
-            new_entrada_file10.place(x=1270, y=160)
+            new_entrada_tipo = Entry(hist_window)
+            new_entrada_tipo.place(x=360, y=10)
+            new_entrada_componente = Entry(hist_window)
+            new_entrada_componente.place(x=360, y=40)
+            new_entrada_componente2 = Entry(hist_window)
+            new_entrada_componente2.place(x=360, y=70)
+            new_entrada_dpvo = Entry(hist_window)
+            new_entrada_dpvo.place(x=360, y=100)
+            new_entrada_descrip = Entry(hist_window, width=75)
+            new_entrada_descrip.place(x=360, y=130)
+
+            new_entrada_date = Entry(hist_window)
+            new_entrada_date.place(x=580, y=10)
+            new_entrada_hora = Entry(hist_window)
+            new_entrada_hora.place(x=580, y=40)
+
+            new_entrada_file1 = Entry(hist_window, width=35)
+            new_entrada_file1.place(x=800, y=10)
+            new_entrada_file2 = Entry(hist_window, width=35)
+            new_entrada_file2.place(x=800, y=40)
+            new_entrada_file3 = Entry(hist_window, width=35)
+            new_entrada_file3.place(x=800, y=70)
+            new_entrada_file4 = Entry(hist_window, width=35)
+            new_entrada_file4.place(x=800, y=100)
+
+            new_entrada_file5 = Entry(hist_window, width=38)
+            new_entrada_file5.place(x=1110, y=10)
+            new_entrada_file6 = Entry(hist_window, width=38)
+            new_entrada_file6.place(x=1110, y=40)
+            new_entrada_file7 = Entry(hist_window, width=38)
+            new_entrada_file7.place(x=1110, y=70)
+            new_entrada_file8 = Entry(hist_window, width=38)
+            new_entrada_file8.place(x=1110, y=100)
+            new_entrada_file9 = Entry(hist_window, width=38)
+            new_entrada_file9.place(x=1110, y=130)
+            new_entrada_file10 = Entry(hist_window, width=38)
+            new_entrada_file10.place(x=1110, y=160)
             if str(numero_ticket) == ticket_enter:
                 Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=190)
                 Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=130)
@@ -1727,7 +1748,7 @@ def cerrar_t():
             ventana_cerrado = Toplevel(ventana_login)
             ventana_cerrado.title("Informe de Operación")
             ventana_cerrado.geometry("230x150")
-            ventana_cerrado.resizable(False, False)
+            #ventana_cerrado.resizable(False, False)
             Label(ventana_cerrado, text="El ticket se cerró correctamente").pack()
             Button(ventana_cerrado, text="OK", command=cerrar_ventana).pack()
     except Exception as e:
@@ -1900,7 +1921,7 @@ def seguimiento():
     no_ticket_s = StringVar()
     descrip = StringVar()
     try:
-        db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
+        db = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
         cursor = db.cursor()
         cursor.execute("SELECT max(registro) FROM ticket_no_" + ticket_enter)
         myresult = cursor.fetchone()
@@ -2022,13 +2043,12 @@ def update():  # Entradas con los datos de la incidencia a modificar
         stat, user_name, spacecraft, ccs, falla_type, comp, comp2, device, desc, date, hora, file, file2, file3, file4,
         file5, file6, file7, file8, file9, file10, tick)
         mycursor.execute(sql, val)
-        mysqldb.commit()
         prefix = "ticket_no_"
 
-        #mycursor.execute("INSERT INTO " + prefix + tick + " VALUES(" + str(0) + ", '" + stat + "', '" + user_name
-        #                 + "', '" + spacecraft + "', '" + ccs + "', '" + falla_type + "', '" + comp + "', '" + comp2 + "', '"
-        #                 + device + "', '" + desc + "', '" + date + "', '" + hora + "', '" + file + "', '" + file2 + "', '" + file3 + "', '" + file4 + "', '" + file5 + "', '" + file6 + "', '" + file7 + "', '" + file8 + "', '" + file9 + "', '" + file10 + "')")
-        #mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
+        mycursor.execute("INSERT INTO " + prefix + tick + " VALUES(" + str(0) + ", '" + stat + "', '" + user_name
+                         + "', '" + spacecraft + "', '" + ccs + "', '" + falla_type + "', '" + comp + "', '" + comp2 + "', '"
+                         + device + "', '" + desc + "', '" + date + "', '" + hora + "', '" + file + "', '" + file2 + "', '" + file3 + "', '" + file4 + "', '" + file5 + "', '" + file6 + "', '" + file7 + "', '" + file8 + "', '" + file9 + "', '" + file10 + "')")
+        mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
         messagebox.showinfo("information", "Record Updated successfully..")
         # Limpiamos las entradas para confirmar la actualización
         entrada_ticket.delete(0, END)
@@ -2556,8 +2576,7 @@ def exito_login():
     l3 = Label(frame1, text="No. de Ticket: ", anchor=E, font=("times", 13)).grid(row=13, column=0, sticky=E, pady=5)
     l3 = Label(frame1, text="Spacecraft:", anchor=E, font=("times", 13)).grid(row=14, column=0, sticky=E, pady=5)
     label_type = Label(frame1, text="Tipo:", anchor=E, font=("times", 13)).grid(row=16, column=0, sticky=E, pady=5)
-    label_dpvo = Label(frame1, text="Dispositivo:", anchor=E, font=("times", 13)).grid(row=18, column=0, sticky=E,
-                                                                                       pady=5)
+    label_dpvo = Label(frame1, text="Dispositivo:", anchor=E,font=("times", 13)).grid(row=18, column=0, sticky=E,pady=5)
     label_dpvo = Label(frame1, text="Dispositivo Secundario:", anchor=E, font=("times", 13)).grid(row=19, column=0,
                                                                                                   sticky=E, pady=5)
     label_dpvo = Label(frame1, text="", anchor=CENTER, bg="green", font=("times", 8)).grid(row=22, column=0, sticky=W,
@@ -2636,7 +2655,7 @@ def exito_login():
     no_ticket = StringVar()
     descrip = StringVar()
     try:
-        db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
+        db = mysql.connector.connect(host="localhost", user="root", password="313218479",database="mydb")  # Conectmydb
         cursor = db.cursor()
         cursor.execute("SELECT max(ticket) FROM datos_incidencias2")
         myresult = cursor.fetchone()
@@ -2895,8 +2914,7 @@ def registro_incidencia2():  #Registra seguimientos
     datos_date = now.strftime("%Y-%m-%d")
     current_time2 = time.strftime("%H:%M:%S")
     # registramos la nueva incidencia en la tabla donde vienen todas las incidencias
-
-    db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
+    db = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
     cursor = db.cursor()
     cursor.execute("SELECT max(registro) FROM ticket_no_"+ticket_enter)
     myresult = cursor.fetchone()
