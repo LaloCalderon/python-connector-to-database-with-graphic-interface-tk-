@@ -10,7 +10,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-engine = create_engine("mysql+pymysql://root:S1s73mas55@localhost/mydb", encoding="utf-8", echo=True)
+engine = create_engine("mysql+pymysql://root:313218479@localhost/mydb", encoding="utf-8", echo=True)
 Base = declarative_base()
 ####TABLA DE USUARIOS
 class Incidencias(Base):
@@ -502,23 +502,23 @@ def visualizar():
     ventana_viss.title("Visualización de Incidencias")
     ventana_viss.iconbitmap('tele_ico.ico')
     #ventana_viss.resizable(True, False)
-    ttk.Label(ventana_viss, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
+    ttk.Label(ventana_viss, text="Introduce una clave: ", style="GW.TLabel").place(x=10, y=190)
 
     variable_e = StringVar()
     variable_f = StringVar()
     optionmenu_e = OptionMenu(ventana_viss, variable_e, *data4.keys())
-    optionmenu_e.config(width=25)
-    optionmenu_e.place(x=230, y=185)
+    optionmenu_e.config(width=15)
+    optionmenu_e.place(x=130, y=185)
     optionmenu_f = OptionMenu(ventana_viss, variable_f, '')
-    optionmenu_f.config(width=32)
-    optionmenu_f.place(x=432, y=185)
+    optionmenu_f.config(width=25)
+    optionmenu_f.place(x=275, y=185)
     variable_e.trace('w', update_options_F)
     variable_e.set('')
     variable_f.set('')
 
-    Button(ventana_viss, text="Atrás", command=hacia_atras, width=13).place(x=870, y=185)
-    Button(ventana_viss, text="Ver Histórico", command=historial2, width=13).place(x=870, y=155)
-    Button(ventana_viss, text="Aplicar", command=aplicar, width=10).place(x=780, y=185)
+    Button(ventana_viss, text="Atrás", command=hacia_atras, width=13).place(x=910, y=185)
+    Button(ventana_viss, text="Ver Histórico", command=historial2, width=13).place(x=810, y=185)
+    Button(ventana_viss, text="Aplicar", command=aplicar, width=10).place(x=470, y=187)
 
     ttk.Label(ventana_viss, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
     ttk.Label(ventana_viss, text="Status: ", style="GW.TLabel").place(x=10, y=40)
@@ -565,8 +565,8 @@ def visualizar():
     entrada_componente2.place(x=360, y=70)
     entrada_dpvo = tkinter.Entry(ventana_viss)
     entrada_dpvo.place(x=360, y=100)
-    entrada_descrip = tkinter.Entry(ventana_viss, width=75)
-    entrada_descrip.place(x=360, y=130)
+    entrada_descrip = tkinter.Text(ventana_viss, wrap="none", width=33, relief=SUNKEN, height=3)
+    entrada_descrip.place(x=360, y=130, width=650)
 
     entrada_date = tkinter.Entry(ventana_viss)
     entrada_date.place(x=580, y=10)
@@ -622,7 +622,7 @@ def visualizar():
         listBox.heading(col, text=col)
         listBox.place(x=10, y=10)
 
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     mycursor.execute(
         "SELECT ticket, status, operador, spacecraft, ccs, tipo_falla, componente, componente2, device, descripcion, date, hora, files, files2, files3, files4, files5, files6, files7, files8, files9, files10 FROM datos_incidencias2")
@@ -773,7 +773,8 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
     entrada_componente.delete(0, END)
     entrada_componente2.delete(0, END)
     entrada_dpvo.delete(0, END)
-    entrada_descrip.delete(0, END)
+    entrada_descrip.delete("1.0", "end")
+    #entrada_descrip.delete(0, END)
     entrada_date.delete(0, END)
     entrada_hora.delete(0, END)
     entrada_file1.delete(0, END)
@@ -799,7 +800,7 @@ def GetValue(event): #el que se usa en visualizar, modifica_reg y aplicar
         entrada_componente.insert(0, select['componente'])
         entrada_componente2.insert(0, select['componente2'])
         entrada_dpvo.insert(0, select['device'])
-        entrada_descrip.insert(0, select['descripción'])
+        entrada_descrip.insert("1.0", select['descripción'])
         entrada_date.insert(0, select['date'])
         entrada_hora.insert(0, select['hora'])
 
@@ -963,7 +964,7 @@ def GetValue2(event):  #El que se usa en historial, aplicar2 y historial2
     new_entrada_componente.delete(0, END)
     new_entrada_componente2.delete(0, END)
     new_entrada_dpvo.delete(0, END)
-    new_entrada_descrip.delete(0, END)
+    new_entrada_descrip.delete("1.0", "end")
     new_entrada_date.delete(0, END)
     new_entrada_hora.delete(0, END)
     new_entrada_file1.delete(0, END)
@@ -989,7 +990,7 @@ def GetValue2(event):  #El que se usa en historial, aplicar2 y historial2
         new_entrada_componente.insert(0, select['componente'])
         new_entrada_componente2.insert(0, select['componente2'])
         new_entrada_dpvo.insert(0, select['device'])
-        new_entrada_descrip.insert(0, select['descripción'])
+        new_entrada_descrip.insert("1.0", select['descripción'])
         new_entrada_date.insert(0, select['date'])
         new_entrada_hora.insert(0, select['hora'])
 
@@ -1159,25 +1160,25 @@ def modifica_reg():
     # tk.Label(root,text="Visualización de Incidencias", fg="black", font=(None, 25)).place(x=400, y=5)
     global ventana_tickets, entrada_ope, entrada_param, varope, entrada_filter
     filtro = StringVar()
-    ttk.Label(rooot, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
+    ttk.Label(rooot, text="Introduce una clave: ", style="GW.TLabel").place(x=10, y=190)
 
     variable_e = StringVar()
     variable_f = StringVar()
     optionmenu_e = OptionMenu(rooot, variable_e, *data4.keys())
-    optionmenu_e.config(width=25)
-    optionmenu_e.place(x=230, y=185)
+    optionmenu_e.config(width=15)
+    optionmenu_e.place(x=130, y=185)
     optionmenu_f = OptionMenu(rooot, variable_f, '')
-    optionmenu_f.config(width=32)
-    optionmenu_f.place(x=432, y=185)
+    optionmenu_f.config(width=25)
+    optionmenu_f.place(x=275, y=185)
     variable_e.trace('w', update_options_F)
     variable_e.set('')
     variable_f.set('')
     #Botones en la ventana rooot
-    Button(rooot, text="Atrás", command=hacia_atras5, width=13).place(x=940, y=165)
-    Button(rooot, text="Ver histórico", command=historial, width=13).place(x=940, y=195)
-    Button(rooot, text="Update", command=update, width=13).place(x=840, y=165)
-    Button(rooot, text="Delete", command=delete, width=13).place(x=840, y=195)
-    Button(rooot, text="Aplicar", command=aplicar, width=10).place(x=675, y=187)
+    Button(rooot, text="Atrás", command=hacia_atras5, width=13).place(x=940, y=187)
+    Button(rooot, text="Ver histórico", command=historial, width=13).place(x=640, y=187)
+    Button(rooot, text="Update", command=update, width=13).place(x=840, y=187)
+    Button(rooot, text="Delete", command=delete, width=13).place(x=740, y=187)
+    Button(rooot, text="Aplicar", command=aplicar, width=10).place(x=470, y=187)
 
     ttk.Label(rooot, text="No. Ticekt: ", style="GW.TLabel").place(x=10, y=10)
     ttk.Label(rooot, text="Status: ", style="GW.TLabel").place(x=10, y=40)
@@ -1222,8 +1223,8 @@ def modifica_reg():
     entrada_componente2.place(x=360, y=70)
     entrada_dpvo = Entry(rooot)
     entrada_dpvo.place(x=360, y=100)
-    entrada_descrip = Entry(rooot, width=85)
-    entrada_descrip.place(x=360, y=130)
+    entrada_descrip = tkinter.Text(rooot, wrap="none", width=33, relief=SUNKEN, height=3)
+    entrada_descrip.place(x=360, y=130, width=650)
 
     entrada_date = Entry(rooot)
     entrada_date.place(x=580, y=10)
@@ -1279,7 +1280,7 @@ def modifica_reg():
         listBox.grid(row=0, column=0)
         listBox.place(x=10, y=10)
 
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     mycursor.execute(
         "SELECT ticket, status, operador, spacecraft, ccs, tipo_falla, componente, componente2, device, descripcion, date, hora, files, files2, files3, files4, files5, files6, files7, files8, files9, files10 FROM datos_incidencias2")
@@ -1317,7 +1318,7 @@ def hacia_atras8():
     rooot.deiconify()
 
 
-def historial2(): #Este es el historial que no se modifica
+def historial2(): #Este es el historial que no modifica registros
     global hist_window, ticket_enter, sc_enter, ccs_enter, type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, \
         variable_e3, variable_f3, optionmenu_e3, optionmenu_f3, variable_e1, variable_f1, optionmenu_f1, sc_enter, ccs_enter, \
         type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
@@ -1334,13 +1335,13 @@ def historial2(): #Este es el historial que no se modifica
     component_enter = entrada_componente.get()
     component2_enter = entrada_componente2.get()
     dpvo_enter = entrada_dpvo.get()
-    descrip_enter = entrada_descrip.get()
+    descrip_enter = entrada_descrip.get("1.0", "end")
 
     if ticket_enter == "":
         no_hay_ticket()
     else:
         try:
-            mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+            mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
             mycursor = mysqldb.cursor()
             mycursor.execute("SELECT ticket FROM datos_incidencias2 where ticket=" + str(ticket_enter))
             records = mycursor.fetchone()
@@ -1354,12 +1355,13 @@ def historial2(): #Este es el historial que no se modifica
                 Button(hist_window, text="Atrás", command=hacia_atras4, width=20).place(x=800, y=187)
                 variable_e1 = StringVar()
                 variable_f1 = StringVar()
+
                 optionmenu_e1 = OptionMenu(hist_window, variable_e1, *data4.keys())
-                optionmenu_e1.config(width=25)
-                optionmenu_e1.place(x=230, y=185)
+                optionmenu_e1.config(width=15)
+                optionmenu_e1.place(x=130, y=185)
                 optionmenu_f1 = OptionMenu(hist_window, variable_f1, '')
-                optionmenu_f1.config(width=32)
-                optionmenu_f1.place(x=432, y=185)
+                optionmenu_f1.config(width=25)
+                optionmenu_f1.place(x=275, y=185)
                 variable_e1.trace('w', update_options_F1)
                 variable_e1.set('')
                 variable_f1.set('')
@@ -1414,8 +1416,8 @@ def historial2(): #Este es el historial que no se modifica
                 new_entrada_componente2.place(x=360, y=70)
                 new_entrada_dpvo = Entry(hist_window)
                 new_entrada_dpvo.place(x=360, y=100)
-                new_entrada_descrip = Entry(hist_window, width=75)
-                new_entrada_descrip.place(x=360, y=130)
+                new_entrada_descrip = tkinter.Text(hist_window, wrap="none", width=33, relief=SUNKEN, height=3)
+                new_entrada_descrip.place(x=360, y=130, width=650)
 
                 new_entrada_date = Entry(hist_window)
                 new_entrada_date.place(x=580, y=10)
@@ -1444,8 +1446,8 @@ def historial2(): #Este es el historial que no se modifica
                 new_entrada_file10 = Entry(hist_window, width=38)
                 new_entrada_file10.place(x=1110, y=160)
 
-                Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=710, y=187)
-                ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
+                Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=470, y=187)
+                ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=10, y=190)
 
                 hist_window.protocol("WM_DELETE_WINDOW", handleProtocol)
                 cols2 = ('registro', 'status', 'operador', 'spacecraft', 'ccs', 'tipo_falla','componente','componente2',
@@ -1473,7 +1475,7 @@ def historial2(): #Este es el historial que no se modifica
                     listBox2.grid(row=1, column=0, rowspan=2, ipady=1)
                     listBox2.place(x=10, y=10)
 
-                mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+                mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
                 mycursor = mysqldb.cursor()
                 add_string = "ticket_no_"
                 mycursor.execute(
@@ -1501,7 +1503,7 @@ def historial2(): #Este es el historial que no se modifica
             sin_coincidencia()
 
 
-def historial():
+def historial():  #Puede modificar registro
     global hist_window, variable_e1, variable_f1, optionmenu_e1, optionmenu_f1, ticket_enter, sc_enter, ccs_enter, \
         type_enter, component_enter, component2_enter, dpvo_enter, descrip_enter, new_entrada_ticket, new_entrada_status, \
         new_entrada_name, new_entrada_sc, new_entrada_sitio, new_entrada_tipo, new_entrada_componente, listBox2, \
@@ -1522,13 +1524,13 @@ def historial():
     component_enter = entrada_componente.get()
     component2_enter = entrada_componente2.get()
     dpvo_enter = entrada_dpvo.get()
-    descrip_enter = entrada_descrip.get()
+    descrip_enter = entrada_descrip.get("1.0", "end")
 
     if ticket_enter == "":
         no_hay_ticket()
     else:
         try:
-            mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+            mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
             mycursor = mysqldb.cursor()
             mycursor.execute("SELECT ticket FROM datos_incidencias2 where ticket=" + str(ticket_enter))
             records = mycursor.fetchone()
@@ -1560,21 +1562,21 @@ def historial():
             ttk.Label(hist_window, text="File 8: ", style="GW.TLabel").place(x=1060, y=100)
             ttk.Label(hist_window, text="File 9: ", style="GW.TLabel").place(x=1060, y=130)
             ttk.Label(hist_window, text="File 10: ", style="GW.TLabel").place(x=1060, y=160)
-            ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=100, y=190)
+            ttk.Label(hist_window, text="Introduce una clave: ", style="GW.TLabel").place(x=10, y=190)
 
             variable_e1 = StringVar()
             variable_f1 = StringVar()
             optionmenu_e1 = OptionMenu(hist_window, variable_e1, *data4.keys())
-            optionmenu_e1.config(width=25)
-            optionmenu_e1.place(x=230, y=185)
+            optionmenu_e1.config(width=15)
+            optionmenu_e1.place(x=130, y=185)
             optionmenu_f1 = OptionMenu(hist_window, variable_f1, '')
-            optionmenu_f1.config(width=32)
-            optionmenu_f1.place(x=432, y=185)
+            optionmenu_f1.config(width=25)
+            optionmenu_f1.place(x=275, y=185)
             variable_e1.trace('w', update_options_F1)
             variable_e1.set('')
             variable_f1.set('')
 
-            Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=675, y=187)
+            Button(hist_window, text="Aplicar", command=aplicar2, width=10).place(x=470, y=187)
             new_entrada_ticket = Entry(hist_window)
             new_entrada_ticket.place(x=85, y=10)
             new_entrada_status = Entry(hist_window)
@@ -1597,8 +1599,8 @@ def historial():
             new_entrada_componente2.place(x=360, y=70)
             new_entrada_dpvo = Entry(hist_window)
             new_entrada_dpvo.place(x=360, y=100)
-            new_entrada_descrip = Entry(hist_window, width=75)
-            new_entrada_descrip.place(x=360, y=130)
+            new_entrada_descrip = tkinter.Text(hist_window, wrap="none", width=33, relief=SUNKEN, height=3)
+            new_entrada_descrip.place(x=360, y=130, width=650)
 
             new_entrada_date = Entry(hist_window)
             new_entrada_date.place(x=580, y=10)
@@ -1627,9 +1629,9 @@ def historial():
             new_entrada_file10 = Entry(hist_window, width=38)
             new_entrada_file10.place(x=1110, y=160)
             if str(numero_ticket) == ticket_enter:
-                Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=20).place(x=870, y=190)
-                Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=20).place(x=870, y=130)
-                Button(hist_window, text="Atrás", command=hacia_atras8, width=20).place(x=870, y=160)
+                Button(hist_window, text="Añadir seguimiento", command=seguimiento, width=18).place(x=630, y=190)
+                Button(hist_window, text="Cerrar ticket", command=cerrar_t, width=18).place(x=765, y=190)
+                Button(hist_window, text="Atrás", command=hacia_atras8, width=18).place(x=900, y=190)
 
                 hist_window.protocol("WM_DELETE_WINDOW", handleProtocol)
                 cols2 = (
@@ -1660,7 +1662,7 @@ def historial():
                     listBox2.grid(row=1, column=0, rowspan=2, ipady=1)
                     listBox2.place(x=10, y=10)
 
-                mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+                mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
                 mycursor = mysqldb.cursor()
                 add_string = "ticket_no_"
                 mycursor.execute(
@@ -1692,7 +1694,7 @@ def cerrar_t():
     global ventana_cerrado
     ticket_enter2 = entrada_ticket.get()
     try:
-        mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+        mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
         mycursor = mysqldb.cursor()
         stringg = "ticket_no_"
         mycursor.execute("select status from " + stringg + ticket_enter2 + " order by registro desc limit 1")
@@ -1916,7 +1918,7 @@ def seguimiento():
     no_ticket_s = StringVar()
     descrip = StringVar()
     try:
-        db = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")  # Conectmydb
+        db = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
         cursor = db.cursor()
         cursor.execute("SELECT max(registro) FROM ticket_no_" + ticket_enter)
         myresult = cursor.fetchone()
@@ -1928,13 +1930,13 @@ def seguimiento():
         max_number = 1
         no_ticket_s = max_number
         """
-        mysqldb = mysql.connector.connect(host="localhost", user="seguimiento_win", password="S1s73mas55", database="mydb")  # Conectmydb
+        mysqldb = mysql.connector.connect(host="localhost", user="seguimiento_win", password="313218479", database="mydb")  # Conectmydb
         mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
         mycursor.execute("INSERT INTO datos_incidencias2 VALUES (" + str(0) + ", 'Cerrado', 'Eduardo Calderón', 'MX3', "
                                                                              "'Iztapalapa', 'Registro de', "
                                                                              "'prueba, Sin este', 'registro la', 'base truena',"
                                                                              " 'no eliminar', '2021-10-10', '10:11:12')")
-        db = MySQLdb.connect(host="localhost", user="seguimiento_win", password="S1s73mas55", database="mydb")
+        db = MySQLdb.connect(host="localhost", user="seguimiento_win", password="313218479", database="mydb")
         cursor = db.cursor()
         cursor.execute("SELECT max(ticket) FROM datos_incidencias2")
         myresult = cursor.fetchone()
@@ -2029,7 +2031,7 @@ def update():  # Entradas con los datos de la incidencia a modificar
     file9 = entrada_file9.get()
     file10 = entrada_file10.get()
     # Conectamos con la base de datos con las credenciales respectiva
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     try:  # Intentamos aplicar la sentencia Update a cualquiera de los parámetros del registro donde el ticket coincide
         sql = "Update datos_incidencias2 set status= %s, operador= %s, spacecraft= %s, ccs= %s, tipo_falla = %s, componente = %s, " \
@@ -2081,7 +2083,7 @@ def update():  # Entradas con los datos de la incidencia a modificar
 
 def delete():
     tick = entrada_ticket.get()
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     try:
         sql = "delete from datos_incidencias2 where ticket = %s"
@@ -2136,7 +2138,7 @@ def aplicar():
 
     data = variable_e.get()
     operador = variable_f.get()
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     try:
         if (data != ""):
@@ -2190,7 +2192,7 @@ def aplicar2():
     operador = variable_f1.get()
     no_ticket = entrada_ticket.get()
 
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     try:
         if (data != ""):
@@ -2233,7 +2235,7 @@ def verifica_login():
     entrada_login_usuario.delete(0, END)  # BORRA INFORMACIÓN DEL CAMPO "Nombre usuario *" AL MOSTRAR NUEVA VENTANA.
     entrada_login_clave.delete(0, END)  # BORRA INFORMACIÓN DEL CAMPO "Contraseña *" AL MOSTRAR NUEVA VENTANA.
     ##############################################   bdd  =  Mysql   #####################################
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")
     mycursor = mysqldb.cursor()
     sql = "select * from users_table where name = %s and password = %s"
     mycursor.execute(sql, [(user_name), (password)])
@@ -2650,7 +2652,7 @@ def exito_login():
     no_ticket = StringVar()
     descrip = StringVar()
     try:
-        db = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55",database="mydb")  # Conectmydb
+        db = mysql.connector.connect(host="localhost", user="root", password="313218479",database="mydb")  # Conectmydb
         cursor = db.cursor()
         cursor.execute("SELECT max(ticket) FROM datos_incidencias2")
         myresult = cursor.fetchone()
@@ -2662,13 +2664,13 @@ def exito_login():
         max_number = 1
         no_ticket = max_number
         """ Para probar cuando la tabla está vacía:
-        mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")  # Conectmydb
+        mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
         mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
         mycursor.execute("INSERT INTO datos_incidencias2 VALUES (" + str(0) + ", 'Cerrado', 'Eduardo Calderón', 'MX3', "
                                                                              "'Iztapalapa', 'Registro de', "
                                                                              "'prueba, Sin este', 'registro la', 'base truena',"
                                                                              " 'no eliminar', '2021-10-10', '10:11:12')")
-        db = MySQLdb.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")
+        db = MySQLdb.connect(host="localhost", user="root", password="313218479", database="mydb")
         cursor = db.cursor()
         cursor.execute("SELECT max(ticket) FROM datos_incidencias2")
         myresult = cursor.fetchone()
@@ -2909,7 +2911,7 @@ def registro_incidencia2():  #Registra seguimientos
     datos_date = now.strftime("%Y-%m-%d")
     current_time2 = time.strftime("%H:%M:%S")
     # registramos la nueva incidencia en la tabla donde vienen todas las incidencias
-    db = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")  # Conectmydb
+    db = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  # Conectmydb
     cursor = db.cursor()
     cursor.execute("SELECT max(registro) FROM ticket_no_"+ticket_enter)
     myresult = cursor.fetchone()
@@ -2918,7 +2920,7 @@ def registro_incidencia2():  #Registra seguimientos
     no_seguim = max_number
 
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55", database="mydb")  #Conectmydb
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479", database="mydb")  #Conectmydb
     mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
     print(ticket_enter) #7 -> ticket
     print("+")
@@ -2937,20 +2939,21 @@ def registro_incidencia2():  #Registra seguimientos
     print(no_seguim) #3
     mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
     try:  # La carpeta incidencias debe ser creada antes de ejecutar el programa.
-        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' +ticket_enter+"\seguimiento_no_"+str(no_seguim))
-        os.system('copy ' + archivo_abiertoo + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
-        os.system('copy ' + archivo_abiertoo2 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
-        os.system('copy ' + archivo_abiertoo3 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
-        os.system('copy ' + archivo_abiertoo4 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
-        os.system('copy ' + archivo_abiertoo5 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.mkdir('C:\\Users\\Ingeniería\\incidencias\incidencia_no_' +ticket_enter+"\seguimiento_no_"+str(no_seguim))
+
+        os.system('copy ' + archivo_abiertoo + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo2 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo3 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo4 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
+        os.system('copy ' + archivo_abiertoo5 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+str(no_seguim))
     except Exception as e:
         print(e)
     try:
-        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
-        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
-        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
-        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
-        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\413ed\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
+        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\Ingeniería\\incidencias\\incidencia_no_' +ticket_enter+"\\seguimiento_no_"+no_seguim)
     except Exception as e:
         print(e)
     label_succes = Label(seguimiento_win, text="Resgistro Exitoso") # En caso de ser un registro exitoso, se manda este mensaje
@@ -3043,43 +3046,47 @@ def registro_incidencia():
                 files6=archivo_abierto6, files7=archivo_abierto7, files8=archivo_abierto8, files9=archivo_abierto9, files10=archivo_abierto10)
 
     stringg = "ticket_no_"  # Prefijo del nombre de la tabla
-    mysqldb = mysql.connector.connect(host="localhost", user="root", password="S1s73mas55",
+    mysqldb = mysql.connector.connect(host="localhost", user="root", password="313218479",
                                       database="mydb")  # Conectmydb
     mycursor = mysqldb.cursor()  # nos posicionamos en la base de datos
     # A la par se crea la tabla que almacenará los históricos de la incidencias
-    mycursor.execute(
+    try:
+        mycursor.execute(
         "Create table " + str(stringg) + str(datos_ticket) + " (registro INT NOT NULL AUTO_INCREMENT, status "
                                                              "VARCHAR(20), operador VARCHAR(50), spacecraft VARCHAR(15), ccs VARCHAR(13), tipo_falla VARCHAR(15), "
                                                              "componente VARCHAR(40), componente2 VARCHAR(30), device VARCHAR(60), descripcion VARCHAR(400), date Date, "
                                                              "hora Time, files VARCHAR(300), files2 VARCHAR(300), files3 VARCHAR(300), files4 VARCHAR(300), files5 VARCHAR(300),"
                                                              "files6 VARCHAR(300), files7 VARCHAR(300), files8 VARCHAR(300), files9 VARCHAR(300), files10 VARCHAR(300), PRIMARY "
                                                              "KEY (registro))")  # Ejecutamos CREATE para crear una tabla asociada a una incidencia
-
+    except Exception as e:
+        pass
     # Esta primera inserción a la tabla recién generada debe hacerse de esta manera debido a que si declaramos una clase
     # o plantilla de una determinada tabla, bien podría aplicar para cualquier de las tablas generadas con la peti-
     # ción de arriba, al tener cada una un nombre diferente no funcionaría ya que se le tendría que cambiar el nombre ala
     # clase o tener una clase por cada tabla, lo cuál no es nada conveniente. Entonces debemos decirle que agregue la inf
-    mycursor.execute(
-        "INSERT INTO " + str(stringg) + str(datos_ticket) + " VALUES(1, 'Abierto', '" + str(datos_operador) + "', '" + str(datos_spacecraft) + "', '" + str(datos_ccs) + "', '" + str(datos_tfalla) + "','" + str(datos_componente) + "','" + str(datos_componente2) + "', '" + str(datos_device) + "', '" + str(datos_descripcion) + "', '" + datos_date + "', '" + current_time2 + "', '" + str(archivo_abierto) + "', '" + str(archivo_abierto2) + "', '" + str(archivo_abierto3) + "', '" + str(archivo_abierto4) + "', '" + str(archivo_abierto5) + "', '" + str(archivo_abierto6) + "', '" + str(archivo_abierto7) + "', '" + str(archivo_abierto8) + "', '" + str(archivo_abierto9) + "', '" + str(archivo_abierto10) + "')")
-
+    try:
+        mycursor.execute(
+            "INSERT INTO " + str(stringg) + str(datos_ticket) + " VALUES(1, 'Abierto', '" + str(datos_operador) + "', '" + str(datos_spacecraft) + "', '" + str(datos_ccs) + "', '" + str(datos_tfalla) + "','" + str(datos_componente) + "','" + str(datos_componente2) + "', '" + str(datos_device) + "', '" + str(datos_descripcion) + "', '" + datos_date + "', '" + current_time2 + "', '" + str(archivo_abierto) + "', '" + str(archivo_abierto2) + "', '" + str(archivo_abierto3) + "', '" + str(archivo_abierto4) + "', '" + str(archivo_abierto5) + "', '" + str(archivo_abierto6) + "', '" + str(archivo_abierto7) + "', '" + str(archivo_abierto8) + "', '" + str(archivo_abierto9) + "', '" + str(archivo_abierto10) + "')")
+    except Exception as e:
+        pass
     mysqldb.commit()  # Actualizamos al momento la bdd para ver reflejados los cambios instantáneamente
 
     try: #La carpeta incidencias debe ser creada antes de ejecutar el programa.
-        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket)
-        os.mkdir('C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy '+archivo_abiertoo+' C:\\Users\\413ed\\incidencias\incidencia_no_'+ datos_ticket+"\\seguimiento_no_1")
-        os.system('copy '+archivo_abiertoo2+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy '+archivo_abiertoo3+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy '+archivo_abiertoo4+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy '+archivo_abiertoo5+ ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.mkdir('C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket)
+        os.mkdir('C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo+' C:\\Users\\Ingeniería\\incidencias\incidencia_no_'+ datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo2+ ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo3+ ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo4+ ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy '+archivo_abiertoo5+ ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
     except Exception as e:
         print(e)
     try:
-        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
-        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\413ed\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo6 + ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo7 + ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo8 + ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo9 + ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
+        os.system('copy ' + archivo_abiertoo10 + ' C:\\Users\\Ingeniería\\incidencias\incidencia_no_' + datos_ticket+"\\seguimiento_no_1")
     except Exception as e:
         print(e)
 
